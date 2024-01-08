@@ -104,5 +104,3 @@ def logingout(request):
 def welcome(req):
     rev=reverse("home")
     return redirect(rev)
-    
-    
