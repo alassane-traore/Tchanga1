@@ -1,0 +1,52 @@
+{% extends 'plan/root.html' %}
+{% block contents %}
+{% load static %}
+
+<div id="addform">
+<h1 id="head" class="head"> ADD A PLAN ! </h1>
+<h4 id="time" class="head"> {{t}} : <span id="daily" > </span> </h4>
+
+<form id="addform0" method="POST" action="{% url 'tchanger' %}" enctype="multipart/form-data">
+  {% csrf_token %}
+  <input id="timereserve" name="date1" >
+  <button class="nav"  id="tchanger" ></button>
+</form>
+<form id="addform" method="POST" action="{% url 'add' %}" enctype="multipart/form-data">
+
+      {% csrf_token %}
+      <h4> <span name="num" id="num"> 0</span> <span> Tasks </span></h4>
+      <input type="hidden" name="hid" id="hid">
+      <div id="stock">
+        <input id="timput" name="date"  type="datetime-local" >
+        <input id="timput1" value="{{d}}" > 
+      </div>
+      
+    <div id ="actsdiv"> 
+    <input id="timF" type="time" value={{task.begin}} >
+    <span>{{task.begin}} -{{task.end}}</span>
+    <input id="timT" type="time"value="{{task.end}}">
+    <br>
+    <input name="l" id="act" placeholder="Tasks" value="{{task.task}}" list="lines">
+    <datalist id="lines">
+      {% for el in l  %}
+      <option >{{el.line}}</option>
+      {% endfor %}
+      </datalist>
+
+    <input name="typo" id ="typo" placeholder="Rubrics" value="{{task.classi}}" list="typos" required>
+    <datalist id="typos">
+    {% for el in k  %}
+    <option >{{el.kategorie}} </option>
+    {% endfor %}
+    </datalist>
+    <button > Submit </button>
+    </div>
+
+    </div>
+</form>
+</div>
+
+<link rel="stylesheet" href="{% static '/plan/style.css' %}">
+<script src="{% static '/plan/index.js' %}"></script>
+
+{% endblock  %}

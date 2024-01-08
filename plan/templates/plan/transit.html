@@ -1,0 +1,21 @@
+{% extends 'plan/root.html' %}
+{% block contents %}
+{% load static %}
+<div id="plusdiv"> 
+<h1 id="head"> What would you like to add ? </h1>
+<h4 id="time"> {{t}} : <span id="daily" > </span> </h4>
+
+    <div> 
+         <h6><a href="{% url 'types' %}"><i class="fa-regular fa-square-plus"> Cathegorie </i></a> </h6>
+          
+          
+          <h6> <a href="{% url 'lines'%}" ><i class="fa-regular fa-square-plus"> Week Headlines </i> </a> </h6>
+          
+          <h6><a href="{% url 'add'%}" ><i class="fa-regular fa-square-plus"> Daily tasks </i>  </a> </h6>
+        </div>
+</div>
+
+<link rel="stylesheet" href="{% static '/plan/style.css' %}">
+<script src="{% static '/plan/index.js' %}"></script>
+
+{% endblock  %}

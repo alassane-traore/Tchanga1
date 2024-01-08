@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>add plan</title>
+</head>
+<body id="place">
+   <nav>
+    <ul>
+        <!--<li class="nav" > <a href="{% url 'transit' %}"> <i class="fa-solid fa-plus"></i> </a></li> -->
+        
+        <li class="nav" style="display:none;"> <a href="{% url 'ringer' %}" id="day">Bird </a> </li>
+        <li class="nav"> <a href="{% url 'transit1' %}"> <i class="fa-regular fa-square-plus"></i>  </a></li>
+        <li class="nav" > <a href="{% url 'counter' %}"> <i class="fa-solid fa-gauge"></i> </a></li>
+        <li class="nav" > <a href="{% url 'market' %}"> <i class="fa-solid fa-cart-shopping"></i> </a> </li>
+       <!-- <li class="nav"  > <a href="{% url 'history' %}"> <i class="fa-solid fa-box-archive"></i> </a></li> -->
+        <li class="nav"  > <a href="{% url 'days' %}"> <i class="fa-regular fa-calendar-days" ></i></i>  </a></li>
+        <li class="nav"> <a href="{% url 'logout' %}"> <i class="fa-solid fa-right-from-bracket"></i> </a></li>
+        <li class="nav" > <a href="{% url 'home' %}"> <i class="fa-solid fa-house"></i> </a></li>
+        
+    </ul>
+   </nav> 
+
+{% block contents %}{% endblock  %}
+</body>
+</html>

@@ -1,0 +1,48 @@
+{% extends 'kasse/enchor.html' %}
+{% block contents %}
+{% load static %}
+<div id="plusdiv1"> 
+<h1 id="head"> Add shopping place! </h1>
+    <div> 
+        <form id="addform0" method="POST" action="{% url 'sectors' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div id="periodiv" > 
+                <label for="from"> From </label>
+               <input id="begin" name="begin" type="datetime-local" >
+               <label for="to"> To </label>
+               <input id="end" name="end" type="datetime-local" >
+            </div>
+
+            <div id="stock">
+
+            </div>
+            
+            <div id="adder">
+            <input id="sector" name="sector" placeholder="Sector name "> 
+             
+            <input id="budget" name="budget" placeholder="Budget">
+            <h6>Automaticaly reusable ? 
+                <span>YES <input type="checkbox"  class="yesno" id="yes" > </span> 
+                 <span> NO <input type="checkbox"  class="yesno" id="no"></span> <h6>
+                    <div id="losdiv"> 
+                        <input type="Submit"class="givelist"  >
+                        </div>
+
+                    <!--<div> <i class="fa-solid fa-plus" id="plus"></i> </div>-->
+                    
+            
+
+            
+            
+            </div>
+
+        </form>
+          
+    </div>
+    
+</div>
+
+<link rel="stylesheet" href="{% static '/kasse/style.css' %}">
+<script src="{% static '/kasse/kasse.js' %}"></script>
+
+{% endblock  %}

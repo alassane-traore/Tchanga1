@@ -1,0 +1,20 @@
+{% extends 'plan/root.html' %}
+{% block contents %}
+{% load static %}
+<div id="plusdiv"> 
+    <h1 id="head"> Veux-tu vraiment supprimer {{del}}  ? </h1>
+<h4 id="time"> {{t}} : <span id="daily" > </span> </h4>
+
+    <div> 
+         <h6><a href="{% url 'days' %}"> NON </a> </h6>
+          
+          
+          <h6> <a href="{% url 'delete'%}" >OUI </a> </h6>
+          
+        </div>
+</div>
+
+<link rel="stylesheet" href="{% static '/plan/style.css' %}">
+<script src="{% static '/plan/index.js' %}"></script>
+
+{% endblock  %}

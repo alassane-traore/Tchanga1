@@ -1,0 +1,165 @@
+.nav{
+    display: inline-block;
+    padding: 19px;
+    
+    
+}
+
+nav>ul{
+   text-align:right; 
+   align-content: end;
+
+}
+
+.sectors{
+    display: inline-block;
+    border: 2px solid white;
+    background-color: purple;
+    color: white;
+    border-radius: 9px;
+    padding: 2px;
+}
+
+#marketdiv{
+  
+ width: 89%;
+ margin: 0 auto;
+}
+
+.marktSubmit{
+    display: none;
+}
+
+.buy{
+    background-color: black;
+    color: white;
+    width: 100%;
+    border-radius: 5px;
+}
+
+#basketdiv{
+    width: 85%;
+    margin: 0 auto;
+    
+}
+
+#marketContainer{
+    width: 85%;
+    margin: 0 auto;
+    color: white;
+}
+
+#kastrans{
+    background-color: white;
+    width: 85%;
+    margin: 0 auto;
+}
+
+.ktrans{
+    display: inline-block;
+    justify-content: right;
+   width: 49%;
+    color: aliceblue;
+    margin: 0 auto;
+    padding-left: 79px;
+}
+
+.ktrans1{
+size: 85px;
+}
+div>a>i{
+    display: inline-block;
+    color: orange;
+   
+    padding-left: 25px;
+}
+
+
+
+body{
+    background-image: url(./gold_pexels-michael-steinberg-321457.jpg);
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+#head{
+    text-align: center;
+    color: white;
+}
+
+label{
+    color: orangered;
+    font-size: 25px;
+}
+
+#plusdiv1{
+    width: 49%;
+    margin:0 auto ;
+    color: white;
+    border-radius: 15px;
+    text-align: center;
+}
+
+ol>li{
+    color: chartreuse;
+}
+
+#plusdiv2{
+    color: white;
+}
+
+.givelist{
+    display: flex;
+    width: 85%;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+#countercontainer{
+    width: 95%;
+    margin: 0 auto;
+}
+#countertable{
+    width: 100%;
+    color: white;
+    text-align: center;
+}
+.buskettitle{
+    background-color: orangered;
+}
+.countertd3{
+    border: 1px  solid black;
+background-color: goldenrod;
+}
+.countertd2{
+    border: 1px  solid black;
+    background-color: white;
+    color: black;
+   
+}
+.countertd1{
+    border: 1px  solid black;
+    background-color: goldenrod;
+    
+
+}
+.anul:hover{
+    color: red;
+}
+.anul{
+    padding-left: 19px;
+}
+
+@media only screen and (max-width:785px){
+
+    .sectors{
+        display: block;
+        padding-bottom: 9px;
+        
+    }
+    #marketdiv{
+        width: 95%;
+        margin: 0 auto;
+       }
+
+}

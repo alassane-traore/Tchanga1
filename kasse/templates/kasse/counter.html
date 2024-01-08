@@ -1,0 +1,41 @@
+{% extends 'kasse/enchor.html' %}
+{% block contents %}
+{% load static %}
+<div id ="countercontainer"> 
+<h1 id="head"> <i class="fa-solid fa-gauge-high">{{total}} </i></h1>
+{% if sector %}
+<table id="countertable">
+
+    <tr> <td>  Dates</td>  <td> Shopping </td> <td> Costs </td> </tr>
+    {% for s in sector %}
+    <tr>  <td colspan="2" class="buskettitle"> {{s.name}} </td> <td class="buskettitle"> {{s.costs}} </td> </tr> 
+   {% for b in s.b %}
+    {% for l  in b.li  %}
+    <tr> 
+       
+        {% if forloop.first %}
+        <td rowspan="{{b.len}}" class="countertd1">{{l.d}} </td>
+        <td class="countertd2" rowspan="1">{{l.name}}</td>
+        <td rowspan="{{b.len}}" class="countertd3" > {{l.costs}} </td>
+        {% else %}
+        <td class="countertd2" rowspan="1">{{l.name}}</td>
+        {% endif %}
+        
+    </tr>
+    <!--<tr> <td class="countertd2" rowspan="1">{{l.name}}</td></tr>-->
+    {% endfor %}
+    {% endfor %}
+    
+    {% endfor %}
+   
+</table>
+{% else %}
+<h4>You have not added any sector yet ! </h4>
+ <h4><a href="{% url 'sectors'%}" ><i class="fa-regular fa-square-plus">Add</i>  </a> </h4>
+{% endif %}
+</div>
+
+<link rel="stylesheet" href="{% static '/kasse/style.css' %}">
+<script src="{% static '/kasse/kasse.js' %}"></script>
+
+{% endblock  %}

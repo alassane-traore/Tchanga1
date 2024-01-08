@@ -1,0 +1,41 @@
+{% extends 'kasse/enchor.html' %}
+{% block contents %}
+{% load static %}
+<div id="marketContainer"> 
+<h1 id="head"> {{sc.name}} <i class="fa-solid fa-sack-dollar"></i>{{sc.c}} </h1>
+<h3><i class="fa-solid fa-cart-plus" id="korb">0</i> </h3>
+
+    <div id="basketdiv"> 
+         
+            <form id="sform" method="POST"  action="{% url 'shop' %}"  enctype="multipart/form-data">
+                {% csrf_token %}
+                <input name="goodnum" id="goodnum" style="display:none;" value="0" >
+                <div> <h3>Shopping list : </h3>
+               <input name="id" style="display:none;" value={{sc.id}}> 
+                {% for l in li  %}
+                <input class="goodId" value="{{l.id}}" style="display:none;">
+                
+                <label for("{{l.name}}") > <input type="checkbox" class="goods">   {{l.name}} </label>
+                
+                {% endfor %}
+                <div> <h3>Expenses : </h3>
+                    <input type="number" step="any" name="prise" > 
+                </div>
+                <div> <h3>Comment(optional)</h3>
+                <div> 
+                    <textarea name="comment" id="" cols="30" rows="5"></textarea>
+                </div> 
+                
+                <input type="submit" class="buy">
+
+
+            </form>
+      
+    </div>
+    
+</div>
+
+<link rel="stylesheet" href="{% static '/kasse/style.css' %}">
+<script src="{% static '/kasse/kasse.js' %}"></script>
+
+{% endblock  %}

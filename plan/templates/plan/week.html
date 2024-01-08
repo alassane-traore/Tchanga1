@@ -1,0 +1,47 @@
+{% extends 'plan/root.html' %}
+{% block contents %}
+{% load static %}
+
+<div class="tab">
+<div id="week">
+<h1 id="head" class="head" >WEEKLY PLAN</h1>
+<h6 id="time" class="head" > {{t}} </h6>
+
+
+{% if week %}
+<table >
+    <tr> <td>Time </td>  <td>Tasks</td></tr>
+{% for w in week %}
+
+{% if w.date %}
+<tr  > <td colspan="2" class="wdate"> <h5> {{w.date}} </h5></td></tr>
+{%endif%}
+<tr >  <td class="wtask1">{{w.date1}}</td> <td class="wtask">{{w.begin}}-{{w.end}} </td>  <td class="wtask"> {{w.task}}</td></tr>
+
+
+{% endfor %}
+
+</table>
+{% else %}
+<h4> You have no Program for this Week ! </h4>
+<h4><a href="{% url 'add'%}" ><i class="fa-regular fa-square-plus">Add</i>  </a> </h4>
+{% endif %}
+</div>
+</div>
+
+<link rel="stylesheet" href="{% static '/plan/style.css' %}">
+<script src="{% static '/plan/index.js' %}"></script>
+{% endblock  %}
+
+<!--
+    <svg hight="500" width="100"> 
+    <circle cx="15" cy="45" r="5" fill="black" />
+    
+    <line x1="15" y1="50" x2="15" y2="200" 
+    stroke="black"
+    stroke-width="3"
+     stroke-linecap="round" 
+    />
+    <circle cx="15" cy="150" r="5" fill="black" />
+</svg>
+-->

@@ -1,0 +1,41 @@
+{% extends 'kasse/enchor.html' %}
+{% block contents %}
+{% load static %}
+<div id ="plusdiv2"> 
+<h1 id="head"> Add shopping list </h1>
+
+<form  method="POST" enctype="multipart/form-data">
+
+      {% csrf_token %}
+
+      <div id="stock"> 
+        <i class="fa-solid fa-list">{{len}}</i>
+      <ol>
+        <!--<input name="del" id="del">-->
+       {% for l in li %}
+       <li> {{l.name}} <i class="fa-solid fa-xmark anul" id="{{l.id}}" ></i> </li>
+       
+       {% endfor %}
+      </ol>
+      </div>
+
+     <!-- <input id="timput" name="date" type="datetime-local" >-->
+      <h4 > Product </h4>
+      <input id="limput" name="good">
+        <di>
+          <input id="sectionId" name="sector" style="display:none;">
+          <h4> Sector </h4>
+          {% for s in cs  %}
+                <input type="checkbox" name="{{s.id}}" class="checkSector">
+                <label for("{{s.name}}")>{{s.name}} </label>
+                {% endfor %}
+        </div>
+  <input type="submit" id="givelist" class="givelist">
+  
+</form>
+</div>
+
+<link rel="stylesheet" href="{% static '/kasse/style.css' %}">
+<script src="{% static '/kasse/kasse.js' %}"></script>
+
+{% endblock  %}

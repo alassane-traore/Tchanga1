@@ -1,0 +1,43 @@
+
+{% extends 'plan/root.html' %}
+{% block contents %}
+{% load static %}
+
+<div class="tab" id="tab">
+<div id="daycontainer"> 
+    <h1 id="head" class="head"> DAYLY PLAN  </h1>
+<h6 id="time" class="head"> {{t}} </h6>
+
+{% if taff %}
+<div id="dayDiv">
+{% for t in taff %}
+<div class="act">
+    <h6 class="times">{{t.begin}}-{{t.end}} <span class="percent"> </span> <h6><i class="fa-solid fa-pen" id='{{t.id }}' ></i> <i class="fa-solid fa-trash-can" id='{{t.id}}'></i>  </h6> </h6>
+    <h5 class="tks">
+        <i class="fa-solid fa-circle-dot ench"></i>
+        {{t.task}} 
+    </h5>
+ </div>
+
+{% endfor %}
+
+</div>
+{% else %}
+<h4> You have no Program for today ! </h4>
+<h4><a href="{% url 'add'%}" ><i class="fa-regular fa-square-plus">Add</i>  </a> </h4>
+{% endif %}
+
+</div>
+
+</div>
+
+
+
+
+
+
+<link rel="stylesheet" href="{% static '/plan/style.css' %}">
+<script src="{% static '/plan/index.js' %}"></script>
+
+
+{% endblock  %}

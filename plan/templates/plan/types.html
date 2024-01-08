@@ -1,0 +1,26 @@
+{% extends 'plan/root.html' %}
+{% block contents %}
+{% load static %}
+<div id ="plusdiv"> 
+<h1 id="head"> Add Classes ! </h1>
+
+<h4 id="time"> {{t}} : <span id="daily" > </span> </h4>
+
+<form  method="POST" enctype="multipart/form-data">
+
+      {% csrf_token %}
+    
+    
+    <input name="typo"> 
+    
+    <a href="{% url 'types' %}"><button> <i class="fa-regular fa-paper-plane" id="los1"></i>  </button> </a>
+    
+     
+   
+</form>
+</div>
+
+<link rel="stylesheet" href="{% static '/plan/style.css' %}">
+<script src="{% static '/plan/index.js' %}"></script>
+
+{% endblock  %}
