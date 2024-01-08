@@ -1,0 +1,28 @@
+{% extends 'users/root.html' %}
+{% block contents %}
+{% load static %}
+
+<h1 id="head"> LOGIN! </h1>
+
+{% if message %}
+<h4 id="time"> {{message}}  </h4>
+{% endif %}
+
+<form id="addform" method="POST" enctype="multipart/form-data">
+
+      {% csrf_token %}
+    <input placeholder="name" name="username">
+    <input type="password" placeholder="password" name="password">
+    <input type="submit" value="LOGIN">
+
+    <!--<i class="fa-regular fa-square-plus" id="onemore"></i>
+    <i class="fa-regular fa-paper-plane" id="los0"></i> -->
+    
+    
+</form>
+
+
+<link rel="stylesheet" href="{% static '/users/style.css' %}">
+<script src="{% static '/users/index.js' %}"></script>
+
+{% endblock  %}

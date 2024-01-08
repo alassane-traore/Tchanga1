@@ -1,0 +1,75 @@
+.nav{
+    display: inline-block;
+    padding: 19px;
+    
+}
+
+nav>ul{
+   text-align:right; 
+   align-content: end;
+}
+
+#onemore{
+    background-color: rebeccapurple;
+    color: white;
+    border: 1 solid black;
+    width: 50%;
+    text-align: center;
+    margin: 0px auto;
+}
+
+#home{
+    width: 95%;
+    margin: 0 auto;
+    align-items: center;
+}
+
+.homea{
+    height: 100%;
+    display: grid;
+    place-items: center;
+    justify-content: center;
+    justify-items: center;
+}
+
+#planApp{
+    display:inline-block;
+    background-color: purple;
+    width: 45%;
+    text-align: center;
+    height: 65vh;
+    vertical-align:middle;
+    border-radius: 15px;
+    
+}
+
+
+#kassenApp{
+    display: inline-block;
+    background-color: orangered;
+    width: 45%;
+    text-align: center;
+    height: 65vh;
+    vertical-align:middle;
+    border-radius: 15px;
+    
+}
+
+#head{
+    text-align: center;
+}
+
+@media only screen and (max-width:785px){
+    #kassenApp{
+        width: 49%;
+        height: 45vh;   
+    }
+
+    #planApp{
+        width: 49%;
+        height: 45vh;
+        
+        
+    }
+
+}
