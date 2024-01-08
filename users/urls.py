@@ -8,5 +8,7 @@ urlpatterns = [
     path('editprofile/',views.edit_profile,name="profiledit" ),
     path('login/',views.loginin,name="login" ),
     path('logout/',views.logingout,name="logout"),
-    path('home/',views.home,name="home")
+    path('home/',views.home,name="home"),
+    path('',views.welcome,name="wlc")
+
 ]
