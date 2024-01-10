@@ -86,7 +86,7 @@ WSGI_APPLICATION='Tchanga.wsgi.application'
     }
 }"""
 
-DATABASES = {
+"""DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.environ.get('Database'),
@@ -95,7 +95,16 @@ DATABASES = {
         'HOST': os.environ.get('Hostname'),
         'PORT': os.environ.get('Port')
     }
+}"""
+DATABASES = {
+    'default': dj_database_url.config(
+       
+        default=os.environ.get('DATABASE_URL'),
+        conn_max_age=600
+    )
 }
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -134,8 +143,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
-STATIC_ROOT=BASE_DIR /"staticfiles"
+if not DEBUG:
+  STATIC_ROOT=os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS=[
     os.path.join(BASE_DIR,'plan/static'),
