@@ -18,29 +18,32 @@ class Login_form(forms.Form):
 
 # Create your views here.
 
-def check_user_account(request, username):
+def check_user_account(request,username):
     try:
         if request.user.is_authenticated:
             ev=reverse("home")
-            print("auth")
             return redirect(ev)
         # Attempt to get the user by username
-        user = User.objects.get(username=username)
+        else:
+            user = User.objects.get(username=username)
 
-        # User account exists, continue with your logic
-        ev=reverse("login")
-        return redirect(ev)
+        # User account exists, 
+            ev=reverse("login")
+            return redirect(ev)
 
     except User.DoesNotExist:
         # User account does not exist, handle accordingly
         return HttpResponseRedirect("signup")
 
 def home(req):
-    
-    if not req.user.is_authenticated:
-        rev=reverse('login')
-        return redirect(rev) 
-    
+    try:
+      if not req.user.is_authenticated:
+         rev=reverse('login')
+         return redirect(rev) 
+    except:
+         rev=reverse('login')
+         return redirect(rev)
+     
     return render(req, "users/home.html")
 
 def signup(request):
@@ -54,7 +57,7 @@ def signup(request):
            password= make_password(str(post1["password"]))
            user = User(username=name,email=email,password=password)
            user.save()
-           rev=reverse("days")
+           rev=reverse("home")
            return  redirect(rev)
         else:
             message="Please submit correct und complete information"
@@ -64,12 +67,13 @@ def signup(request):
 
 
 def loginin(request):
-    check_user_account(request,request.user)
-    if request.method=="POST":
+    try:
+      return check_user_account(request,request.user)
+    except:
+     if request.method=="POST":
         post=request.POST
         use=Login_form(post)
         if use.is_valid:
-           print("VALID !")
            name=request.POST["username"]
            password=request.POST["password"]    
            user = authenticate(request,username=name,password=password)
@@ -80,8 +84,8 @@ def loginin(request):
               message="Invalid credentials"
               return render(request,"users/login.html",context={"message":message})
     
-    else:
-        print(request.user)
+     else:
+       
         return render(request,"users/login.html")
     
 def profile(request):
@@ -96,7 +100,7 @@ def edit_profile(request):
 
     
 def logingout(request):
-    print(request.user)
+   
     logout(request)
     rev=reverse("login")
     return redirect(rev)
