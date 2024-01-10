@@ -18,40 +18,44 @@ class Login_form(forms.Form):
 
 # Create your views here.
 
-def check_user_account(request,username,direction):
+def check_user_account(request):#,username,direction
     try:
         if request.user.is_authenticated:
-            
+            print("trying to check !")
             ev=reverse("home")
             return redirect(ev)
         # Attempt to get the user by username
-        else:
-            user = User.objects.get(username=username)
+        #else:
+           # user = User.objects.get(username=username)
 
         # User account exists, 
-            
-            ev=reverse(direction)
-            return redirect(ev)
+            #print("tring to check , user exists")
+           # ev=reverse(direction)
+            #return redirect(ev)
 
     except User.DoesNotExist:
         
         message="If you do not an account, you must create one (signup) before loging in"
+        print(message)
         return render(request,"users/login.html",context={"message":message})
         
         
 
 def home(req):
     try:
-      if not req.user.is_authenticated:
-         
-         rev=reverse('login')
-         return redirect(rev) 
-    except:
-         
-         rev=reverse('login')
-         return redirect(rev)
-     
-    return render(req, "users/home.html")
+      if req.user.is_authenticated:
+         print("user is aut in home !")
+         #rev=reverse('login')
+         return  render(req, "users/home.html")#redirect(rev) 
+    except Exception as e:
+         print("exception in home:",e)
+         #rev=reverse('login')
+         #return redirect(rev)
+         pass
+    print("redirecting to login") 
+    rev=reverse('login')
+    return redirect('login')
+    #return render(req, "users/home.html")
 
 def signup(request):
     if request.method == "POST":
@@ -85,13 +89,17 @@ def signup(request):
 
 
 def loginin(request):
-    try:
-      if not request.method=="POST":
+    """try:
+      if not request.method=="POST" and request.user.is_authenticated:
+        print("try in login")
        
-        return check_user_account(request,request.user,"login")
+        print("trying to check !")
+        ev=reverse("home")
+        return redirect(ev)
+      #  return check_user_account(request,request.user,"login")
     except:
         
-        pass
+        pass"""
     if request.method=="POST":
         
         post=request.POST
@@ -131,3 +139,4 @@ def logingout(request):
 def welcome(req):
     rev=reverse("home")
     return redirect(rev)
+    #return render(req, "users/home.html")
