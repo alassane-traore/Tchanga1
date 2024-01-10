@@ -18,28 +18,6 @@ class Login_form(forms.Form):
 
 # Create your views here.
 
-def check_user_account(request):#,username,direction
-    try:
-        if request.user.is_authenticated:
-            print("trying to check !")
-            ev=reverse("home")
-            return redirect(ev)
-        # Attempt to get the user by username
-        #else:
-           # user = User.objects.get(username=username)
-
-        # User account exists, 
-            #print("tring to check , user exists")
-           # ev=reverse(direction)
-            #return redirect(ev)
-
-    except User.DoesNotExist:
-        
-        message="If you do not an account, you must create one (signup) before loging in"
-        print(message)
-        return render(request,"users/login.html",context={"message":message})
-        
-        
 
 def home(req):
     try:
@@ -51,10 +29,13 @@ def home(req):
          print("exception in home:",e)
          #rev=reverse('login')
          #return redirect(rev)
-         pass
-    print("redirecting to login") 
-    rev=reverse('login')
-    return redirect('login')
+    try:
+      print("redirecting to login") 
+      rev=reverse('login')
+      return redirect('login')
+    except Exception as e:
+        print("exception happened:",e)
+        
     #return render(req, "users/home.html")
 
 def signup(request):
