@@ -33,8 +33,9 @@ def check_user_account(request,username):
 
     except User.DoesNotExist:
         # User account does not exist, handle accordingly
-        rev=reverse("login") # "signup"
-        return redirect(rev)
+        #rev=reverse("login") # "signup"
+        #return redirect(rev)
+        pass
         
 
 def home(req):
