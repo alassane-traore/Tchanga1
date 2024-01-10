@@ -94,7 +94,8 @@ DATABASES = {
 
 parsed_url=parse_qs(os.environ.get("DATABASE_URL"))
 durl=os.environ.get("DATABASE_URL")
-DATABASES['default']=parsed_url #parsed_url  os.environ.get("DATABASE_URL") 'postgres://tchangabase_user:qQ0UnP8IY5XcE9kPXmmlE9648GLAXWLc@dpg-cmdlpf8cmk4c73alkbpg-a.frankfurt-postgres.render.com/tchangabase'  dj_database_url.parse(durl)
+DATABASES['default']=dj_database_url.config()
+DATABASES['default']=dj_database_url.config(default=durl)     #parsed_url #parsed_url  os.environ.get("DATABASE_URL") 'postgres://tchangabase_user:qQ0UnP8IY5XcE9kPXmmlE9648GLAXWLc@dpg-cmdlpf8cmk4c73alkbpg-a.frankfurt-postgres.render.com/tchangabase'  dj_database_url.parse(durl)
 
 
 
