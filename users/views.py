@@ -32,7 +32,7 @@ def home(req):
     try:
       print("redirecting to login") 
       rev=reverse('login')
-      return redirect('login')
+      return redirect(rev)
     except Exception as e:
         print("exception happened:",e)
         
