@@ -56,17 +56,17 @@ def new_time(req):
     #dt=d
     cw=find_week(f"{d.year}-{d.month}-{d.day}")
     lines=weecklines.objects.all().filter(author=req.user,week=cw)
-    print("metho0 : ",req.POST)
+    
     if req.method=="POST":
       dt =req.POST["date1"].split("T")[0]
       dt1=req.POST["date1"]
       d=datetime.strptime(str(dt),'%Y-%m-%d')
-      print("meth:",req.method,d)
+      
       cw=find_week(f"{d.year}-{d.month}-{d.day}")
       lines = weecklines.objects.all().filter(author=req.user,week=cw)
       return render(req,'plan/add.html',context={"t":my_time,"k":k,"l":lines,"d":dt1})
     else:
-        print("hhhhiiii")
+        
         HttpResponseRedirect(reverse("add"))  
   
 def add(req):
@@ -89,11 +89,11 @@ def add(req):
        for i in range(1,int(num)+1):
            classi=post[f"typo{i}"]
            el = k.filter(kategorie=classi,author=req.user)
-           #print("elem:",el.get(), classi)
+          
            if len(el)<1:
               newK=Kategories(author=author,kategorie=classi)
               newK.save()
-              print(classi)
+              
            fm=post[f"timF{i}"]
            to=post[f"timT{i}"]
            acti=post[f"act{i}"]
@@ -112,11 +112,11 @@ def add_week(req):
     if req.method=="POST":
         dt=req.POST["week"].split("T")[0]
         dt=str(dt)
-        print(dt)
+       
         w=find_week(dt)
         author=req.user
         l=req.POST["line"]
-        print(author,w)
+        
         if author is not None and w is not None and l !="":
            myweek=weecklines(author=author,week=w,line=l)
            myweek.save()
@@ -173,9 +173,9 @@ def days(req):
     #.datetime.now()
     
     lc = get_localzone()
-    print("TZ",lc)
+    
     tm=datetime.now(lc)
-    print(f"time:{tm}")
+    
     y=tm.year
     m=tm.month
     da=tm.day
@@ -211,7 +211,7 @@ def week(req):
     current_Week=find_week(f"{today.year}-{today.month}-{today.day}")
     
     we=Task.objects.all().filter(author=req.user)
-    #print(req.user,":", we[1].date)
+    
     wee=[]
     for el in we:
         
@@ -284,7 +284,7 @@ def months(req):
     da=[]
     for i in moar:
         d=datetim.datetime(i.date.year,i.date.month,i.date.day)
-       # print("d:",d)
+       
         if not d in da:
           da.append(d)  
         
@@ -307,7 +307,7 @@ def months(req):
           if d ==i:
             one.append(el.begin)
         one.sort()
-        #print(one)
+
         taff0.append(one)
     
         for ar in taff0:
@@ -316,7 +316,7 @@ def months(req):
            d=datetim.datetime(o.date.year,o.date.month,o.date.day)
            
            if el1==o.begin and d==i :
-           # print(d,":",el1)
+           
             ob={}
             ob["begin"]=str(o.begin)[:-3]
             ob["end"]=str(o.end)[:-3]
@@ -348,7 +348,7 @@ def types(req):
     if req.method=="POST":
         classi=req.POST["typo"]
         author=req.user
-        print(author,classi)
+        
         if author is not None and classi is not None:
            k=Kategories(author=author,kategorie=classi)
            
@@ -363,19 +363,19 @@ def give_to_update_object(req,id):
     
       ob=Task.objects.get(id=id) #.filter(author=req.user,id=id)
       k=Kategories.objects.all().filter(author=req.user)
-      print(ob)
+     
       dat1=ob.date
       dat=datetime.strptime(f"{dat1.month}-{dat1.day}-{dat1.year}",'%m-%d-%Y')
       wk=find_week(str(dat1))
       
       lines = weecklines.objects.all().filter(author=req.user,week=wk)
-      print(type(ob.begin))
+      
       return render(req,'plan/update.html',context={"t":my_time,"k":k,"l":lines,"task":ob,"d":dat})
 
 def remov(req,id):
     ob=Task.objects.get(id=id)
     #delet =ob.task
-    print(ob)
+    
     ob.delete()
     return redirect("days")
     #return render(req,'plan/delete.html',context={"t":my_time,"del":delet})

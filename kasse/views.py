@@ -27,7 +27,7 @@ def create_date(period,begin):
         d+=1
         try:
             b=datetim.datetime(y,m,d)  
-            #print(i,":",b)           
+                       
         except:
          try:
             ni1=i
@@ -35,7 +35,7 @@ def create_date(period,begin):
             d=1 
             b=datetim.datetime(y,m,d)
             create_date(ni1,b)  
-            #print(i,"::",b) 
+            
          except:
             ni2=i
             y+=1
@@ -43,7 +43,7 @@ def create_date(period,begin):
             d=1 
             b=datetim.datetime(y,m,d)
             create_date(ni2,b) 
-            #print(i,":::",b)
+            
     return b
 
 def new_sector(req):
@@ -64,7 +64,7 @@ def new_sector(req):
             auto=False
        except  :
            auto=False
-           print("Exception occured !")
+           
            
        ms=Sector(author=author,name=sector,begin=begin,end=end,budget=budget,automate=auto)
        ms.save()
