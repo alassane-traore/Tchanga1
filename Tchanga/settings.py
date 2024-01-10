@@ -14,6 +14,9 @@ from pathlib import Path
 import os
 from tzlocal import get_localzone
 import dj_database_url
+from urllib.parse import urlparse , urlencode, parse_qs
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,11 +24,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
-SECRET_KEY = os.environ.get('SECRET_KEY')
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
 
-ALLOWED_HOSTS = ['tchanga12x.onrender.com']
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY ='bfb6c1140d595eaf0fc50054b03d7c0d'#parse_qs(os.environ.get('SECRET_KEY'))#'django-insecure-ph+676$%oyyv73(vr#!q-s@t_p6rhow8$6$rg_&*7@09+_%jy1'
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG =os.environ.get("DEBUG",False)
+
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS","127.0.0.1 ").split(" ")
 
 
 # Application definition
@@ -79,12 +85,17 @@ WSGI_APPLICATION='Tchanga.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-"""DATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME':'/home/alassane/Desktop/Dev-Projects/PythonProjects/Django/tchanga/db.sqlite3',    #BASE_DIR / 'db.sqlite3',
+        'NAME':BASE_DIR / 'db.sqlite3'  #'/home/alassane/Desktop/Dev-Projects/PythonProjects/Django/tchanga/db.sqlite3',    #BASE_DIR / 'db.sqlite3',
     }
-}"""
+}
+
+parsed_url=parse_qs(os.environ.get("DATABASE_URL"))
+durl=os.environ.get("DATABASE_URL")
+DATABASES['default']=parsed_url #parsed_url  os.environ.get("DATABASE_URL") 'postgres://tchangabase_user:qQ0UnP8IY5XcE9kPXmmlE9648GLAXWLc@dpg-cmdlpf8cmk4c73alkbpg-a.frankfurt-postgres.render.com/tchangabase'  dj_database_url.parse(durl)
+
 
 """DATABASES = {
     'default': {
@@ -92,19 +103,21 @@ WSGI_APPLICATION='Tchanga.wsgi.application'
         'NAME': os.environ.get('Database'),
         'USER': os.environ.get('Username'),
         'PASSWORD': os.environ.get('Password'),
-        'HOST': os.environ.get('Hostname'),
+        'HOST':os.environ.get('Hostname'),#'tchanga12x.onrender.com',# , '127.0.0.1' os.environ.get('Hostname')
         'PORT': os.environ.get('Port')
     }
-}"""
-DATABASES = {
+    
+    }"""
+
+
+"""DATABASES = {
+    
     'default': dj_database_url.config(
-       
         default=os.environ.get('DATABASE_URL'),
+        engine= 'django.db.backends.postgresql',
         conn_max_age=600
     )
-}
-
-
+}"""
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -157,21 +170,3 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-# settings.py
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'loggers': {
-        'whitenoise': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-        },
-    },
-}
-
