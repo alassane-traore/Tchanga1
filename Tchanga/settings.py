@@ -89,11 +89,11 @@ WSGI_APPLICATION='Tchanga.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DATABASE_NAME'),
-        'USER': os.environ.get('DATABASE_USER'),
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
-        'HOST': os.environ.get('DATABASE_HOST'),
-        'PORT': '10000', #os.environ.get('DATABASE_PORT')
+        'NAME': os.environ.get('Database'),
+        'USER': os.environ.get('Username'),
+        'PASSWORD': os.environ.get('Password'),
+        'HOST': os.environ.get('Hostname'),
+        'PORT': '10000'
     }
 }
 
