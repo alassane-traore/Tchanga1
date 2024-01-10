@@ -65,7 +65,8 @@ def signup(request):
             message="Please submit correct und complete information"
             return render(request,"users/signup.html",context={"message":message})
     else:
-        return render(request,"users/signup.html")
+        message="If you have allready an accound , do not create one again !Simply login !"
+        return render(request,"users/signup.html",context={"message":message})
 
 
 def loginin(request):
