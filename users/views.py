@@ -18,9 +18,10 @@ class Login_form(forms.Form):
 
 # Create your views here.
 
-def check_user_account(request,username):
+def check_user_account(request,username,direction):
     try:
         if request.user.is_authenticated:
+            
             ev=reverse("home")
             return redirect(ev)
         # Attempt to get the user by username
@@ -28,22 +29,25 @@ def check_user_account(request,username):
             user = User.objects.get(username=username)
 
         # User account exists, 
-            ev=reverse("login")
+            
+            ev=reverse(direction)
             return redirect(ev)
 
     except User.DoesNotExist:
-        # User account does not exist, handle accordingly
-        #rev=reverse("login") # "signup"
-        #return redirect(rev)
-        pass
+        
+        message="If you do not an account, you must create one (signup) before loging in"
+        return render(request,"users/login.html",context={"message":message})
+        
         
 
 def home(req):
     try:
       if not req.user.is_authenticated:
+         
          rev=reverse('login')
          return redirect(rev) 
     except:
+         
          rev=reverse('login')
          return redirect(rev)
      
@@ -59,9 +63,19 @@ def signup(request):
            email=post1["email"]
            password= make_password(str(post1["password"]))
            user = User(username=name,email=email,password=password)
-           user.save()
-           rev=reverse("home")
-           return  redirect(rev)
+           try:
+               user1=User.objects.get(user,None)
+               if user1 is not None:
+                  message="Please use an other username !"
+                  return render(request,"users/signup.html",context={"message":message})
+               else:
+                  user.save()
+                  rev=reverse("home")
+                  return  redirect(rev)
+                   
+           except:
+               message="Please use an other username 2!"
+               return render(request,"users/signup.html",context={"message":message})
         else:
             message="Please submit correct und complete information"
             return render(request,"users/signup.html",context={"message":message})
@@ -72,9 +86,14 @@ def signup(request):
 
 def loginin(request):
     try:
-      return check_user_account(request,request.user)
+      if not request.method=="POST":
+       
+        return check_user_account(request,request.user,"login")
     except:
-     if request.method=="POST":
+        
+        pass
+    if request.method=="POST":
+        
         post=request.POST
         use=Login_form(post)
         if use.is_valid:
@@ -88,9 +107,9 @@ def loginin(request):
               message="Invalid credentials"
               return render(request,"users/login.html",context={"message":message})
     
-     else:
+     
        
-        return render(request,"users/login.html")
+    return render(request,"users/login.html")
     
 def profile(request):
     
