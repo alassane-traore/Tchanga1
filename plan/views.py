@@ -9,7 +9,6 @@ import time
 import pytz
 from tzlocal import get_localzone
 from .models import Task,Kategories,dates,weecklines
-import pygame
 import os
 
 w_days=["Monday", "Tuesday", "Wednesday","Thursday","Friday","Saturday","Sunday" ]
@@ -25,7 +24,7 @@ mybird=os.path.join(base_dir,birds[2])
 
 last_tone=""
 
-def give_tone(req):
+"""def give_tone(req):
     global last_tone
     nw=last_tone
     pygame.mixer.init()
@@ -38,7 +37,8 @@ def give_tone(req):
       pygame.mixer.quit()
       last_tone=datetim.datetime.now()
     
-    return HttpResponseRedirect(reverse("days"))
+    return HttpResponseRedirect(reverse("days"))"""
+
 
 def find_week(date):
     date=datetime.strptime(date,'%Y-%m-%d')
@@ -167,11 +167,12 @@ def ordi(taff1):
     return taff
 
 def days(req):
+    print("i am in todays")
     #tm=datetime.utcnow()
     #local=pytz.timezone('Europe/Berlin')
     #localtime=tm.replace(tzinfo=pytz.utc).astimezone(local)
     #.datetime.now()
-    
+    #aud=os.path.join(base_dir,)
     lc = get_localzone()
     
     tm=datetime.now(lc)
@@ -200,12 +201,15 @@ def days(req):
         ob["id"]=el.id
         taff.append(ob)
     if not req.user.is_authenticated:
+        print("in days:user not auth !")
         rev=reverse('login')
         return redirect(rev) 
-              
+    try:
+     print("in days : rendering  !") 
+     return render(req,'plan/today.html',context={"t":my_time,"taff":taff})
+    except Exception as e:
+      print("the exception her:",e)
       
-    return render(req,'plan/today.html',context={"t":my_time,"taff":taff})
-
 def week(req):
     today=datetim.datetime.now()
     current_Week=find_week(f"{today.year}-{today.month}-{today.day}")

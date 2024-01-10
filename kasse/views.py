@@ -10,7 +10,7 @@ import pytz
 from tzlocal import get_localzone
 from django.utils import timezone
 from .models import Sector,Basket,Goods
-import pygame
+#import pygame
 import os
 
 print("localtime:",timezone.localtime(timezone.now()))

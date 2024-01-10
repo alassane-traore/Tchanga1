@@ -56,6 +56,22 @@ let ev = new Event("click")
 
 let begin=""
 let ringed =""
+
+function signal(){
+    let aud =new Audio(document.getElementById("day").textContent)
+    console.log("link",document.getElementById("day").textContent)
+    console.log("1:",aud.ended)
+    aud.play().catch((e)=>{})
+ }
+
+
+    dayIc.addEventListener("click",()=>{
+        signal()
+        
+       })
+       
+
+
 function pointer(){
 let times = document.querySelectorAll(".times")
 if (times && times.length>0 && document.getElementById("tab")){
@@ -73,6 +89,8 @@ if (times && times.length>0 && document.getElementById("tab")){
         }
       
      }
+
+
     for (let i=0;i<times.length;i++){
         
         let d=new Date()
@@ -162,12 +180,15 @@ if (times && times.length>0 && document.getElementById("tab")){
 }
 }
 
+
+
 setInterval(()=>{
     if (new Date().getHours()===0&& new Date().getMinutes()===0 && new Date().getSeconds()<1){
         
         location.reload()
     }
 },1000)
+
 
 function weekPointer(x,y,z){
     for(let i=0;i<x.length;i++){

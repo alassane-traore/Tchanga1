@@ -16,7 +16,7 @@
     <ul>
         <!--<li class="nav" > <a href="{% url 'transit' %}"> <i class="fa-solid fa-plus"></i> </a></li> -->
         
-        <li class="nav" style="display:none;"> <a href="{% url 'ringer' %}" id="day">Bird </a> </li>
+        <li class="nav" style="display:none;"> <a id="day">{% static 'plan/Bird_Ringtone(256k).mp3' %} </a> </li>
         <li class="nav"> <a href="{% url 'transit1' %}"> <i class="fa-regular fa-square-plus"></i>  </a></li>
         <li class="nav" > <a href="{% url 'counter' %}"> <i class="fa-solid fa-gauge"></i> </a></li>
         <li class="nav" > <a href="{% url 'market' %}"> <i class="fa-solid fa-cart-shopping"></i> </a> </li>
