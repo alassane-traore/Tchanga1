@@ -33,7 +33,7 @@ def check_user_account(request,username):
 
     except User.DoesNotExist:
         # User account does not exist, handle accordingly
-        rev=reverse("signup")
+        rev=reverse("login") # "signup"
         return redirect(rev)
         
 
