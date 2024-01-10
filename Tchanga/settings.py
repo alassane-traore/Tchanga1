@@ -97,27 +97,6 @@ durl=os.environ.get("DATABASE_URL")
 DATABASES['default']=parsed_url #parsed_url  os.environ.get("DATABASE_URL") 'postgres://tchangabase_user:qQ0UnP8IY5XcE9kPXmmlE9648GLAXWLc@dpg-cmdlpf8cmk4c73alkbpg-a.frankfurt-postgres.render.com/tchangabase'  dj_database_url.parse(durl)
 
 
-"""DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('Database'),
-        'USER': os.environ.get('Username'),
-        'PASSWORD': os.environ.get('Password'),
-        'HOST':os.environ.get('Hostname'),#'tchanga12x.onrender.com',# , '127.0.0.1' os.environ.get('Hostname')
-        'PORT': os.environ.get('Port')
-    }
-    
-    }"""
-
-
-"""DATABASES = {
-    
-    'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL'),
-        engine= 'django.db.backends.postgresql',
-        conn_max_age=600
-    )
-}"""
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
