@@ -51,7 +51,7 @@ def signup(request):
            try:
                #user1=User.objects.get(name,None) 
                user1=User.objects.get(username=name) 
-               print(user1)
+               print("new:",user1)
                if user1 is not None:
                   message="Please use an other username !"
                   return render(request,"users/signup.html",context={"message":message})
