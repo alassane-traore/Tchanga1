@@ -49,7 +49,8 @@ def signup(request):
            password= make_password(str(post1["password"]))
            user = User(username=name,email=email,password=password)
            try:
-               user1=User.objects.get(name,None)
+               #user1=User.objects.get(name,None) 
+               user1=User.objects.get(username=name)
                if user1 is not None:
                   message="Please use an other username !"
                   return render(request,"users/signup.html",context={"message":message})
