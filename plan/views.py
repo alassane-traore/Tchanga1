@@ -12,7 +12,7 @@ from .models import Task,Kategories,dates,weecklines
 import os
 
 w_days=["Monday", "Tuesday", "Wednesday","Thursday","Friday","Saturday","Sunday" ]
-
+my_months=["", "January", "February","March","April", "May", "June", "July","August","September","October","November","December"]
 my_time=datetim.datetime.now().weekday()
 my_time = str(datetim.datetime.now().date()) +","+ w_days[my_time]
 base_dir=settings.BASE_DIR
@@ -20,25 +20,7 @@ birds =["plan/static/plan/Bird_Ringtone(256k).mp3",
         "plan/static/plan/Birds_Ringtone____Sweet_Voice____New_Ringtones_2020____Ringtones_2.O___(256k).mp3",
         "plan/static/plan/Bird_Voice_-_Ringtone_[With_Free_Download_Link](256k).mp3"
         ]
-mybird=os.path.join(base_dir,birds[2])
-
-last_tone=""
-
-"""def give_tone(req):
-    global last_tone
-    nw=last_tone
-    pygame.mixer.init()
-    pygame.mixer.music.load(mybird)
-    if last_tone==""or datetim.datetime.now() > datetim.datetime(nw.year,nw.month,nw.day,nw.hour,nw.minute+2,nw.second):
-      pygame.mixer.music.play()
-    
-      while pygame.mixer.music.get_busy():
-        pygame.time.Clock().tick()
-      pygame.mixer.quit()
-      last_tone=datetim.datetime.now()
-    
-    return HttpResponseRedirect(reverse("days"))"""
-
+mybird=os.path.join(base_dir,birds[0])
 
 def find_week(date):
     date=datetime.strptime(date,'%Y-%m-%d')
@@ -278,17 +260,40 @@ def week(req):
 
 def months(req):
     mo=datetim.datetime.now().month
+    yea=datetim.datetime.now().year
     fmo=Task.objects.all().filter(author=req.user)
+    try:
+      month_info=req.GET["msel"]
+      msel=int(month_info.split(":")[0])
+      syea=int(month_info.split(":")[1])
+      print(type(msel), ":", msel)
+      print(type(syea), ":", syea)
+      if not msel==mo:
+         mo=msel
+         yea=syea
+         
+    except:
+        pass
+        
     moar=[]
+    
+    allmonths=[]
+    selected_month={"val":f"{mo}:{yea}","name":f"{my_months[mo]} {yea}"}
     for el in fmo:
         if el.date:
           date=datetime.strptime(f"{el.date.year}-{el.date.month}-{el.date.day}",'%Y-%m-%d')
-          if date.month == mo and not el in moar:
+          ob={"val":f"{date.month}:{date.year}","name":f"{my_months[date.month]} {date.year}"}
+          
+          if not ob in allmonths:
+              if not date.month==mo or not date.year==yea:
+                allmonths.append(ob)
+                  
+          if date.month == mo  and date.year==yea and not el in moar:
              moar.append(el)
     da=[]
     for i in moar:
         d=datetim.datetime(i.date.year,i.date.month,i.date.day)
-       
+       # print("d:",d)
         if not d in da:
           da.append(d)  
         
@@ -311,7 +316,7 @@ def months(req):
           if d ==i:
             one.append(el.begin)
         one.sort()
-
+        #print(one)
         taff0.append(one)
     
         for ar in taff0:
@@ -320,7 +325,7 @@ def months(req):
            d=datetim.datetime(o.date.year,o.date.month,o.date.day)
            
            if el1==o.begin and d==i :
-           
+           # print(d,":",el1)
             ob={}
             ob["begin"]=str(o.begin)[:-3]
             ob["end"]=str(o.end)[:-3]
@@ -346,7 +351,7 @@ def months(req):
         rev=reverse('login')
         return redirect(rev) 
    
-    return render(req,'plan/month.html',context={"t":my_time,"mo":m1})
+    return render(req,'plan/month.html',context={"t":my_time,"mo":m1,"sel":selected_month,"mo1":allmonths})
 
 def types(req):
     if req.method=="POST":

@@ -361,3 +361,14 @@ trash.forEach(el=>{
     })
     
 })
+
+// get new month date on change
+let monSubmit=document.getElementById("monSubmit")
+let monSel=document.getElementById("msel")
+if (monSubmit){
+    monSel.addEventListener("change",()=>{
+        monSubmit.dispatchEvent(ev)
+        monSubmit.click()
+        console.log("I clicke :)")
+    })
+}

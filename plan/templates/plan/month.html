@@ -5,7 +5,15 @@
 <div class="tab">
 <h1 id="head" class="head">MONTHLY PLAN</h1>
 <h6 id="time" class="head"> {{t}} </h6>
-
+<form  method="GET" enctype="multipart/form-data">
+    <select id="msel" name="msel"> 
+    <option value="{{sel.val}}">{{sel.name}} </option>
+    {% for m in mo1 %}
+    <option value="{{m.val}}">{{m.name}} </option>
+    {% endfor %}
+    </select>
+    <input type="submit"  id="monSubmit">
+    </form>
 {% if mo %}
 <table >
     <tr> <td>Time </td>  <td> Tasks </td></tr>
