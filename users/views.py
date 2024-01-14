@@ -49,8 +49,7 @@ def signup(request):
            password= make_password(str(post1["password"]))
            user = User(username=name,email=email,password=password)
            try:
-               #user1=User.objects.get(name,None) 
-               user1=User.objects.get(username=name) 
+               user1=User.objects.get(username=name)
                print("new:",user1)
                if user1 is not None:
                   message="Please use an other username !"
@@ -61,8 +60,11 @@ def signup(request):
                   return  redirect(rev)
                    
            except:
-               message="Please use an other username 2!"
-               return render(request,"users/signup.html",context={"message":message})
+              
+                  user.save()
+                  rev=reverse("home")
+                  return  redirect(rev)
+               
         else:
             message="Please submit correct und complete information"
             return render(request,"users/signup.html",context={"message":message})
