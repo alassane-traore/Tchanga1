@@ -95,7 +95,7 @@ def signup(request):
        
            except Exception as e:
                  
-                 message= e #"Please use an other username !"
+                 message="Please use an other Email!"
                  return render(request,"users/signup.html",context={"message":message})
                   
                
