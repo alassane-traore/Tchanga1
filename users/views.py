@@ -131,7 +131,7 @@ def loginin(request):
                #user1= [o for o in n if o['mail']==name]
                print("Hey from Db:",n)
                request.session["user"]={"mail":name,'token':auth.current_user['idToken'],'name':n}#user1[0]['name']
-               us=session.get("user")
+               us=request.session.get("user")
                print("I got this using req.session.get in login",us)
                rev=reverse("home")
                return redirect(rev)
