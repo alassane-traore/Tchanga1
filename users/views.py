@@ -10,7 +10,7 @@ import os
 from django.conf import  settings
 
 firebase_config={
-   "apiKey":os.environ.get("apiKey"),
+  "apiKey":os.environ.get("apiKey"),
   "authDomain":os.environ.get("authDomainL"),
   "databaseURL": os.environ.get("DATABASE_URL"), 
   "projectId": "tchanga",
