@@ -53,7 +53,9 @@ def home(req):
          #rev=reverse('login')
          return  render(req, "users/home.html",context={"user":n})#redirect(rev) 
     except Exception as e:
-         pass    
+        rev=reverse('login')
+        return redirect(rev)
+            
     try:
 
       rev=reverse('login')
@@ -123,11 +125,11 @@ def loginin(request):
                #user1= [o for o in n if o['mail']==name]
                print("Hey from Db:",n)
                request.session["user"]={"mail":name,'token':auth.current_user['idToken'],'name':n}#user1[0]['name']
-               print("Hey from Db:",n,"again !")
+               print("req.user is :",request.session["user"])
                rev=reverse("home")
-               return  redirect(rev)
+               return redirect(rev)
            except Exception as e:
-               print("can not continue because",e)
+               print(e)
                message="Invalid credentials"
         
                return render(request,"users/login.html",context={"message":message})  
