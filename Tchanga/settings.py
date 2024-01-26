@@ -84,19 +84,7 @@ WSGI_APPLICATION='Tchanga.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME':BASE_DIR / 'db.sqlite3'  
-    }
-}
-
-parsed_url=parse_qs(os.environ.get("DATABASE_URL"))
-durl=os.environ.get("DATABASE_URL")
-DATABASES['default']=dj_database_url.config()
-DATABASES['default']=dj_database_url.config(default=durl)     
-
-
+     
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
