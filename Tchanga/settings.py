@@ -26,8 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY =os.environ.get('SECRET_KEY'), parse_qs(os.environ.get('SECRET_KEY'))#'django-insecure-ph+676$%oyyv73(vr#!q-s@t_p6rhow8$6$rg_&*7@09+_%jy1'
-
+SECRET_KEY =os.environ.get('SECRET_KEY'), parse_qs(os.environ.get('SECRET_KEY'))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG =False #os.environ.get("DEBUG",False)
 
@@ -88,14 +87,14 @@ WSGI_APPLICATION='Tchanga.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME':BASE_DIR / 'db.sqlite3'  #'/home/alassane/Desktop/Dev-Projects/PythonProjects/Django/tchanga/db.sqlite3',    #BASE_DIR / 'db.sqlite3',
+        'NAME':BASE_DIR / 'db.sqlite3'  
     }
 }
 
 parsed_url=parse_qs(os.environ.get("DATABASE_URL"))
 durl=os.environ.get("DATABASE_URL")
 DATABASES['default']=dj_database_url.config()
-DATABASES['default']=dj_database_url.config(default=durl)     #parsed_url #parsed_url  os.environ.get("DATABASE_URL") 'postgres://tchangabase_user:qQ0UnP8IY5XcE9kPXmmlE9648GLAXWLc@dpg-cmdlpf8cmk4c73alkbpg-a.frankfurt-postgres.render.com/tchangabase'  dj_database_url.parse(durl)
+DATABASES['default']=dj_database_url.config(default=durl)     
 
 
 
