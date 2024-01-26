@@ -68,7 +68,7 @@ def home(req):
     #return render(req, "users/home.html")
 
 def signup(request):
-    print("session:",request.session.get())
+    print("session:",request.session.session_key)
      
     if request.method == "POST":
         post1=request.POST
