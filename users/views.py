@@ -55,6 +55,7 @@ def home(req):
          #rev=reverse('login')
          return  render(req, "users/home.html",context={"user":n})#redirect(rev) 
     except Exception as e:
+        print("Exception in home:",e)
         rev=reverse('login')
         return redirect(rev)
             
@@ -64,6 +65,8 @@ def home(req):
       return redirect(rev)
     except Exception as e:
         print("exception happened:",e)
+       rev=reverse('signup')
+       return redirect(rev)
         
     #return render(req, "users/home.html")
 
@@ -128,7 +131,6 @@ def loginin(request):
                #user1= [o for o in n if o['mail']==name]
                print("Hey from Db:",n)
                request.session["user"]={"mail":name,'token':auth.current_user['idToken'],'name':n}#user1[0]['name']
-               print("req.user is :",request.session["user"])
                rev=reverse("home")
                return redirect(rev)
            except Exception as e:
