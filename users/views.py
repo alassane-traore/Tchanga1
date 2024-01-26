@@ -65,8 +65,8 @@ def home(req):
       return redirect(rev)
     except Exception as e:
         print("exception happened:",e)
-       rev=reverse('signup')
-       return redirect(rev)
+        rev=reverse('signup')
+        return redirect(rev)
         
     #return render(req, "users/home.html")
 
