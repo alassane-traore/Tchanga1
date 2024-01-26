@@ -10,7 +10,7 @@ import os
 from django.conf import  settings
 
 firebase_config={
-  "apiKey":os.environ.get("apiKey"),
+   "apiKey":os.environ.get("apiKey"),
   "authDomain":os.environ.get("authDomainL"),
   "databaseURL": os.environ.get("DATABASE_URL"), 
   "projectId": "tchanga",
@@ -95,7 +95,7 @@ def signup(request):
        
            except Exception as e:
                  
-                 message="Please use an other Email!"
+                 message= e #"Please use an other username !"
                  return render(request,"users/signup.html",context={"message":message})
                   
                
@@ -113,19 +113,21 @@ def loginin(request):
         
         post=request.POST
         use=Login_form(post)
+        message="welcome"
         if use.is_valid:
            name=request.POST["username"]
-           password=request.POST["password"]    #make_password(str(request.POST["password"]))#
+           password=request.POST["password"]    
            try:
                auth.sign_in_with_email_and_password(name,password)
                n=db.child(name.split('.')[0]).child('name').get().val()
                #user1= [o for o in n if o['mail']==name]
                print("Hey from Db:",n)
                request.session["user"]={"mail":name,'token':auth.current_user['idToken'],'name':n}#user1[0]['name']
-               #return redirect(reverse("home"))
+               return redirect(reverse("home"))
            except Exception as e:
                print(e)
                message="Invalid credentials"
+        
                return render(request,"users/login.html",context={"message":message})  
     return render(request,"users/login.html")
     
