@@ -134,8 +134,9 @@ def loginin(request):
                us=request.session.get("user")
                #print("I got this using req.session.get in login",us)
                rev=reverse("home")
-               print("redirecting to home",rev)
+               print("from login redirecting to",rev)
                try:
+                   print("should go home now")
                    return redirect(rev)
                except Exception as e:
                     print("could not redirect to home because of ", e)
@@ -166,5 +167,6 @@ def logingout(request):
 
 def welcome(req):
     rev=reverse("home")
+    print("from root redirecting to:",rev)
     return redirect(rev)
     #return render(req, "users/home.html")
