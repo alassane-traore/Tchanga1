@@ -68,7 +68,8 @@ def home(req):
     #return render(req, "users/home.html")
 
 def signup(request):
-    #print("user:",request.user)
+    print("session:",request.session)
+     
     if request.method == "POST":
         post1=request.POST
         use=Signup_form(post1)
