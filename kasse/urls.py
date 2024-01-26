@@ -13,7 +13,7 @@ urlpatterns = [
     path('shopping/',views.shopping_list,name='list'),
     path('hist/',views.hist,name='history'),
     path('shop/',views.basket,name='shop'),
-     path('del/<int:id>',views.removit,name="delete")
+     path('del/<str:id>',views.removit,name="delete")
     
     
     

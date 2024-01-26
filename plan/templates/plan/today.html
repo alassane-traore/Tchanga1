@@ -7,6 +7,11 @@
 <div id="daycontainer"> 
     <h1 id="head" class="head"> DAYLY PLAN  </h1>
 <h6 id="time" class="head"> {{t}} </h6>
+<form  method="POST" enctype="multipart/form-data" class="deleteform">
+    {% csrf_token %}
+    <input name="delete" id="deletes">
+<input type="submit" id="deleteb" >
+</form>
 
 {% if taff %}
 <div id="dayDiv">

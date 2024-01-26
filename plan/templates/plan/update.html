@@ -3,40 +3,42 @@
 {% load static %}
 
 <div id="addform">
-<h1 id="head" class="head"> ADD A PLAN ! </h1>
+<h1 id="head" class="head"> Upadte {{d.task}}! </h1>
 <h4 id="time" class="head"> {{t}} : <span id="daily" > </span> </h4>
 
 <form id="addform0" method="POST" action="{% url 'tchanger' %}" enctype="multipart/form-data">
   {% csrf_token %}
-  <input id="timereserve" name="date1" >
+  <input id="timereserve" name="date2">
+  <input id="timeId" name="id" value="{{d.id}}">
   <button class="nav"  id="tchanger" ></button>
 </form>
-<form id="addform" method="POST" action="{% url 'add' %}" enctype="multipart/form-data">
+<form id="addform" method="POST" action="{% url 'update' %}" enctype="multipart/form-data">
 
       {% csrf_token %}
-      <h4> <span name="num" id="num"> 0</span> <span> Tasks </span></h4>
+      <h4> <span name="num" id="num"> 1</span> <span> Tasks </span></h4>
       <input type="hidden" name="hid" id="hid">
+      <input class="deleteform" name="id" value="{{d.id}}" >
       <div id="stock">
-        <input id="timput" name="date"  type="datetime-local" >
-        <input id="timput1" value="{{d}}" > 
+        <input id="timput" name="date"  type="datetime-local" value="{{d.date}}" >
+        <!--<input id="timput1" value="{{d.date}}"  > -->
       </div>
       
     <div id ="actsdiv"> 
-    <input id="timF" type="time" value={{task.begin}} >
-    <span>{{task.begin}} -{{task.end}}</span>
-    <input id="timT" type="time"value="{{task.end}}">
+    <input id="timF" type="time" name="begin" value={{d.begin}} >
+   <!-- <span>{{d.begin}} -{{d.end}}</span>-->
+    <input id="timT" type="time" name="end" value="{{d.end}}">
     <br>
-    <input name="l" id="act" placeholder="Tasks" value="{{task.task}}" list="lines">
+    <input name="task" id="act" placeholder="Tasks" value="{{d.task}}" list="lines">
     <datalist id="lines">
       {% for el in l  %}
       <option >{{el.line}}</option>
       {% endfor %}
       </datalist>
 
-    <input name="typo" id ="typo" placeholder="Rubrics" value="{{task.classi}}" list="typos" required>
+    <input name="classi" id ="typo" placeholder="Rubrics" value="{{d.classi}}" list="typos" required>
     <datalist id="typos">
     {% for el in k  %}
-    <option >{{el.kategorie}} </option>
+    <option >{{el.class}} </option>
     {% endfor %}
     </datalist>
     <button > Submit </button>

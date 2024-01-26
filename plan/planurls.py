@@ -14,7 +14,9 @@ urlpatterns = [
     path('transit/',views.transit,name="transit"),
     #path('bird/',views.give_tone,name="ringer"),
     path('t/',views.new_time,name="tchanger"),
-    path('update/<int:id>',views.give_to_update_object,name="update"),
-    path('delete/<int:id>',views.remov,name="delete")
+    path('update/',views.give_to_update_object,name="update"),
+    path('delete/',views.remov,name="delete"),
+    path('rm/',views.disprogram,name="disprog")
+    
     
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

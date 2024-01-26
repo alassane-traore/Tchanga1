@@ -10,12 +10,12 @@
         <div class="sectors"> 
             <form id="sform" method="POST"  action="{% url 'market' %}"  enctype="multipart/form-data">
                 {% csrf_token %}
-               <input name="id" style="display:none;" value={{s.id}}> 
-                <h4>{{s.name}} <i class="fa-solid fa-sack-dollar">{{s.c}}</i>  </h4>
+               <input name="id" class="addform0" value={{s.name}}> 
+                <h4>{{s.name}} <i class="fa-solid fa-sack-dollar {{s.decor}}" >{{s.rest}}</i>  </h4>
 
                 <h6><i class="fa-solid fa-clock"></i> <span>{{s.end}} </span> </h6>
 
-                <h4> <span >Budget: </span> <span>{{s.budget}} </span> </h4>
+                <h4> <span >Budget: </span> <span>{{s.newbudget}} </span> </h4>
                 <input type="submit" class="marktSubmit">
 
 

@@ -2,20 +2,20 @@
 {% block contents %}
 {% load static %}
 <div id="marketContainer"> 
-<h1 id="head"> {{sc.name}} <i class="fa-solid fa-sack-dollar"></i>{{sc.c}} </h1>
+<h1 id="head"> {{sc.name}} <i class="fa-solid fa-sack-dollar {{sc.decor}}">{{sc.rest}}</i> </h1>
 <h3><i class="fa-solid fa-cart-plus" id="korb">0</i> </h3>
 
     <div id="basketdiv"> 
          
             <form id="sform" method="POST"  action="{% url 'shop' %}"  enctype="multipart/form-data">
                 {% csrf_token %}
-                <input name="goodnum" id="goodnum" style="display:none;" value="0" >
-                <div> <h3>Shopping list : </h3>
-               <input name="id" style="display:none;" value={{sc.id}}> 
-                {% for l in li  %}
-                <input class="goodId" value="{{l.id}}" style="display:none;">
+                <input name="goodnum" id="goodnum"  class="addform0" style="display:none;" >
+                <div> <h3>Shopping list :{{sc.len}} </h3>
+               <input name="id" class="addform0" value={{sc.name}}> 
+                {% for l in sc.list  %}
+                <input class="goodId addform0" value="{{l}}" style="display:none;">
                 
-                <label for("{{l.name}}") > <input type="checkbox" class="goods">   {{l.name}} </label>
+                <label for("{{l}}") > <input type="checkbox" class="goods">   {{l}} </label>
                 
                 {% endfor %}
                 <div> <h3>Expense: </h3>

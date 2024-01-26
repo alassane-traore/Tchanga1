@@ -12,11 +12,11 @@
 <table >
     <tr> <td>Time </td>  <td>Tasks</td></tr>
 {% for w in week %}
+<tr  > <td colspan="2" class="wdate"> <h5> {{w.0.date}} </h5></td></tr>
+{% for o in  w %}
+<tr >  <td class="wtask1"></td> <td class="wtask">{{o.begin}}-{{o.end}} </td>  <td class="wtask"> {{o.task}}</td></tr>
+{% endfor %}
 
-{% if w.date %}
-<tr  > <td colspan="2" class="wdate"> <h5> {{w.date}} </h5></td></tr>
-{%endif%}
-<tr >  <td class="wtask1">{{w.date1}}</td> <td class="wtask">{{w.begin}}-{{w.end}} </td>  <td class="wtask"> {{w.task}}</td></tr>
 
 
 {% endfor %}

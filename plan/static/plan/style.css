@@ -140,7 +140,20 @@ body{
     display: none;
     visibility: hidden;
 }
+.deleteform{
+    color: white;
+    display: none;
+}
 
+.danger{
+    color: white;
+    background-color: red;
+}
+#timereserve1{
+    display: none;
+    background-color: transparent;
+    color: white;
+}
 @media only screen and (max-width:785px){
     .nav{
        

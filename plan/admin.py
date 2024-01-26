@@ -1,4 +1,4 @@
-from django.contrib import admin
+"""from django.contrib import admin
 from .models import  Task,Kategories,dates,weecklines
 # Register your models here.
 
@@ -8,4 +8,4 @@ admin.site.register(Kategories)
 
 admin.site.register(dates)
 
-admin.site.register(weecklines)
+admin.site.register(weecklines)"""

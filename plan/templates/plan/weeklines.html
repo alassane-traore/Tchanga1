@@ -4,18 +4,33 @@
 <div id ="plusdiv"> 
 <h1 id="head"> Add week Headlines! </h1>
 <h4 id="time"> {{t}} : <span id="daily" > </span> </h4>
+<form id="wform" method="POST" action="{% url 'disprog' %}" enctype="multipart/form-data">
 
-<form id="wform" method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+
+  <div > 
+    <input class="deleteform" id="timereserve1" name="l" >
+    <h6>In Program: </h6>
+  <ol>
+    <!--<input name="del" id="del">-->
+   {% for l in lines %}
+   <li> {{l}} <i class="fa-solid fa-xmark anul" id="{{w}}:{{l}}"></i> </li>
+   
+   {% endfor %}
+  </ol>
+  </div>
+  <input class="deleteform" type="submit" id="goAnul" >
+</form>
+
+<form id="wform" method="POST" action="{% url 'lines' %}" enctype="multipart/form-data">
 
       {% csrf_token %}
     
-      <label for="date"> week</label>
-    <input type="datetime-local" name="week">
+      <label for"date"> week 
+    <input type="datetime-local" name="week" value={{d}} >
     <input name="line"> 
     
-    <a href="{% url 'lines' %}"><button> <i class="fa-regular fa-paper-plane" id="los1"></i>  </button> </a>
-   
-     
+    <a href="{% url 'lines' %}"><button> <i class="fa-regular fa-paper-plane" id="los1"></i>  </button> </a> 
    
 </form>
 </div>

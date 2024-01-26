@@ -6,24 +6,23 @@
 {% if sector %}
 <table id="countertable">
 
-    <tr> <td>  Dates</td>  <td> Shopping </td> <td> Costs </td> </tr>
+    <tr> <td>  Dates</td>  <td> Shopping </td> <td> Monthly Costs </td> </tr>
     {% for s in sector %}
-    <tr>  <td colspan="2" class="buskettitle"> {{s.name}} </td> <td class="buskettitle"> {{s.costs}} </td> </tr> 
-   {% for b in s.b %}
-    {% for l  in b.li  %}
+    <tr>  <td colspan="2" class="buskettitle"> {{s.name}} Total <i class="fa-solid fa-gauge-high">{{s.counter}} </i>  </td> <td class="buskettitle"> {{s.newcounter}} </td> </tr> 
+   {% for b in s.buskets %}
+
+    
     <tr> 
-       
-        {% if forloop.first %}
-        <td rowspan="{{b.len}}" class="countertd1">{{l.d}} </td>
-        <td class="countertd2" rowspan="1">{{l.name}}</td>
-        <td rowspan="{{b.len}}" class="countertd3" > {{l.costs}} </td>
-        {% else %}
-        <td class="countertd2" rowspan="1">{{l.name}}</td>
-        {% endif %}
+      <td class="countertd1">{{b.date}} </td>
+      
         
+        <td class="countertd2" > {% for g  in b.goods  %} {{g}} {% endfor %} </td>
+        
+      
+       <td lass="countertd3" > {{b.costs}} </td>
     </tr>
-    <!--<tr> <td class="countertd2" rowspan="1">{{l.name}}</td></tr>-->
-    {% endfor %}
+    
+      
     {% endfor %}
     
     {% endfor %}

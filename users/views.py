@@ -5,6 +5,30 @@ from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password,check_password
 from django.urls import reverse
 from django import forms
+import pyrebase  
+import os
+from django.conf import  settings
+
+firebase_config={
+   "apiKey":os.environ.get("apiKey"),
+  "authDomain":os.environ.get("authDomainL"),
+  "databaseURL": os.environ.get("DATABASE_URL"), 
+  "projectId": "tchanga",
+  "storageBucket":os.environ.get("storageBucket") ,
+  "messagingSenderId":os.environ.get("messagingSenderId"),
+  "appId": os.environ.get("appId"),
+  "measurementId":os.environ.get("measurementId") 
+}
+
+
+
+
+firebase = pyrebase.initialize_app(firebase_config)
+auth = firebase.auth()
+db=firebase.database()
+
+
+
 
 class Signup_form(forms.Form):
     username=forms.CharField(max_length=69)
@@ -13,7 +37,7 @@ class Signup_form(forms.Form):
     
 
 class Login_form(forms.Form):
-      username=forms.CharField(max_length=69)
+      username=forms.EmailField()#(max_length=69)
       password=forms.CharField(min_length=8,max_length=79)
 
 # Create your views here.
@@ -21,16 +45,17 @@ class Login_form(forms.Form):
 
 def home(req):
     try:
-      if req.user.is_authenticated:
-         print("user is aut in home !")
+      if req.session['user']:
+        # print("user is aut in home !", "user:",req.session['user']['name'])
+         n=req.session['user']['name']
+         
+         print(req.session['user'])
          #rev=reverse('login')
-         return  render(req, "users/home.html")#redirect(rev) 
+         return  render(req, "users/home.html",context={"user":n})#redirect(rev) 
     except Exception as e:
-         print("exception in home:",e)
-         #rev=reverse('login')
-         #return redirect(rev)
+         pass    
     try:
-      print("redirecting to login") 
+
       rev=reverse('login')
       return redirect(rev)
     except Exception as e:
@@ -39,6 +64,7 @@ def home(req):
     #return render(req, "users/home.html")
 
 def signup(request):
+    #print("user:",request.user)
     if request.method == "POST":
         post1=request.POST
         use=Signup_form(post1)
@@ -46,24 +72,32 @@ def signup(request):
         if use.is_valid:
            name=post1["username"]
            email=post1["email"]
-           password= make_password(str(post1["password"]))
-           user = User(username=name,email=email,password=password)
+           password= post1["password"] #make_password(str())
+           
+           #user = User(username=name,email=email,password=password)
            try:
-               user1=User.objects.get(username=name)
-               print("new:",user1)
-               if user1 is not None:
-                  message="Please use an other username !"
-                  return render(request,"users/signup.html",context={"message":message})
-               else:
-                  user.save()
-                  rev=reverse("home")
-                  return  redirect(rev)
+               auth.create_user_with_email_and_password(email,password)
+               user={'name':name,'mail':email}
+               u=db.child("users").get().val()
+               
+               base=db.child(email.split(".")[0]).get().val()
+               if not base:
+                   db.child(email.split(".")[0]).set({'name':name})
                    
-           except:
-              
-                  user.save()
-                  rev=reverse("home")
-                  return  redirect(rev)
+               if u is not None:
+                   db.child("users").child(len(u)).set(user)
+               else:
+                   db.child("users").child(0).set(user)
+               
+               
+               rev=reverse("home")
+               return  redirect(rev)   
+       
+           except Exception as e:
+                 
+                 message= e #"Please use an other username !"
+                 return render(request,"users/signup.html",context={"message":message})
+                  
                
         else:
             message="Please submit correct und complete information"
@@ -74,35 +108,27 @@ def signup(request):
 
 
 def loginin(request):
-    """try:
-      if not request.method=="POST" and request.user.is_authenticated:
-        print("try in login")
-       
-        print("trying to check !")
-        ev=reverse("home")
-        return redirect(ev)
-      #  return check_user_account(request,request.user,"login")
-    except:
-        
-        pass"""
+   
     if request.method=="POST":
         
         post=request.POST
         use=Login_form(post)
         if use.is_valid:
            name=request.POST["username"]
-           password=request.POST["password"]    
-           user = authenticate(request,username=name,password=password)
-           if user is not None:
-              login(request,user)
-              return redirect(reverse("days")) # HttpResponseRedirect(reverse("plan/today.html"))
-           else:
-              message="Invalid credentials"
-              return render(request,"users/login.html",context={"message":message})
-    
-     
-       
+           password=request.POST["password"]    #make_password(str(request.POST["password"]))#
+           try:
+               auth.sign_in_with_email_and_password(name,password)
+               n=db.child(name.split('.')[0]).child('name').get().val()
+               #user1= [o for o in n if o['mail']==name]
+               print("Hey from Db:",n)
+               request.session["user"]={"mail":name,'token':auth.current_user['idToken'],'name':n}#user1[0]['name']
+               #return redirect(reverse("home"))
+           except Exception as e:
+               print(e)
+               message="Invalid credentials"
+               return render(request,"users/login.html",context={"message":message})  
     return render(request,"users/login.html")
+    
     
 def profile(request):
     
@@ -116,8 +142,8 @@ def edit_profile(request):
 
     
 def logingout(request):
-   
-    logout(request)
+    request.session.clear()
+    #logout(request)
     rev=reverse("login")
     return redirect(rev)
 

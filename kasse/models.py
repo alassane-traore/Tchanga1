@@ -1,4 +1,4 @@
-from django.db import models
+"""from django.db import models
 from django.forms import ValidationError
 
 # Create your models here.
@@ -57,4 +57,4 @@ class Basket(models.Model):
     def __str__(self) -> str:
         return f"{self.d}:({self.kaufliste})"
 
-    
+    """

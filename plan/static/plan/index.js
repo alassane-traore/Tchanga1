@@ -24,10 +24,25 @@ let head=document.getElementById("head")
 let dayIc=document.getElementById("day")
 let tchanger=document.getElementById("tchanger")
 let timereserve =document.getElementById("timereserve")
+let timereserve1 =document.getElementById("timereserve1")
+let anul=document.querySelectorAll(".anul")
 let pen=document.querySelectorAll(".fa-pen")
 let trash = document.querySelectorAll(".fa-trash-can")
+let deletesValue=document.getElementById('deletes')
+let sendDelete =document.getElementById('deleteb')
 
 
+let ev = new Event("click")
+
+//Delete week preprogramed task for 
+anul.forEach(el=>{
+    el.addEventListener("click",()=>{
+        timereserve1.value=el.id
+        let goAnul=document.getElementById("goAnul")
+        goAnul.dispatchEvent(ev)
+        goAnul.click()
+    })
+})
 let lin=0
 let myPoint=0
 
@@ -52,7 +67,7 @@ function getISOWeekNumber(date) {
     return weekNum;
   }
 
-let ev = new Event("click")
+
 
 let begin=""
 let ringed =""
@@ -75,18 +90,19 @@ function signal(){
 function pointer(){
 let times = document.querySelectorAll(".times")
 if (times && times.length>0 && document.getElementById("tab")){
+    //implement alarm
      if (begin !==""){
         let  dm =new Date().getMinutes()
         let d0=new Date().getHours()
         let exd =new Date(begin).getHours()
         let exm=new Date(begin).getMinutes()
         
-        if (exd==d0 && exm==dm && ringed !==d0 && new Date().getSeconds()<1){
-            dayIc.dispatchEvent(ev)
-            dayIc.click()
-            console.log("yes")
-            ringed=d0
-        }
+    if (exd==d0 && exm==dm && ringed !==d0 && new Date().getSeconds()<1){
+         dayIc.dispatchEvent(ev)
+         dayIc.click()
+         console.log("yes")
+         ringed=d0
+    }
       
      }
 
@@ -96,22 +112,26 @@ if (times && times.length>0 && document.getElementById("tab")){
         let d=new Date()
         let el=times[i].textContent
         let timeAr=el.split("-")
-        let h1 =timeAr[0],m1=0
-        let h2=timeAr[1],m2=0
+        let h1 =timeAr[0].split(':')[0], m1= timeAr[0].split(':')[1] //m1=0
+        let h2=timeAr[1].split(':')[0],m2=timeAr[1].split(':')[1] //m2=0
         //timeAr[0].includes("a.m.")?h1=timeAr[0].split("a.m.")[0]:h1=timeAr[0].split("p.m.")[0]
         //timeAr[1].includes("a.m.")?h2=timeAr[1].split("a.m.")[0]:h2=timeAr[1].split("p.m.")[0]
-        if (h1.includes(":") ){
-            hh=h1.split(":")
-            h1=parseInt(hh[0])
-            m1=parseInt(hh[1])
-        }
+        //if (h1.includes(":") ){
+            //hh=h1.split(":")
+            //h1=parseInt(hh[0])
+            //m1=parseInt(hh[1])
+        //}
 
-        if(h2.includes(":")){
-            hh=h2.split(":")
+        //if(h2.includes(":")){
+           // hh=h2.split(":")
             
-            h2=parseInt(hh[0])
-            m2=parseInt(hh[1])  
-        }
+            //h2=parseInt(hh[0])
+            //m2=parseInt(hh[1])  
+        //}
+        h1=parseInt(h1)
+        m1=parseInt(m1)
+        h2=parseInt(h2)
+        m2=parseInt(m2)
         let f = d.setHours(h1,m1)
         
         let t = d.setHours(h2,m2)
@@ -230,7 +250,11 @@ if(head.textContent==="WEEKLY PLAN"){
 if(timeInput){
 timeInput.addEventListener("change",()=>{
     timereserve.value=timeInput.value
+
     console.log(timereserve.value)
+    //if(document.getElementById("timeId")){
+       // document.getElementById("timeId").value=
+    //}
     tchanger.dispatchEvent(ev)
     tchanger.click()
 })
@@ -310,39 +334,45 @@ onemore.addEventListener("click",()=>{
 }
 
 async function getToUpdateObject(id){
-    fetch(`/update/${id}`)
-    .then(response=>{
-        if(!response.ok){
-            throw Error("The response was not ok !")
-        }
-       return response.text()
+    deletesValue.value=`${id}:E`
+     sendDelete.dispatchEvent(ev)
+     sendDelete.click()
+    //fetch(`/update/${id}`)
+    //.then(response=>{
+       // if(!response.ok){
+          //  throw Error("The response was not ok !")
+        ///}
+      // return response.text()
         
-    })
-    .then(data=>{
-    console.log(data)
-    document.getElementById("place").innerHTML=data
+    //})
+   // .then(data=>{
+    //console.log(data)
+    //document.getElementById("place").innerHTML=data
     
-    })
+   /// })
 
-    .then(()=>{
-        let timeInput= document.getElementById("timput")
-        let timeInput0= document.getElementById("timput1")
+    //.then(()=>{
+       // let timeInput= document.getElementById("timput")
+        //let timeInput0= document.getElementById("timput1")
         
-        let dat=new Date(timeInput0.value).toLocaleString()
-        timeInput.value=dat
+       // let dat=new Date(timeInput0.value).toLocaleString()
+        //timeInput.value=dat
         
-        console.log("time :",new Date(dat))
-    })
+       // console.log("time :",new Date(dat))
+   // })
 }
 
 
 async function toDelete(id){
 
-    fetch(`/delete/${id}`)
-    .then(res =>{
-        res.text()
-    }).then(data=>console.log(data))
-     .catch(e=>{throw Error(`I was confronted with an error : ${e}`)})
+   // fetch(`/delete/${id}`)
+    //.then(res =>{
+     //   res.text()
+   // }).then(data=>console.log(data))
+     //.catch(e=>{throw Error(`I was confronted with an error : ${e}`)})
+     deletesValue.value=`${id}:D`
+     sendDelete.dispatchEvent(ev)
+     sendDelete.click()
 }
 
 pen.forEach(el=>{
@@ -357,7 +387,7 @@ trash.forEach(el=>{
     el.addEventListener("click",()=>{
     let id=el.id
     toDelete(id)
-    location.reload()
+    //location.reload()
     })
     
 })

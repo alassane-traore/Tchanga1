@@ -18,12 +18,10 @@
 <table >
     <tr> <td>Time </td>  <td> Tasks </td></tr>
 {% for m in mo %}
-
-{% if m.date %}
-<tr  > <td colspan="2" class="wdate" > <h5> {{m.date}}</h5></td></tr>
-{%endif%}
-<tr><td class="wtask1" >{{m.date1}} </td>  <td class="wtask">{{m.begin}}-{{m.end}} </td>  <td class="wtask"> {{m.task}}</td></tr>
-
+<tr  > <td colspan="2" class="wdate" > <h5> {{m.0.date}}</h5></td></tr>
+{% for n in m %}
+<tr><td class="wtask1" ></td>  <td class="wtask">{{n.begin}}-{{n.end}} </td>  <td class="wtask"> {{n.task}}</td></tr>
+{% endfor %}
 
 {% endfor %}
 

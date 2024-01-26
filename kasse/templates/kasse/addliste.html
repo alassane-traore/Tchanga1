@@ -11,11 +11,25 @@
       <div id="stock"> 
         <i class="fa-solid fa-list">{{len}}</i>
       <ol>
-        <!--<input name="del" id="del">-->
+
+        <table> 
+          <tr>
+{% for s in cs %}<td>{{s.name}} : {{s.len}} </td>{% endfor %}
+          </tr>
+
+          <tr> 
+            {% for s  in cs %}
+            <td> {% for l in s.list %} <i class="fa-solid fa-xmark anul" id="{{s.name}};{{l}}" > {{l}} </i> {% endfor %} </td>
+            {% endfor %}
+          </tr>
+          
+          
+        </table>
+        <!--<input name="del" id="del">
        {% for l in li %}
        <li> {{l.name}} <i class="fa-solid fa-xmark anul" id="{{l.id}}" ></i> </li>
        
-       {% endfor %}
+       {% endfor %}-->
       </ol>
       </div>
 
@@ -23,10 +37,10 @@
       <h4 > Product </h4>
       <input id="limput" name="good">
         <di>
-          <input id="sectionId" name="sector" style="display:none;">
+          <input id="sectionId" name="sector" class="addform0" style="display:none;">
           <h4> Sector </h4>
           {% for s in cs  %}
-                <input type="checkbox" name="{{s.id}}" class="checkSector">
+                <input type="checkbox" name="{{s.name}}" class="checkSector">
                 <label for("{{s.name}}")>{{s.name}} </label>
                 {% endfor %}
         </div>

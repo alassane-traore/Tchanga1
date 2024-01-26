@@ -11,7 +11,7 @@
 <form id="addform" method="POST" enctype="multipart/form-data">
 
       {% csrf_token %}
-    <input placeholder="name" name="username">
+    <input type="email" placeholder="Email" name="username">
     <input type="password" placeholder="password" name="password">
     <input type="submit" value="LOGIN">
 

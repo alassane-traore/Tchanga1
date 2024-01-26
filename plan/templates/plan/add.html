@@ -15,7 +15,10 @@
 
       {% csrf_token %}
       <h4> <span name="num" id="num"> 0</span> <span> Tasks </span></h4>
-      <input type="hidden" name="hid" id="hid">
+      {% if blocked %}
+      <h4>Ces holaires ont été modufier pour evité des superpositions : {{blocked}}</h4>
+      {% endif %}
+      <input type="hidden" name="hid" id="hid" >
       <div id="stock">
         <input id="timput" name="date" type="datetime-local" value={{d}} >
         
@@ -28,7 +31,7 @@
     <input name="l" id="act" placeholder="Tasks" list="lines">
     <datalist id="lines">
       {% for el in l  %}
-      <option >{{el.line}}</option>
+      <option >{{el}}</option>
       {% endfor %}
       </datalist>
 
