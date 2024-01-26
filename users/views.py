@@ -123,9 +123,11 @@ def loginin(request):
                #user1= [o for o in n if o['mail']==name]
                print("Hey from Db:",n)
                request.session["user"]={"mail":name,'token':auth.current_user['idToken'],'name':n}#user1[0]['name']
-               return redirect(reverse("home"))
+               print("Hey from Db:",n,"again !")
+               rev=reverse("home")
+               return  redirect(rev)
            except Exception as e:
-               print(e)
+               print("can not continue because",e)
                message="Invalid credentials"
         
                return render(request,"users/login.html",context={"message":message})  
