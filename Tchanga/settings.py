@@ -143,3 +143,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 SESSION_COOKIE_NAME = 'Tchanga_session'
 SESSION_COOKIE_AGE = 1209600
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
