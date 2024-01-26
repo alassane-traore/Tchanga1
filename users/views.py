@@ -46,7 +46,9 @@ class Login_form(forms.Form):
 def home(req):
     try:
       if req.session['user']:
-        # print("user is aut in home !", "user:",req.session['user']['name'])
+          
+         print("user is aut in home !", "user:",req.session['user']['name'])
+         print(req.session['user'])
          n=req.session['user']['name']
          
          print(req.session['user'])
