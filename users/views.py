@@ -135,7 +135,10 @@ def loginin(request):
                #print("I got this using req.session.get in login",us)
                rev=reverse("home")
                print("redirecting to home",rev)
-               return redirect(rev)
+               try:
+                   return redirect(rev)
+               except Exception as e:
+                    print("could not redirect to home because of ", e)
            except Exception as e:
                print(e)
                message="Invalid credentials"
