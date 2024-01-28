@@ -137,7 +137,8 @@ def loginin(request):
                print("from login redirecting to",rev)
                try:
                    print("should go home now")
-                   return HttpResponseRedirect("home")
+                   return redirect(rev)
+
                except Exception as e:
                     print("could not redirect to home because of ", e)
            except Exception as e:
