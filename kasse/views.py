@@ -12,7 +12,9 @@ from django.utils import timezone
 #from .models import Sector,Basket,Goods
 #import pygame
 import os
-from users.views import db
+from Tchanga1.settings import firebase
+
+db=firebase.database()
 #from .tests import test_markets_view
 print("localtime:",timezone.localtime(timezone.now()))
 
@@ -304,7 +306,8 @@ def markets(req):
    nw = datetim.datetime.now()
    s= select([db,me,'kasse','sectors'],{},"get")
    cs=[]
-   for o in s:
+   if s is not None:
+     for o in s:
        name=o
        o=select([db,me,'kasse','sectors',name],{},"get")
        nb=o["begin"].split(' 00:00:00')[0]
@@ -431,7 +434,8 @@ def count(req):
     bt=[]
     totalcosts=0
     sec=[]
-    for s in sector:
+    if sector is not None:
+     for s in sector:
       name=s
       s=select([db,me,"kasse","sectors",name],{},"get")
       totalcosts+=s["newcounter"]
@@ -470,52 +474,5 @@ def removit(req,id):
     return redirect("addlist")
   
 
-f=datetim.datetime.now()
 
-t=create_date(30,f)
-f=str(datetime.strptime(f"{f.year}-{f.month}-{f.day}",'%Y-%m-%d'))
-t=str(datetime.strptime(f"{t.year}-{t.month}-{t.day}",'%Y-%m-%d'))
-print("Just created date:" , t)
-
-#ob =[{'id':0},{'begin':f},{'end':t},{'budget':500},{'newbudget':500},{'counter':0},{'newcounter':0},{'automate':True}]
-ob={'begin':f,'end':t,'budget':100,'newbudget':100,'counter':0,'newcounter':0,'automate':True}
-
-s={"Altag":ob}
-me='alassanet076@gmail'
-#for o in ob:
-#select([db,me,"kasse","sectors"],s,"update")
-
-"""try:
-  o=select([db,'alassanet076@gmail','kasse','sectors',list(s.keys())[0]],ob,"get") 
-  if o is not None:
-    print("Sector : ",list(s.keys())[0], " already exists")
-    print(o)
-    #print("updating",list(s.keys())[0] , "...")
-    #update=select([db,'alassanet076@gmail','kasse','sectors',list(s.keys())[0]],{'budget':100},"update") 
-   # print(update)
-  else:
-    add=select([db,'alassanet076@gmail','kasse','sectors'],s,"update") 
-    print(add)
-except Exception as e:
-  
-  print("THIS IS AN EXCEPTION",e)
-  #select([db,'alassanet076@gmail','kasse','sectors'],s,"update") """
-  
-
-sc=select([db,'alassanet076@gmail','kasse','sectors'],ob,"get") #,list(s.keys())[0]
-
-#select([db,'alassanet076@gmail','kasse','sectors',list(s.keys())[0]],ob,"update")
-
-#sc["rest"]="{:.2f}".format(sc["newbudget"]-sc["newcounter"])
-#sc["newcounter"]="{:.2f}".format(sc["newcounter"])
-
-#print(sc)
-
-n="0.001"
-
-print("EVAL:",eval(n)+1)
-
-l=[1,2,5]
-l.remove(2)
-print(l is not None and 5 in l)
 

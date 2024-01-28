@@ -440,8 +440,8 @@ def months(req):
     #prepare the months list for a select tag
  allmonths=[]
  selected_month={"val":f"{mo}:{yea}","name":f"{my_months[mo]} {yea}"}
-    
- for el in fmo:
+ if fmo is not None: 
+  for el in fmo:
           date=datetime.strptime(el.split(' 00:00:00')[0],'%Y-%m-%d')
           ob={"val":f"{date.month}:{date.year}","name":f"{my_months[date.month]} {date.year}"}
           if not ob in allmonths:
@@ -536,3 +536,5 @@ def remov(req):
   print("I deleted ", ob.task)
   previous_url = req.META.get('HTTP_REFERER', '/')
   return redirect(previous_url)
+
+

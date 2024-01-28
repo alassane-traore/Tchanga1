@@ -5,25 +5,12 @@ from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password,check_password
 from django.urls import reverse
 from django import forms
-import pyrebase  
+from Tchanga1.settings import firebase 
 import os
-from django.conf import  settings
+from Tchanga1.settings import firebase
+from kasse.views import select
 
-firebase_config={
-   "apiKey":os.environ.get("apiKey"),
-  "authDomain":os.environ.get("authDomainL"),
-  "databaseURL": os.environ.get("DATABASE_URL"), 
-  "projectId": "tchanga",
-  "storageBucket":os.environ.get("storageBucket") ,
-  "messagingSenderId":os.environ.get("messagingSenderId"),
-  "appId": os.environ.get("appId"),
-  "measurementId":os.environ.get("measurementId") 
-}
-
-
-
-
-firebase = pyrebase.initialize_app(firebase_config)
+#firebase = pyrebase.initialize_app(firebase_config)
 auth = firebase.auth()
 db=firebase.database()
 
@@ -42,20 +29,25 @@ class Login_form(forms.Form):
 
 # Create your views here.
 
+def exists_or_signup(req,me):
+   res= select([db,me],{},"get")
+   
+   if res is None:
+       req.session.clear()
+       auth.logout(req)
+       return redirect(reverse("signup"))
 
 def home(req):
+    
     try:
       if req.session['user']:
-          
-         print("user is aut in home !", "user:",req.session['user']['name'])
-         print(req.session['user'])
+         me=req.session['user']['mail']
+         
+         exists_or_signup(req,me.split(".")[0])
          n=req.session['user']['name']
          
-         print(req.session['user'])
-         #rev=reverse('login')
          return  render(req, "users/home.html",context={"user":n})#redirect(rev) 
     except Exception as e:
-        print("1Exception in home:",e)
         rev=reverse('login')
         return redirect(rev)
             
@@ -64,15 +56,12 @@ def home(req):
       rev=reverse('login')
       return redirect(rev)
     except Exception as e:
-        print("2exception happened:",e)
-        rev=reverse('signup')
-        return redirect(rev)
+        print("exception happened:",e)
         
     #return render(req, "users/home.html")
 
 def signup(request):
-    print("session:",request.session.session_key)
-     
+    #print("user:",request.user)
     if request.method == "POST":
         post1=request.POST
         use=Signup_form(post1)
@@ -89,9 +78,9 @@ def signup(request):
                u=db.child("users").get().val()
                
                base=db.child(email.split(".")[0]).get().val()
-               if not base:
+               if not base or base is None:
                    db.child(email.split(".")[0]).set({'name':name})
-                   
+                   #request.session["user"]={"mail":name,'token':auth.current_user['idToken'],'name':name}
                if u is not None:
                    db.child("users").child(len(u)).set(user)
                else:
@@ -103,7 +92,7 @@ def signup(request):
        
            except Exception as e:
                  
-                 message= e #"Please use an other username !"
+                 message= "Please try again!"
                  return render(request,"users/signup.html",context={"message":message})
                   
                
@@ -131,16 +120,9 @@ def loginin(request):
                #user1= [o for o in n if o['mail']==name]
                print("Hey from Db:",n)
                request.session["user"]={"mail":name,'token':auth.current_user['idToken'],'name':n}#user1[0]['name']
-               us=request.session.get("user")
-               #print("I got this using req.session.get in login",us)
+               
                rev=reverse("home")
-               print("from login redirecting to",rev)
-               try:
-                   print("should go home now")
-                   return redirect(rev)
-
-               except Exception as e:
-                    print("could not redirect to home because of ", e)
+               return redirect(rev)
            except Exception as e:
                print(e)
                message="Invalid credentials"
@@ -162,12 +144,13 @@ def edit_profile(request):
     
 def logingout(request):
     request.session.clear()
+    auth.logout(request)
     #logout(request)
     rev=reverse("login")
     return redirect(rev)
 
 def welcome(req):
+    
     rev=reverse("home")
-    print("from root redirecting to:",rev)
     return redirect(rev)
     #return render(req, "users/home.html")
