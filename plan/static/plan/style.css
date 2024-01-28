@@ -131,7 +131,7 @@ h6>i{
 }
 
 body{
-    background-image: url(./dark_red_pexels-amir-ghoorchiani-462394.jpg);
+    background-image: url(./whit_map_pexels-monstera-production-7412057.jpg);
     background-attachment: fixed;
     background-size: cover;
 }
@@ -153,7 +153,19 @@ body{
     display: none;
     background-color: transparent;
     color: white;
+
 }
+
+#period{
+    color: purple;
+    
+}
+
+
+.todayperiod{
+    color: aqua;
+}
+
 @media only screen and (max-width:785px){
     .nav{
        

@@ -7,6 +7,9 @@
 <h4 id="time"> {{t}} : <span id="daily" > </span> </h4>
 
 <form  method="POST" enctype="multipart/form-data">
+  {% if m %} <h4 ><i class="fa-regular fa-circle-check">{{m}}</i> </h4>{% endif %}
+
+ 
 
       {% csrf_token %}
     

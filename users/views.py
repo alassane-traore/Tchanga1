@@ -57,11 +57,10 @@ def home(req):
       return redirect(rev)
     except Exception as e:
         print("exception happened:",e)
-        
-    #return render(req, "users/home.html")
+    
 
 def signup(request):
-    #print("user:",request.user)
+    
     if request.method == "POST":
         post1=request.POST
         use=Signup_form(post1)
@@ -117,8 +116,8 @@ def loginin(request):
            try:
                auth.sign_in_with_email_and_password(name,password)
                n=db.child(name.split('.')[0]).child('name').get().val()
-               #user1= [o for o in n if o['mail']==name]
-               print("Hey from Db:",n)
+               
+               
                request.session["user"]={"mail":name,'token':auth.current_user['idToken'],'name':n}#user1[0]['name']
                
                rev=reverse("home")
@@ -144,7 +143,7 @@ def edit_profile(request):
     
 def logingout(request):
     request.session.clear()
-    auth.logout(request)
+    #auth.logout(request)
     #logout(request)
     rev=reverse("login")
     return redirect(rev)

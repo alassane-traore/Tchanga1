@@ -5,9 +5,11 @@
 
 <div class="tab" id="tab">
 <div id="daycontainer"> 
-    <h1 id="head" class="head"> DAYLY PLAN  </h1>
+    <h1 id="head" class="head"> DAILY PLAN  </h1>
 <h6 id="time" class="head"> {{t}} </h6>
+<span class="period todayperiod"> {{period.seting1}}<i class="fa-solid fa-arrow-right" ></i>{{period.seting2}}</span>
 <form  method="POST" enctype="multipart/form-data" class="deleteform">
+   
     {% csrf_token %}
     <input name="delete" id="deletes">
 <input type="submit" id="deleteb" >

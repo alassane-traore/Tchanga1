@@ -12,11 +12,11 @@
   <button class="nav"  id="tchanger" ></button>
 </form>
 <form id="addform" method="POST" action="{% url 'add' %}" enctype="multipart/form-data">
-
+ <span> {{period.seting1}}<i class="fa-solid fa-arrow-right" ></i>{{period.seting2}}</span>
       {% csrf_token %}
       <h4> <span name="num" id="num"> 0</span> <span> Tasks </span></h4>
       {% if blocked %}
-      <h4>Ces holaires ont été modufier pour evité des superpositions : {{blocked}}</h4>
+      <h4>Ces horaires ont été modufiés pour garder la chrono : {{blocked}}</h4>
       {% endif %}
       <input type="hidden" name="hid" id="hid" >
       <div id="stock">
@@ -46,7 +46,8 @@
     </div>
 
     <div id ="senddiv"> 
-     <div id="onemore"> One more </div> 
+      <i id="onemore" class="fa-solid fa-plus"></i>
+     
      <br> <br>
      
     <!--<i class="fa-regular fa-square-plus" id="onemore"></i>

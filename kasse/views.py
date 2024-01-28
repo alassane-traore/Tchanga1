@@ -15,10 +15,9 @@ import os
 from Tchanga1.settings import firebase
 
 db=firebase.database()
-#from .tests import test_markets_view
-print("localtime:",timezone.localtime(timezone.now()))
 
-print("gettimezone:",get_localzone())
+
+
 
 def create_date(period,begin):
     b=""
@@ -59,10 +58,9 @@ def select(root,data,message):
       for el in root:
          r=r.child(el) 
       if message=="get":
-       #print("ROOT :", r)
+       
        s=r.get().val()
-       #print("root :", r, "data:",s)
-       #print("I could get ", s)
+       
        return s
       elif message=="set":
         r.set(data)
@@ -82,8 +80,7 @@ def select(root,data,message):
        
   except Exception as e:
        s=data
-       #print("Got an obtacle when try to get sector which is ", s, "the ussue is ", e)
-       #print("I could get ", type(data))
+    
        ms=f"Got an obtacle when try to {message} {root[-1]} {e}"
        return ms
  
@@ -250,12 +247,7 @@ def add_list(req):
      li.append(n)
      ob={"list":li}
      s=select([db,me,"kasse","sectors",sec],ob,"update")  #Sector.objects.get(id=)
-     print(s)
-    
-    #new_good=Goods(author=req.user,s=s,name=n)
-    
-    #new_good.save()
-    
+     
     return redirect("addlist")
   
   return render(req,"kasse/addliste.html",context={"li":gs,"cs":cs,"len":leng})
@@ -365,20 +357,20 @@ def basket(req):
       
       goodn=post["goodnum"]
       goodn=int(goodn)
-      print("this is goonum",goodn)
+      
       liste=[]
       for i in range(goodn+1):
         try:
           good=post[f"good{i}"]
-          g=select([db,me,"kasse","sectors",sid,"list"],'',"get")  #Goods.objects.get(id=post[f"good{i}"])
+          g=select([db,me,"kasse","sectors",sid,"list"],'',"get")  
           
           if g is not None and good in g:
              liste.append(good)
              g.remove(good)
              rm=select([db,me,"kasse","sectors",sid],{"list":g},"update") 
-             print(rm)
-          else:
-            print("Could not find ",good , "in", g)
+             
+          
+            
         except Exception as e:
            g=select([db,me,"kasse","sectors",sid,"list"],'',"get")
            print( "Exception occured when geting list element which is ",g, "Here is the Error: ",e)
@@ -403,13 +395,13 @@ def basket(req):
            
        busket=select([db,me,"kasse","sectors",sid,],{"buskets":b},"update")  
        
-       print(busket)  
+        
        s=select([db,me,"kasse","sectors",sid],{},"get")
        s["counter"]=s["counter"]+eval(prise)
        s["newcounter"]=s["newcounter"]+eval(prise)
        s={sid:s}
        counter=select([db,me,"kasse","sectors"],s,"update")
-       print(counter)
+       
       
        return HttpResponseRedirect(reverse("market"))
      except Exception as e:
@@ -464,7 +456,7 @@ def removit(req,id):
      me=req.session.get('user')['mail'].split('.')[0]
     except:
       return redirect(reverse("login"))
-    print(id)
+    
     sector=id.split(";")[0]
     good=id.split(";")[1]
     li=select([db,me,"kasse","sectors",sector,"list"],{},"get")
