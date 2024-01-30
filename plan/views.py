@@ -8,7 +8,7 @@ from datetime import datetime,timedelta
 import time
 import pytz
 from tzlocal import get_localzone
-from .models import Task ,weecklines #,Kategories,dates
+from .models import Task #,Kategories,dates ,weecklines 
 import os
 from users.views import db
 from kasse.views import select,validate,create_date
@@ -688,13 +688,3 @@ def remov(req):
 
 
 
-
-nw=datetime.now()
-
-nd = nw+timedelta(hours=3)
-
-print("ND:",nd)
-
-fw=weecklines.objects.all()
-
-print(fw)

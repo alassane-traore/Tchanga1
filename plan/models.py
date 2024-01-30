@@ -27,11 +27,11 @@ from  django.db import models
   
 def filter_list(li,cond):
     l=li
-    print('filt:',li)
+    
     for i in cond:
         for j in l:
             if j ==i:
-                print("i:",i,"j:",j)
+                
                 l.remove(i)
                 #return l
     return l
@@ -88,7 +88,7 @@ def prevent_ovolapp(borders,i,a):
           b=[]
       return b
     else: 
-      print(a, "and",i, "are totaly overlapping")
+     
       return[]
        
          
@@ -209,7 +209,7 @@ class Task():
         self.alt=alt
         id=0
         
-        print("mycleaner:",self.alt)
+        
         
         ob=[f"begin,{self.begin}",
             f"end,{self.end}",
@@ -261,7 +261,7 @@ class Task():
             db.child(self.me).child('tasks').child(self.date).child(self.id).remove()
         
       except:
-           print("could not see:", tk)
+           
            
            pass
   def delet_date(self,d): 
@@ -271,7 +271,7 @@ class Task():
         if tk is not None:
             db.child(self.me).child('tasks').child(self.d).remove() 
       except:
-           print("could not see:", tk)
+           
            
            pass
        
