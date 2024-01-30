@@ -23,6 +23,7 @@ class weecklines(models.Model):
         """
  
 from users.views import db 
+from  django.db import models
   
 def filter_list(li,cond):
     l=li
@@ -41,7 +42,7 @@ def makeborder(old,new,opt):
       for x in new:
         
         if x  in old :
-          print(x ,"is  in ",old ) 
+      
           last.append(new.index(x))
           return new.index(x)
       if len(last)<1:
@@ -52,10 +53,10 @@ def makeborder(old,new,opt):
         for x in new:
           if x not  in old :
             last.append(new.index(x))
-            print(x ,"is not in ",old ) 
+            
           #else:  
             #return last[0]
-        print(">"*9,last)
+       
         if len(last)<1:
             last=[""]
             
@@ -64,15 +65,14 @@ def makeborder(old,new,opt):
 def prevent_ovolapp(borders,i,a):
     if not "" in borders :
       if borders[0]<borders[1]:
-         print("b0<b1")
-      
+        
          borders[0]=borders[1]
          nl=[x for x in i if i.index(x)>borders[0]]
-         print("nl=",nl)
+         
          end1=makeborder(a,nl,True)
          end=borders[1]
-         if type(end1) is not int():
-           print("typof end1:",type(end1))
+         if not isinstance(end1,int):
+           
            end1=len(i)-1
            end=len(i)
          else:
@@ -81,11 +81,9 @@ def prevent_ovolapp(borders,i,a):
          borders[1]= end-1 #len(i)-1
       elif borders[0]>0:
        borders[0]=borders[0]-1
-       print(borders[0],">",0)
-      
+       
       borders.sort()
       b=[i[borders[0]],i[borders[1]]]
-      print("lena",b)
       if b[0]==b[1]:
           b=[]
       return b
@@ -115,13 +113,13 @@ class watch():
         if i<10:
             i=f"0{i}"
         nh=f"{frm.split(':')[0]}:{i}"
-        print(nh)
+        
         self.ar.append(nh)
         if nh==to:
-            print("return first:")
+            
             return self.ar
         elif i==59:
-            print("h:",int(frm.split(':')[0]))
+            
             if int(frm.split(':')[0])<23:
                 
               h=int(frm.split(':')[0])+1
@@ -131,22 +129,22 @@ class watch():
               #ar.append(nh)
               self.new_hours(nh,to)
               
-            else:
-                h="00"+":"+"00"
-                self.new_hours(h,to)
+            #else:
+                #h="00"+":"+"00"
+                #self.new_hours(h,to)
         #else:
             #ar.append(nh)
     else:
         self.ar=[]
         
-    print('last returning:',self.ar)
+    
     return self.ar
  def filter(self,ar):
       self.ar=ar
       no=[x for x in self.ar if x.split(':')[0]==self.frm.split(':')[0] and int(x.split(':')[1])<int(self.frm.split(':')[1])]
       
       self.ar = [x for x in self.ar if x not in no]
-      print("filted:",self.ar)
+      
       return self.ar
     
      
@@ -174,13 +172,13 @@ class Task():
         f=str(self.begin)
         t=str(self.end)
         ar=watch(f,t).filter(watch(f,t).new_hours(f,t))
-        print("not cleaned list:",ar)
-        print("not cleaned list2:",tk)
+        
         #make a list of the already planed 
         
         if tk  and len(tk)>0:
             tk0=[]
             for ob in tk:
+              if ob is not None:
                 l=watch(ob['begin'],ob['end']).filter(watch(ob['begin'],ob['end']).new_hours(ob['begin'],ob['end']))   #watch(ob['begin'],ob['end']).new_hours(ob['begin'],ob['end'])
                 tk0.extend(l)
             tk=tk0
@@ -199,9 +197,9 @@ class Task():
         except:
           if ar1 is None or tk is None:
              ar1=[]
-        print("cleaned list:",ar1)
+        
         if alt =="":
-           print("<"*19)
+           
            return ar1
         else:
             return self.ar
@@ -221,8 +219,7 @@ class Task():
         if self.alt !="" and len(self.alt)>1:
             b=self.alt[0]
             en=self.alt[-1]
-            print("using special object"*5)
-            print("FROM:",b,"TO:",en)
+            
             ob=["begin," +b ,
             "end," + en,
             f"task,{self.task}",
@@ -279,5 +276,13 @@ class Task():
            pass
        
 
-#Task("alassanet076@gmail","","","","","").delet_date("2024-01-21 00:00:00")
+
+class weecklines(models.Model):
+    author = models.CharField(max_length=85)
+    week=models.IntegerField()
+    line=models.CharField(max_length=89)
+   
+    def __str__(self) -> str:
+        return f"W({self.week}):{self.line}"
+    
 

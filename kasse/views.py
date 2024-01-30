@@ -100,7 +100,7 @@ def design(x,y):
   if y*100/x>=50 and y*100/x <75 :
     return "orange"
   elif y*100/x>=75 and y*100/x <100:
-    return "orangred"
+    return "orangered"
   elif y*100/x>=100:
     return "red"
   else:

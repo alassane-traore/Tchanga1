@@ -8,7 +8,7 @@ from datetime import datetime,timedelta
 import time
 import pytz
 from tzlocal import get_localzone
-from .models import Task #,Kategories,dates,weecklines
+from .models import Task ,weecklines #,Kategories,dates
 import os
 from users.views import db
 from kasse.views import select,validate,create_date
@@ -201,29 +201,33 @@ class Make_time_interval(date_details):
 
 def new_time(req):
     me=req.session.get('user')['mail'].split('.')[0]
+    #get classes
     k=[]
     try:
       k=db.child(me).child('classes').get().val()
     except Exception as e:
         print("when get classes in new time:",e)
         k=[]
+    #get the current week to get lins
     d=datetim.datetime.now()
-    #dt=d
+   
     cw=find_week(f"{d.year}-{d.month}-{d.day}")
+    #get lines
     lines=[]
     try:
-      lines=db.child(me).child("weekt").child(cw).get().val()
+      lines=select([db,me,"plan",'weekt',d.year,cw],{},"get")
     except Exception as e:
         
         lines=[]
     
     if req.method=="POST":
+     #verify if the request is comming from the updating form or the add one 
      try:
       verifix=req.POST["date2"] 
       if verifix is not None:
         
         date=verifix#req.POST['date']
-        
+        d=date
         
         try:  
            date=datetime.strptime(date,'%Y-%m-%dT%H:%M')
@@ -247,19 +251,23 @@ def new_time(req):
          return redirect(previous_url)
                 
      except Exception as e:
+      print("finalGot an issue by UPDATE:",e)
+      # post request coming from the add form
       try:
-        print("finalGot an issue by UPDATE:",e)
-        
+        #the data from post request to reqenine the week
         dt =req.POST["date1"].split("T")[0]
         dt1=req.POST["date1"]
         d=datetime.strptime(str(dt),'%Y-%m-%d')
+        #get the specific week needed 
         cw=find_week(f"{d.year}-{d.month}-{d.day}")
+        period=Make_time_interval(d).forme_week()
+        #geting the lines
         try:
           
-          lines =select([db,me,"plan","weekt",cw],{},"get")    #db.child(me).child("weekt").child(cw).get().val()
+          lines =select([db,me,"plan","weekt",d.year,cw],{},"get")    
         except:
-          
-            return render(req,'plan/add.html',context={"t":my_time,"k":k,"l":lines,"d":dt1})
+          pass
+        return render(req,'plan/add.html',context={"t":my_time,"k":k,"l":lines,"d":dt1,"period":period})
       except:
           previous_url = req.META.get('HTTP_REFERER', '/')
       
@@ -328,7 +336,7 @@ def add(req):
                nwtask.save(alt="")  
         
            else:
-               if nwtask1 is not None and len(nwtask1)>1 :
+               if nwtask1 is not None and len(nwtask1)>0 :
                  ar=nwtask.clean(alt="ok")
                 
                  
@@ -350,7 +358,7 @@ def add(req):
      print("when geting classes by add at the end of add:",e)
  try:
      cw=find_week(f"{d.year}-{d.month}-{d.day}")
-     li=select([db,me,"plan",'weekt',cw],{},"get")
+     li=select([db,me,"plan",'weekt',d.year,cw],{},"get")
      
  except Exception as e:
         print("I was blocked by an Errro when getting the week kines :",e)
@@ -380,12 +388,12 @@ def add_week(req):
         fd=f"{y}-{m}-{da}"
         d1=fd
         w=find_week(fd)
-        
+        d=the_date
         #author=req.user
         l=req.POST["line"]
         if validate([w,l]):
            try:
-             myweek= select([db,me,"plan",'weekt',w],{},"get") #db.child(me).child("weekt").child(w).get().val()
+             myweek= select([db,me,"plan",'weekt',y,w],{},"get") #db.child(me).child("weekt").child(w).get().val()
              if myweek is not None and len(myweek)>0:
                #id=len(myweek)
                myweek.append(l)
@@ -394,17 +402,17 @@ def add_week(req):
                  myweek=[]
                  myweek.append(l)
              ob={w:myweek}
-             wk=select([db,me,"plan",'weekt'],ob,"update")
+             wk=select([db,me,"plan",'weekt',y],ob,"update")
              
              
            except Exception as e:
                print("I wa getting Weekt but ",e)
                ob={w:[l]}
-               wk=select([db,me,"plan",'weekt'],ob,"update")
+               wk=select([db,me,"plan",'weekt',d.year],ob,"update")
                
                
     try:
-      l=select([db,me,"plan",'weekt',w],{},"get")
+      l=select([db,me,"plan",'weekt',d.year,w],{},"get")
     except:
         l=[]
    # d1=datetim.datetime.now()
@@ -680,3 +688,13 @@ def remov(req):
 
 
 
+
+nw=datetime.now()
+
+nd = nw+timedelta(hours=3)
+
+print("ND:",nd)
+
+fw=weecklines.objects.all()
+
+print(fw)

@@ -14,12 +14,15 @@
   <table>
     <!--<input name="del" id="del">-->
     <th class="period"> {{period.seting1}}<i class="fa-solid fa-arrow-right"></i>{{period.seting2}}</th>
-    <tr> <td> 
+    
       {% for l in lines %}
+      <tr> 
+      <td> 
       <span> <i class="fa-solid fa-xmark anul" id="{{w}}:{{l}}">{{l}}</i> </span>
-      
+    </td>
+  </tr>
       {% endfor %}
-    </td> </tr>
+     
    
   </table>
   </div>

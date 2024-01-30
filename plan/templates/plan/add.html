@@ -12,7 +12,7 @@
   <button class="nav"  id="tchanger" ></button>
 </form>
 <form id="addform" method="POST" action="{% url 'add' %}" enctype="multipart/form-data">
- <span> {{period.seting1}}<i class="fa-solid fa-arrow-right" ></i>{{period.seting2}}</span>
+ <span class="period"> {{period.seting1}}<i class="fa-solid fa-arrow-right" ></i>{{period.seting2}}</span>
       {% csrf_token %}
       <h4> <span name="num" id="num"> 0</span> <span> Tasks </span></h4>
       {% if blocked %}
