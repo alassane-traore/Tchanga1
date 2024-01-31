@@ -6,12 +6,11 @@
 {% if sector %}
 <table id="countertable">
 
-    <tr> <td>  Dates</td>  <td> Shopping </td> <td> Monthly Costs </td> </tr>
+    <tr> <td>  Dates</td>  <td> Shopping {{sector.0.m}} Costs :{{nt}} </td> <td> {{sector.0.interv}}  </td> </tr>
     {% for s in sector %}
-    <tr>  <td colspan="2" class="buskettitle"> {{s.name}} Total <i class="fa-solid fa-gauge-high">{{s.counter}} </i>  </td> <td class="buskettitle"> {{s.newcounter}} </td> </tr> 
+    <tr>  <td colspan="2" class="buskettitle"> {{s.name}} {{s.m}}<i class="fa-solid fa-gauge-high"> {{s.newcounter}} </i>  </td> <td class="buskettitle"> {{s.counter}} </td> </tr> 
    {% for b in s.buskets %}
 
-    
     <tr> 
       <td class="countertd1">{{b.date}} </td>
       

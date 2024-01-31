@@ -4,7 +4,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponseRedirect,HttpResponse,JsonResponse
 from django.urls import reverse
 import datetime as datetim
-from datetime import datetime,timedelta
+from datetime import datetime,timedelta,date
 import time
 import pytz
 from tzlocal import get_localzone
@@ -83,10 +83,6 @@ class date_details():
       self.integer1=integer1
       
       
-   
-
-
-
 class Make_time_interval(date_details):
   def __init__(self,reference):
       self.reference=reference
@@ -196,15 +192,12 @@ class Make_time_interval(date_details):
         
         
 
- 
-        
-
 def new_time(req):
     me=req.session.get('user')['mail'].split('.')[0]
     #get classes
     k=[]
     try:
-      k=db.child(me).child('classes').get().val()
+      k=db.child(me).child('plan').child('classes').get().val()
     except Exception as e:
         print("when get classes in new time:",e)
         k=[]
@@ -238,7 +231,7 @@ def new_time(req):
            date=datetime.strptime(fd,'%Y-%m-%d')
            id=req.POST['id']
            id=int(id)
-           ob= db.child(me).child('tasks').child(date).child(id).get().val()
+           ob= db.child(me).child('plan').child('tasks').child(date).child(id).get().val()
         except Exception as e:
            print("Got an issue by UPDATE:",e)
                
@@ -367,8 +360,6 @@ def add(req):
  return render(req,'plan/add.html',context={"t":my_time,"k":k,"d":md,"blocked":blocked,"l":li,"period":period})
     
 
-
-
 def add_week(req):
     try:
         me=req.session.get('user')['mail'].split('.')[0]
@@ -417,8 +408,8 @@ def add_week(req):
         l=[]
    # d1=datetim.datetime.now()
     perio=Make_time_interval(periodate).forme_week()
-    
-    return render(req,'plan/weeklines.html',context={"t":my_time,"lines":l,"w":w,"d":d1,"period":perio})
+    #print("PERIOD",periodate.year)
+    return render(req,'plan/weeklines.html',context={"t":my_time,"lines":l,"w":w,"d":periodate.year,"period":perio})
 
 
 def disprogram(req):
@@ -427,17 +418,23 @@ def disprogram(req):
     except:
         return redirect(reverse("login"))
     ind=req.POST['l']
-    w=ind.split(':')[0]
-    w=int(w)
+   
+    w0=ind.split(':')[0]
     
+    w=int(w0.split("-")[1])
+    
+    
+    y=int(w0.split("-")[0])
     
     l=ind.split(':')[1]
     
-    lines=select([db,me,"plan","weekt",w],{},"get") #db.child(me).child("weekt").child(w).get()
+    lines=select([db,me,"plan","weekt",y,w],{},"get") #db.child(me).child("weekt").child(w).get()
+   
+    if lines is not None:
+       
+       li=[x for x in lines if x.strip() !=l.strip()]
+       select([db,me,"plan","weekt",y],{w:li},"update")
     
-    
-    li=[x for x in lines if x !=l]
-    select([db,me,"plan","weekt"],{w:li},"update")
         
     previous_url = req.META.get('HTTP_REFERER', '/')
     return redirect(previous_url)
@@ -449,7 +446,8 @@ def transit(req):
 def ordi(me,date):
     
    try:
-        taff1 = db.child(me).child('tasks').child(date).get().val() #order_by_child('date').equal_to(t).get().val()
+        taff1= ob= select([db,me,"plan","tasks",date],{},"get")
+        #taff1 = db.child(me).child('tasks').child(date).get().val() #order_by_child('date').equal_to(t).get().val()
         
         taff0=[]
         if taff1 is not None:
@@ -499,14 +497,14 @@ def days(req):
     if req.method=="POST":
             try:
              we=find_week(fd)
-             li=db.child(me).child("weekt").child(we).get().val()
+             li=select([db,me,"plan",'weekt',y,we],{},"get")#db.child(me).child("weekt").child(we).get().val()
             except:
                 li=[]
             el=req.POST['delete'].split(':')
             id=int(el[0])
             message=el[1]
             try:
-                ob= db.child(me).child('tasks').child(t).child(id).get().val()
+                ob= select([db,me,"plan","tasks",str(t),id],{},"get")#db.child(me).child('tasks').child(t).child(id).get().val()
                 
             except Exception as e:
                 print("could not get object:",ob,"because of ",e)   
@@ -515,17 +513,20 @@ def days(req):
                 return render(req,'plan/delete.html',context={"t":my_time,"d":ob})
             elif ob is not None:
                 try:
-                 cl=db.child(me).child("classes").get().val()
+                 
+                 cl=select([db,me,"plan","classes"],{},"get")
+                 #cl=db.child(me).child("classes").get().val()
                 except Exception as e:
                     print("could not get classes",cl,":",e)
                     cl=[]
                 
                 return render(req,'plan/update.html',context={"t":my_time,"d":ob,"l":li,"k":cl})
-                
-    tas=ordi(me=me,date=t)
+    
+    tas=ordi(me=me,date=str(t))
         
     return render(req,'plan/today.html',context={"t":my_time,"taff":tas,"period":perid})
     
+
 
       
 def week(req):
@@ -534,7 +535,7 @@ def week(req):
     current_Week=find_week(f"{today.year}-{today.month}-{today.day}")
     we=[]
     try:
-       we=db.child(me).child('tasks').get().val()
+       we= ob= select([db,me,"plan","tasks"],{},"get") #db.child(me).child('tasks').get().val()
     except Exception as e:
         print("Exception when trying to get we tasks:",e)
         we=[]
@@ -564,7 +565,7 @@ def months(req):
      return redirect(rev)
  mo=datetim.datetime.now().month
  yea=datetim.datetime.now().year
- fmo=db.child(me).child('tasks').get().val()
+ fmo= ob= select([db,me,"plan","tasks"],{},"get")#db.child(me).child('tasks').get().val()
  #verify if an othen than current month was chosen
  md=datetime.now()
  try:
@@ -663,7 +664,7 @@ def give_to_update_object(req):
   
   for x in a:
     if x.split(',')[1]is not None:
-      db.child(me).child('tasks').child(date).child(id).child(x.split(',')[0]).set(x.split(',')[1])
+      db.child(me).child('plan').child('tasks').child(date).child(id).child(x.split(',')[0]).set(x.split(',')[1])
       
      
       

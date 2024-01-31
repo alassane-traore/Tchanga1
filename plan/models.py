@@ -165,7 +165,7 @@ class Task():
         tk=[]
         #get the existing planing
         try:
-          tk=db.child(self.me).child('tasks').child(self.date).get().val()
+          tk=db.child(self.me).child('plan').child('tasks').child(self.date).get().val()
         except:
             tk=[]
         #an  Array of the ongoing planing     
@@ -226,7 +226,7 @@ class Task():
             f"classi,{self.classi}",
             f"date,{self.date}"]
         try:
-          tk=db.child(self.me).child('tasks').child(self.date).get().val()
+          tk=db.child(self.me).child('plan').child('tasks').child(self.date).get().val()
           
           if tk is not None and len(tk)>0:
               id=len(tk)
@@ -234,14 +234,14 @@ class Task():
               for a in ob:
                at=a.split(',')[0]
                v=a.split(',')[1]
-               db.child(self.me).child('tasks').child(self.date).child(id).child(at).set(v)
+               db.child(self.me).child('plan').child('tasks').child(self.date).child(id).child(at).set(v)
               #db.child(self.me).child('tasks').child(self.date).child(id).set(ob)
           else:
               ob.append(f"id,{id}")
               for a in ob:
                at=a.split(',')[0]
                v=a.split(',')[1]
-               db.child(self.me).child('tasks').child(self.date).child(id).child(at).set(v)
+               db.child(self.me).child('plan').child('tasks').child(self.date).child(id).child(at).set(v)
              # db.child(self.me).child('tasks').child(self.date).child(id).set(ob)
               
         except Exception as e:
@@ -250,15 +250,15 @@ class Task():
             for a in ob:
                 at=a.split(',')[0]
                 v=a.split(',')[1]
-                db.child(self.me).child('tasks').child(self.date).child(id).child(at).set(v)
+                db.child(self.me).child('plan').child('tasks').child(self.date).child(id).child(at).set(v)
             print(e)
    
   def delet_task(self,id): 
       self.id=id
       try:
-        tk=db.child(self.me).child('tasks').child(self.date).child(self.id).get().val()
+        tk=db.child(self.me).child("plan").child('tasks').child(self.date).child(self.id).get().val()
         if tk is not None:
-            db.child(self.me).child('tasks').child(self.date).child(self.id).remove()
+            db.child(self.me).child('plan').child('tasks').child(self.date).child(self.id).remove()
         
       except:
            
@@ -267,9 +267,9 @@ class Task():
   def delet_date(self,d): 
       self.d=d
       try:
-        tk=db.child(self.me).child('tasks').child(self.d).get().val()
+        tk=db.child(self.me).child('plan').child('tasks').child(self.d).get().val()
         if tk is not None:
-            db.child(self.me).child('tasks').child(self.d).remove() 
+            db.child(self.me).child('plan').child('tasks').child(self.d).remove() 
       except:
            
            

@@ -99,7 +99,7 @@ def signup(request):
             message="Please submit correct und complete information"
             return render(request,"users/signup.html",context={"message":message})
     else:
-        message="If you have allready an accound , do not create one again !Simply login !"
+        message="Signup or login !"
         return render(request,"users/signup.html",context={"message":message})
 
 
@@ -131,8 +131,12 @@ def loginin(request):
     
     
 def profile(request):
+    try:
+      n=request.session['user']['name']
+    except:
+        pass
     
-    return render(request,"profile.html") 
+    return render(request,"users/profile.html",context={"n":n}) 
         
         
 def edit_profile(request):

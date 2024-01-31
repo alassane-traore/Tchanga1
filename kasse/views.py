@@ -16,7 +16,7 @@ from Tchanga1.settings import firebase
 
 db=firebase.database()
 
-
+my_months=["", "Jan", "Feb","Mar","Apr", "May", "June", "July","Aug","Sept","Oct","Nov","Dec"]
 
 
 def create_date(period,begin):
@@ -150,7 +150,7 @@ def new_sector(req):
           fd2=f"{y2}-{m2}-{da2}"
           t=datetime.strptime(fd2,'%Y-%m-%d')
           t=str(t)
-          ob ={'begin':f,'end':t,'budget':budget,'newbudget':budget,'counter':0,'newcounter':0,'automate':auto}    
+          ob ={'begin':f,"fbegin":f,'end':t,'budget':budget,'newbudget':budget,'counter':0,'newcounter':0,'automate':auto}    
        #db.child(me).child('kasse').child('sectors').child(id).set(ob) 
           s={sector:ob}
        #select([db,me,"kasse",'sectors',id],ob,"set")
@@ -185,7 +185,7 @@ def add_list(req):
   leng=0  
       
   cs=[]
-  
+  nw1=datetime.strptime(f"{nw.year}-{nw.month}-{nw.day}",'%Y-%m-%d')
   for o in s:
        name=o
        o=select([db,me,'kasse','sectors',name],{},"get")
@@ -194,7 +194,7 @@ def add_list(req):
        nt=o["end"].split(' 00:00:00')[0]
        nt=datetime.strptime(nt,'%Y-%m-%d')
        
-       if nb<=nw and nt>=nw:
+       if nb<=nw1 and nt>=nw1:
            o['name']=name
            try:
              o["list"]=[x for x in o["list"] if x is not None]
@@ -206,7 +206,7 @@ def add_list(req):
            leng+=len(o["list"])
            cs.append(o)
            
-       elif nt<nw and o["automate"]:
+       elif nt<nw1 and o["automate"]:
            period=nt-nb 
            period=period.days
            nb=create_date(1,nt)
@@ -299,6 +299,7 @@ def markets(req):
    s= select([db,me,'kasse','sectors'],{},"get")
    cs=[]
    if s is not None:
+     nw=datetime.strptime(f"{nw.year}-{nw.month}-{nw.day}",'%Y-%m-%d') 
      for o in s:
        name=o
        o=select([db,me,'kasse','sectors',name],{},"get")
@@ -307,6 +308,7 @@ def markets(req):
        nt=o["end"].split(' 00:00:00')[0]
        nt=datetime.strptime(nt,'%Y-%m-%d') 
        # only sectors uptodate
+       
        if nb<=nw and nt>=nw:
            o["decor"]=design(o["newbudget"],o["newcounter"])
            o["rest"]="{:.2f}".format(o["newbudget"]-o["newcounter"])
@@ -393,7 +395,7 @@ def basket(req):
            b=[]
            b.append(bk)
            
-       busket=select([db,me,"kasse","sectors",sid,],{"buskets":b},"update")  
+       busket=select([db,me,"kasse","sectors",sid],{"buskets":b},"update")  
        
         
        s=select([db,me,"kasse","sectors",sid],{},"get")
@@ -426,23 +428,43 @@ def count(req):
     bt=[]
     totalcosts=0
     sec=[]
+    ntotal=0
+    secdates=[]#to receive the date of the sectors wich i will sort to find the first
     if sector is not None:
      for s in sector:
+      
       name=s
       s=select([db,me,"kasse","sectors",name],{},"get")
-      totalcosts+=s["newcounter"]
+      secdates.append(s['fbegin'])
+      ntotal+=s["newcounter"]
+      totalcosts+=s["counter"]
       s["name"]=name
       s["newcounter"]= "{:.2f}".format(s["newcounter"])
+      s["counter"]= "{:.2f}".format(s["counter"])
+      f=datetime.strptime(s["begin"].split(' 00:00:00')[0],'%Y-%m-%d')
+      t=datetime.strptime(s["end"].split(' 00:00:00')[0],'%Y-%m-%d')
+      
+      s["m"]=my_months[f.month]
+      if f.month !=t.month:
+        s["m"]=f"{my_months[f.month]}-{my_months[t.month]}"
+      
       try:
        bk=s["buskets"]
        s["len"]=len(bk)
+       
       except Exception as e:
         print("Exception revailed in count :", e)
         s["len"]=1
       sec.append(s)
     totalcosts= "{:.2f}".format(totalcosts)  
-      
-    return render(req,"kasse/counter.html",context={"sector":sec,"b":bt,"total":totalcosts})
+    ntotal= "{:.2f}".format(ntotal)
+    secdates.sort()
+    first=datetime.strptime(secdates[0].split(" ")[0],'%Y-%m-%d')
+    interv=f"from {first.day} {my_months[first.month]} {first.year}"
+    sec[0]['interv']=interv
+    if first.month<datetime.now().month:
+       sec[0]['interv']=f"{interv}--{datetime.now().day} {my_months[datetime.now().month]} {datetime.now().year}"
+    return render(req,"kasse/counter.html",context={"sector":sec,"b":bt,"total":totalcosts,"nt":ntotal})
       
     
     
