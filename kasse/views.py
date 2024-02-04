@@ -429,6 +429,7 @@ def count(req):
     totalcosts=0
     sec=[]
     ntotal=0
+    totalbudget=0
     secdates=[]#to receive the date of the sectors wich i will sort to find the first
     if sector is not None:
      for s in sector:
@@ -438,6 +439,7 @@ def count(req):
       secdates.append(s['fbegin'])
       ntotal+=s["newcounter"]
       totalcosts+=s["counter"]
+      totalbudget+=s["newbudget"]
       s["name"]=name
       s["newcounter"]= "{:.2f}".format(s["newcounter"])
       s["counter"]= "{:.2f}".format(s["counter"])
@@ -458,13 +460,14 @@ def count(req):
       sec.append(s)
     totalcosts= "{:.2f}".format(totalcosts)  
     ntotal= "{:.2f}".format(ntotal)
+    totalbudget= "{:.2f}".format(totalbudget)
     secdates.sort()
     first=datetime.strptime(secdates[0].split(" ")[0],'%Y-%m-%d')
     interv=f"from {first.day} {my_months[first.month]} {first.year}"
     sec[0]['interv']=interv
     if first.month<datetime.now().month:
        sec[0]['interv']=f"{interv}--{datetime.now().day} {my_months[datetime.now().month]} {datetime.now().year}"
-    return render(req,"kasse/counter.html",context={"sector":sec,"b":bt,"total":totalcosts,"nt":ntotal})
+    return render(req,"kasse/counter.html",context={"sector":sec,"b":bt,"total":totalcosts,"nt":ntotal,"bud":totalbudget})
       
     
     
