@@ -66,6 +66,12 @@ nav>ul{
 #time{
     text-align: center;
 }
+
+.btn-default{
+    width: 100%;
+    background-color: black;
+    color: white;
+}
 @media only screen and (max-width:785px){
     #kassenApp{
         width: 49%;
