@@ -190,7 +190,56 @@ class Make_time_interval(date_details):
       self.integer1=f
       self.integer2=t
         
-        
+def delete_or_update(req) :
+    me=req.session.get('user')['mail'].split('.')[0]
+    previous_url = req.META.get('HTTP_REFERER', '/')
+    if req.method=="POST":
+            try:
+             el=req.POST['delete'].split(':')
+             message=el[1]
+             
+             if "/months" in previous_url or "/weeks"  in previous_url :
+                 dt=el[0].split("_")[0]
+                 i=el[0].split("_")[1]
+                 id=int(i)
+                 t=datetime.strptime(dt,'%Y-%m-%d')
+                 y=t.year
+                 dt=str(t)
+             else:
+                 
+                 t=datetime.now()
+                 dt=datetime.strptime(f"{t.year}-{t.month}-{t.day}",'%Y-%m-%d')
+                 dt=str(dt)
+                 y=t.year
+                 t=dt
+                 id = int(el[0])
+             we=find_week(dt.split(' 00:00:00')[0])
+             
+             li=select([db,me,"plan",'weekt',y,we],{},"get")
+            except Exception as e:
+                print("this is the exception: ",e)
+                #li=[]
+                pass
+            
+            try:
+                ob= select([db,me,"plan","tasks",str(t),id],{},"get")
+            except Exception as e:
+                print("could not get object:",ob,"because of ",e)   
+            if ob is not None and message=="D":
+                
+                return render(req,'plan/delete.html',context={"t":my_time,"d":ob})
+            elif ob is not None:
+                try:
+                 
+                 cl=select([db,me,"plan","classes"],{},"get")
+                 
+                except Exception as e:
+                    print("could not get classes",cl,":",e)
+                    #cl=[]
+                
+                return render(req,'plan/update.html',context={"t":my_time,"d":ob,"l":li,"k":cl})  
+            previous_url = req.META.get('HTTP_REFERER', '/')
+            return redirect(previous_url)      
 
 def new_time(req):
     me=req.session.get('user')['mail'].split('.')[0]
@@ -279,7 +328,9 @@ def add(req):
     
     k=[]
     try:
-      k=select([db,me,"plan","classes"],{},"get") #db.child(me).child('classes').get().val()
+      k=select([db,me,"plan","classes"],{},"get") 
+      if k is None:
+          k=[]
     except Exception as e:
         k=[]
         print("when geting classes by add:",e)
@@ -302,26 +353,27 @@ def add(req):
        d=selected_date
        for i in range(1,int(num)+1):
            classi=post[f"typo{i}"]
+           print("CLASSI:",classi)
            try:
              el = [c for c in k if c==classi]
-             if len(el)<1 and len(k)>0:
+             if len(el)<1 :
                  k.append(classi)
-             else:
-                 k=[]
-                 k.append(classi)
+            # else:
+               #  k=[]
+               #  k.append(classi)
              ob={"classes":k}
              cl=select([db,me,"plan"],ob,"update")
-               #db.child(me).child("classes").child(len(k)).set({'class':classi})
-           except:
+             print(cl)
+               
+           except Exception as e:
+               print("One error:",e)
                pass
-              #db.child(me).child("classes").child(0).set({'class':classi})
+             
               
            fm=post[f"timF{i}"]
            to=post[f"timT{i}"]
            acti=post[f"act{i}"]
           
-           
-             
            nwtask=Task(date=selected_date,me=me,begin=str(fm),end=str(to),task=acti,classi=classi)
            nwtask1=nwtask.clean(alt="")
           
@@ -347,7 +399,8 @@ def add(req):
  try:
      k=select([db,me,"plan","classes"],{},"get")
  except Exception as e:
-     k=[]
+     if k is None:
+       k=[]
      print("when geting classes by add at the end of add:",e)
  try:
      cw=find_week(f"{d.year}-{d.month}-{d.day}")
@@ -355,7 +408,8 @@ def add(req):
      
  except Exception as e:
         print("I was blocked by an Errro when getting the week kines :",e)
-        li=[]
+        if li is None:
+         li=[]
  period=Make_time_interval(d).forme_week()
  return render(req,'plan/add.html',context={"t":my_time,"k":k,"d":md,"blocked":blocked,"l":li,"period":period})
     
@@ -484,7 +538,7 @@ def days(req):
        print(e)
        return redirect(reverse("login")) 
     id=0
-        #tasks=db.child(m).child("tasks").get().val()
+        
     lc = get_localzone()
     tm=datetime.now(lc)
     y=tm.year
@@ -495,33 +549,7 @@ def days(req):
     t=datetime.strptime(fd,'%Y-%m-%d') #'%Y-%m-%d'
     perid=Make_time_interval(tm).forme_week()
     if req.method=="POST":
-            try:
-             we=find_week(fd)
-             li=select([db,me,"plan",'weekt',y,we],{},"get")#db.child(me).child("weekt").child(we).get().val()
-            except:
-                li=[]
-            el=req.POST['delete'].split(':')
-            id=int(el[0])
-            message=el[1]
-            try:
-                ob= select([db,me,"plan","tasks",str(t),id],{},"get")#db.child(me).child('tasks').child(t).child(id).get().val()
-                
-            except Exception as e:
-                print("could not get object:",ob,"because of ",e)   
-            if ob is not None and message=="D":
-                
-                return render(req,'plan/delete.html',context={"t":my_time,"d":ob})
-            elif ob is not None:
-                try:
-                 
-                 cl=select([db,me,"plan","classes"],{},"get")
-                 #cl=db.child(me).child("classes").get().val()
-                except Exception as e:
-                    print("could not get classes",cl,":",e)
-                    cl=[]
-                
-                return render(req,'plan/update.html',context={"t":my_time,"d":ob,"l":li,"k":cl})
-    
+      return delete_or_update(req)
     tas=ordi(me=me,date=str(t))
         
     return render(req,'plan/today.html',context={"t":my_time,"taff":tas,"period":perid})
@@ -551,6 +579,8 @@ def week(req):
     w1=[ordi(me,x)for x in wee]
     w1.reverse()
     period=Make_time_interval(today).forme_week()
+    if req.method=="POST":
+     return delete_or_update(req)
    
     return render(req,'plan/week.html',context={"t":my_time,"week":w1,"period":period})
 
@@ -597,7 +627,9 @@ def months(req):
     
  m1=[ordi(me,x)for x in moar]
  m1.reverse()
- period=Make_time_interval(md).forme_month()        
+ period=Make_time_interval(md).forme_month() 
+ if req.method =="POST":
+     return delete_or_update(req)
  return render(req,'plan/month.html',context={"t":my_time,"mo":m1,"sel":selected_month,"mo1":allmonths,"period":period})
 
 

@@ -92,6 +92,7 @@ tr>td{
 .wtask1{
     display: none;
 }
+
 div>h6{
     padding: 9px;
     
@@ -166,6 +167,14 @@ body{
     color: aqua;
 }
 
+.mtab{
+    text-align: left;
+}
+
+.deleteupdate{
+    text-align: right;
+    padding-left: 9px;
+}
 @media only screen and (max-width:785px){
     .nav{
        

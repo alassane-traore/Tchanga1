@@ -6,6 +6,12 @@
 <h1 id="head" class="head">MONTHLY PLAN</h1>
 <h6 id="time" class="head"> {{t}} </h6>
 <span class="period todayperiod"> {{period.seting1}}<i class="fa-solid fa-arrow-right" ></i>{{period.seting2}}</span>
+<form  method="POST" enctype="multipart/form-data" class="deleteform">
+   
+    {% csrf_token %}
+    <input name="delete" id="deletes">
+<input type="submit" id="deleteb" >
+</form>
 <form  method="GET" enctype="multipart/form-data">
     <select id="msel" name="msel"> 
     <option value="{{sel.val}}">{{sel.name}} </option>
@@ -21,7 +27,7 @@
 {% for m in mo %}
 <tr  > <td colspan="2" class="wdate" > <h5> {{m.0.date}}</h5></td></tr>
 {% for n in m %}
-<tr><td class="wtask1" ></td>  <td class="wtask">{{n.begin}}-{{n.end}} </td>  <td class="wtask"> {{n.task}}</td></tr>
+<tr><td class="wtask1" ></td>  <td class="wtask">{{n.begin}}-{{n.end}} </td>  <td class="wtask mtab"> {{n.task}} <i class="fa-solid fa-pen deleteupdate" id='{{n.date}}_{{n.id }}' ></i> <i class="fa-solid fa-trash-can deleteupdate" id='{{n.date}}_{{n.id }}'></i></td></tr>
 {% endfor %}
 
 {% endfor %}
