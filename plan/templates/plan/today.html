@@ -17,9 +17,9 @@
 
 {% if taff %}
 <div id="dayDiv">
-{% for t in taff %}
-<div class="act">
-    <h6 class="times">{{t.begin}}-{{t.end}} <span class="percent"> </span> <h6><i class="fa-solid fa-pen" id='{{t.id }}' ></i> <i class="fa-solid fa-trash-can" id='{{t.id}}'></i>  </h6> </h6>
+{% for t in taff %} 
+<div class="act pointed-row">
+    <h6 class="times">{{t.begin}}-{{t.end}} <span class="percent"> </span> <h6 class="edit-delete" ><i class="fa-solid fa-pen" id='{{t.id }}' ></i> <i class="fa-solid fa-trash-can" id='{{t.id}}'></i>  </h6> </h6>
     <h5 class="tks">
         <i class="fa-solid fa-circle-dot ench"></i>
         {{t.task}} 

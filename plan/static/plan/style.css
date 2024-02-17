@@ -175,6 +175,10 @@ body{
     text-align: right;
     padding-left: 9px;
 }
+
+.edit-delete{
+    visibility: hidden;
+}
 @media only screen and (max-width:785px){
     .nav{
        

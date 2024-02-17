@@ -30,9 +30,24 @@ let pen=document.querySelectorAll(".fa-pen")
 let trash = document.querySelectorAll(".fa-trash-can")
 let deletesValue=document.getElementById('deletes')
 let sendDelete =document.getElementById('deleteb')
-
+let pointedRow = document.querySelectorAll(".pointed-row")
+let deleteOrEdit=document.querySelectorAll(".edit-delete")
 
 let ev = new Event("click")
+
+//handle hide an show of edit and delete icones
+
+for(let i=0;i<pointedRow.length;i++){
+    let pointed =pointedRow[i]
+   let  delOrEd=deleteOrEdit[i]
+    pointed.addEventListener("mouseenter",()=>{
+     delOrEd.style.visibility="visible"
+    })
+    pointed.addEventListener("mouseleave",()=>{
+        delOrEd.style.visibility="hidden"
+       })
+
+}
 
 //Delete week preprogramed task for 
 anul.forEach(el=>{
