@@ -606,10 +606,13 @@ def months(req):
     if not msel==mo:
      mo=msel
      yea=syea
+ 
      
  except:
         pass
-        
+ periode_date=f"{yea}-{mo}-{1}"
+ periode_date=datetime.strptime(periode_date,'%Y-%m-%d')
+ period=Make_time_interval(periode_date).forme_month()         
  moar=[]
     #prepare the months list for a select tag
  allmonths=[]
@@ -627,7 +630,7 @@ def months(req):
     
  m1=[ordi(me,x)for x in moar]
  m1.reverse()
- period=Make_time_interval(md).forme_month() 
+ #period=Make_time_interval(md).forme_month() 
  if req.method =="POST":
      return delete_or_update(req)
  return render(req,'plan/month.html',context={"t":my_time,"mo":m1,"sel":selected_month,"mo1":allmonths,"period":period})
