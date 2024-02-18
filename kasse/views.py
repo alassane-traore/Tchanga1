@@ -97,13 +97,11 @@ def validate(x):
 
 
 def design(x,y):
- # print("newbudget:",x,"newcounter:",y,f"{x}<0 :",x<0)
   if y*100/x>=50 and y*100/x <75 :
     return "orange"
   elif y*100/x>=75 and y*100/x <100:
     return "orangered"
   elif y*100/x>=100 or x<=0:
-    print("1newbudget:",x,"newcounter:",y,f"{x}<0 :",x<0)
     return "red"
   else:
     return "normal"
