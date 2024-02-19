@@ -135,6 +135,7 @@ body{
     background-image: url(./whit_map_pexels-monstera-production-7412057.jpg);
     background-attachment: fixed;
     background-size: cover;
+    background-position: center;
 }
 
 #monSubmit{

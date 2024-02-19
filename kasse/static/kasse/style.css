@@ -80,6 +80,7 @@ body{
     background-image: url(./gold_pexels-michael-steinberg-321457.jpg);
     background-attachment: fixed;
     background-size: cover;
+    background-position: center;
 }
 
 #head{
