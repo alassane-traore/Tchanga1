@@ -14,10 +14,40 @@ from django.utils import timezone
 import os
 from Tchanga1.settings import firebase
 
+
 db=firebase.database()
 
 my_months=["", "Jan", "Feb","Mar","Apr", "May", "June", "July","Aug","Sept","Oct","Nov","Dec"]
 
+def get_user(key,message,users):
+    user=False
+    try:
+     for u in users:
+        
+        if u[f"{key}"]==message:
+          user=u
+          return user
+    except Exception as e:
+        print("THIS IS THE EX:", e)
+       # pass
+    return user
+
+def form_clien_date(x):
+      dtim =x.split("TIME")[1].split(":")[0]
+      y=dtim.split("-")[0]
+      y=int(y)
+      mon=dtim.split("-")[1]
+      mon=int(mon)+1
+      d=dtim.split("-")[2]
+      d=int(d)
+      h=x.split("TIME")[1].split(":")[1]
+      h=int(h)
+      min=x.split("TIME")[1].split(":")[2]
+      min=int(min)
+      sec=x.split("TIME")[1].split(":")[3]
+      sec=int(sec)
+      nd=datetime.datetime(year=y,month=mon,day=d,hour=h,minute=min,second=sec)
+      return nd
 
 def create_date(period,begin):
     b=""
@@ -109,6 +139,8 @@ def design(x,y):
   
   
 def new_sector(req):
+    mg=""
+    signaler="new sector"
   #verify that user is authenticated
     try :
      me=req.session.get('user')['mail'].split('.')[0]
@@ -166,11 +198,13 @@ def new_sector(req):
       except:
         previous_url = req.META.get('HTTP_REFERER', '/')
         return redirect(previous_url)
-    return render(req,"kasse/sectors.html",context={"m":message})
+    return render(req,"kasse/sectors.html",context={"m":message,"ident":mg,"signaler":signaler})
 
 
 
 def add_list(req):
+  mg=""
+  signaler="add list"
   #verify that user is authenticated
   try :
      me=req.session.get('user')['mail'].split('.')[0]
@@ -251,24 +285,39 @@ def add_list(req):
      
     return redirect("addlist")
   
-  return render(req,"kasse/addliste.html",context={"li":gs,"cs":cs,"len":leng})
-
-
+  return render(req,"kasse/addliste.html",context={"li":gs,"cs":cs,"len":leng,"ident":mg,"signaler":signaler})
 
 
 def shopping_list(req):
+    mg=""
+    signaler="shopping list"
     
-    
-    return render(req, "kasse/kaufliste.html")
-
+    return render(req, "kasse/kaufliste.html",context={"ident":mg,"signaler":signaler})
 
             
 def markets(req):
+   mg=""
+   signaler="markets"
    #make sure user is athenticated
    try :
     me=req.session.get('user')['mail'].split('.')[0]
    except:
-    return redirect(reverse("login"))
+     try:
+        mg=req.GET['letter']
+        mg1=mg
+        if "TIME" in mg:
+          mg1=mg.split("TIME")[0]
+        if mg1 and mg1 is not None and mg1 !=" ":
+          users=select([db,'users'],{},'get')
+          me= get_user(key="message",message=mg1,users=users)['mail'].split(".")[0]
+        signaler=""
+        if me is None:
+           return redirect(reverse("login"))
+        
+     except Exception as e:
+         me=""
+         signaler=""
+    #return redirect(reverse("login"))
    #prepare to redirect to the busket by click
    if req.method=="POST":
      
@@ -295,7 +344,7 @@ def markets(req):
        print("GOT AN EXCEPTION in marks", e)
        
      
-     return render(req,"kasse/basket.html",context={"sc":s})
+     return render(req,"kasse/basket.html",context={"sc":s,"ident":mg,"signaler":signaler})
    
    #present current available sector on the marketplace and renew them if automate is True 
    nw = datetim.datetime.now()
@@ -340,15 +389,32 @@ def markets(req):
            #db.child(me).child('kasse').child('sectors').child(o.id).update(o)
            cs.append(o)
            
-   return render(req,"kasse/market.html",context={"sector":cs})
+   return render(req,"kasse/market.html",context={"sector":cs,"ident":mg,"signaler":signaler})
 
 
 def basket(req):
-  #ensure that user is authenticated
+    mg=""
+    signaler="basket"
+   #ensure that user is authenticated
     try :
      me=req.session.get('user')['mail'].split('.')[0]
     except:
-     return redirect(reverse("login"))
+      try:
+        mg=req.GET['letter']
+        mg1=mg
+        if "TIME" in mg:
+          mg1=mg.split("TIME")[0]
+        if mg1 and mg1 is not None and mg1 !=" ":
+          users=select([db,'users'],{},'get')
+          me= get_user(key="message",message=mg1,users=users)['mail'].split(".")[0]
+        signaler=""
+        if me is None:
+           return redirect(reverse("login"))
+        
+      except Exception as e:
+         me=""
+         signaler=""
+     #return redirect(reverse("login"))
    #handle post request in shop
     if req.method=="POST":
      try:
@@ -414,20 +480,37 @@ def basket(req):
         print("final exception in busket", e)
         previous_url = req.META.get('HTTP_REFERER', '/')
         return redirect(previous_url)
-    return render(req,"kasse/basket.html")
+    return render(req,"kasse/basket.html",context={"ident":mg,"signaler":signaler})
 
 
 def transit1(req):
-    
-    return render(req,'kasse/transit.html')
+    mg=""
+    signaler="transit"
+    return render(req,'kasse/transit.html',context={"ident":mg,"signaler":signaler})
       
 
 def count(req):
+    mg=""
+    signaler="count"
     try :
      me=req.session.get('user')['mail'].split('.')[0]
     except:
-      return redirect(reverse("login"))
-    
+      try:
+        mg=req.GET['letter']
+        mg1=mg
+        if "TIME" in mg:
+          mg1=mg.split("TIME")[0]
+        if mg1 and mg1 is not None and mg1 !=" ":
+          users=select([db,'users'],{},'get')
+          me= get_user(key="message",message=mg1,users=users)['mail'].split(".")[0]
+        signaler=""
+        if me is None:
+           return redirect(reverse("login"))
+        
+      except Exception as e:
+         me=""
+         signaler=""
+     
     sector=select([db,me,"kasse","sectors"],{},"get")
     bt=[]
     totalcosts=0
@@ -466,12 +549,16 @@ def count(req):
     ntotal= "{:.2f}".format(ntotal)
     totalbudget= "{:.2f}".format(totalbudget)
     secdates.sort()
-    first=datetime.strptime(secdates[0].split(" ")[0],'%Y-%m-%d')
-    interv=f"from {first.day} {my_months[first.month]} {first.year}"
-    sec[0]['interv']=interv
-    if first.month<datetime.now().month:
-       sec[0]['interv']=f"{interv}--{datetime.now().day} {my_months[datetime.now().month]} {datetime.now().year}"
-    return render(req,"kasse/counter.html",context={"sector":sec,"b":bt,"total":totalcosts,"nt":ntotal,"bud":totalbudget})
+    try:
+     first=datetime.strptime(secdates[0].split(" ")[0],'%Y-%m-%d')
+     interv=f"from {first.day} {my_months[first.month]} {first.year}"
+     sec[0]['interv']=interv
+    
+     if first.month<datetime.now().month:
+        sec[0]['interv']=f"{interv}--{datetime.now().day} {my_months[datetime.now().month]} {datetime.now().year}"
+    except:
+      pass
+    return render(req,"kasse/counter.html",context={"sector":sec,"b":bt,"total":totalcosts,"nt":ntotal,"bud":totalbudget,"ident":mg,"signaler":signaler})
       
     
     

@@ -10,7 +10,7 @@ import pytz
 from tzlocal import get_localzone
 from .models import Task #,Kategories,dates ,weecklines 
 import os
-from users.views import db
+from users.views import db,form_clien_date,get_user
 from kasse.views import select,validate,create_date
 
 
@@ -191,6 +191,8 @@ class Make_time_interval(date_details):
       self.integer2=t
         
 def delete_or_update(req) :
+    mg=""
+    signaler="Types"
     me=req.session.get('user')['mail'].split('.')[0]
     previous_url = req.META.get('HTTP_REFERER', '/')
     if req.method=="POST":
@@ -227,7 +229,7 @@ def delete_or_update(req) :
                 print("could not get object:",ob,"because of ",e)   
             if ob is not None and message=="D":
                 
-                return render(req,'plan/delete.html',context={"t":my_time,"d":ob})
+                return render(req,'plan/delete.html',context={"t":my_time,"d":ob,"ident":mg,"signaler":signaler})
             elif ob is not None:
                 try:
                  
@@ -237,12 +239,14 @@ def delete_or_update(req) :
                     print("could not get classes",cl,":",e)
                     #cl=[]
                 
-                return render(req,'plan/update.html',context={"t":my_time,"d":ob,"l":li,"k":cl})  
+                return render(req,'plan/update.html',context={"t":my_time,"d":ob,"l":li,"k":cl,"ident":mg,"signaler":signaler})  
             previous_url = req.META.get('HTTP_REFERER', '/')
             return redirect(previous_url)      
 
 def new_time(req):
     me=req.session.get('user')['mail'].split('.')[0]
+    mg=""
+    signaler="add week"
     #get classes
     k=[]
     try:
@@ -284,7 +288,7 @@ def new_time(req):
         except Exception as e:
            print("Got an issue by UPDATE:",e)
                
-        return render(req,'plan/update.html',context={"t":my_time,"d":ob,"l":lines,"k":k})
+        return render(req,'plan/update.html',context={"t":my_time,"d":ob,"l":lines,"k":k,"ident":mg,"signaler":signaler})
         
       else:
         
@@ -309,7 +313,7 @@ def new_time(req):
           lines =select([db,me,"plan","weekt",d.year,cw],{},"get")    
         except:
           pass
-        return render(req,'plan/add.html',context={"t":my_time,"k":k,"l":lines,"d":dt1,"period":period})
+        return render(req,'plan/add.html',context={"t":my_time,"k":k,"l":lines,"d":dt1,"period":period,"ident":mg,"signaler":signaler})
       except:
           previous_url = req.META.get('HTTP_REFERER', '/')
       
@@ -323,6 +327,8 @@ def new_time(req):
    
 def add(req):
  blocked=False
+ mg=""
+ signaler="add week"
  try:
     me=req.session.get('user')['mail'].split('.')[0]
     
@@ -394,8 +400,24 @@ def add(req):
            #nwtask.save()
  except Exception as e:# not req.user.is_authenticated:
         print("Final:",e)
-        rev=reverse('add')
-        return redirect(rev) 
+        try:
+           mg=req.GET['letter']
+           mg1=mg
+           if "TIME" in mg:
+             mg1=mg.split("TIME")[0]
+           if mg1 and mg1 is not None and mg1 !=" ":
+             users=select([db,'users'],{},'get')
+             me= get_user(key="message",message=mg1,users=users)['mail'].split(".")[0]
+            
+             signaler=""
+             if me is None:
+               return redirect(reverse("login"))
+        
+        except Exception as e:
+          me=""
+          signaler=""
+        #rev=reverse('add')
+        #return redirect(rev) 
  try:
      k=select([db,me,"plan","classes"],{},"get")
  except Exception as e:
@@ -411,14 +433,31 @@ def add(req):
         if li is None:
          li=[]
  period=Make_time_interval(d).forme_week()
- return render(req,'plan/add.html',context={"t":my_time,"k":k,"d":md,"blocked":blocked,"l":li,"period":period})
+ return render(req,'plan/add.html',context={"t":my_time,"k":k,"d":md,"blocked":blocked,"l":li,"period":period,"ident":mg,"signaler":signaler})
     
 
 def add_week(req):
+    mg=""
+    signaler="add week"
     try:
         me=req.session.get('user')['mail'].split('.')[0]
     except:
-        return redirect(reverse("login"))
+        try:
+           mg=req.GET['letter']
+           mg1=mg
+           if "TIME" in mg:
+             mg1=mg.split("TIME")[0]
+           if mg1 and mg1 is not None and mg1 !=" ":
+             users=select([db,'users'],{},'get')
+             me= get_user(key="message",message=mg1,users=users)['mail'].split(".")[0]
+             signaler=""
+             if me is None:
+               return redirect(reverse("login"))
+        
+        except Exception as e:
+          me=""
+          signaler=""
+        #return redirect(reverse("login"))
     d=datetim.datetime.now()
     periodate=d
     d1=f"{d.year}-{d.month}-{d.day}"
@@ -463,7 +502,7 @@ def add_week(req):
    # d1=datetim.datetime.now()
     perio=Make_time_interval(periodate).forme_week()
     #print("PERIOD",periodate.year)
-    return render(req,'plan/weeklines.html',context={"t":my_time,"lines":l,"w":w,"d":periodate.year,"period":perio})
+    return render(req,'plan/weeklines.html',context={"t":my_time,"lines":l,"w":w,"d":periodate.year,"period":perio,"ident":mg,"signaler":signaler})
 
 
 def disprogram(req):
@@ -492,10 +531,11 @@ def disprogram(req):
         
     previous_url = req.META.get('HTTP_REFERER', '/')
     return redirect(previous_url)
-    
+     
 def transit(req):
-    
-    return render(req,'plan/transit.html',context={"t":my_time})
+    mg=""
+    signaler="transit"
+    return render(req,'plan/transit.html',context={"t":my_time,"ident":mg,"signaler":signaler})
 
 def ordi(me,date):
     
@@ -530,17 +570,34 @@ def ordi(me,date):
 
 def days(req):
     tas=[]
+    mg=""
     try:
-        user1=req.session.get('user')['name']
-        me=req.session.get('user')['mail'].split('.')[0]
-        
+      mg=req.GET['letter']
+      mg1=mg
+      if "TIME" in mg:
+        mg1=mg.split("TIME")[0]
+      if mg1 and mg1 is not None and mg1 !=" ":
+         users=select([db,'users'],{},'get')
+         me= get_user(key="message",message=mg1,users=users)['mail'].split(".")[0]
+         print(me)
+         if me is None:
+           return redirect(reverse("login")) 
     except Exception as e:
-       print(e)
-       return redirect(reverse("login")) 
+        print("Exep:",e)
+        return render(req,'plan/today.html',context={"t":my_time,"ident":mg})
+        
+    #try:
+        #user1=req.session.get('user')['name']
+        #me=req.session.get('user')['mail'].split('.')[0]
+        
+    #except Exception as e:
+       #print(e)
+       #return redirect(reverse("login")) 
     id=0
         
     lc = get_localzone()
-    tm=datetime.now(lc)
+    tm= form_clien_date(mg)#datetime.now(lc)
+    
     y=tm.year
     m=tm.month
     da=tm.day
@@ -552,14 +609,29 @@ def days(req):
       return delete_or_update(req)
     tas=ordi(me=me,date=str(t))
         
-    return render(req,'plan/today.html',context={"t":my_time,"taff":tas,"period":perid})
+    return render(req,'plan/today.html',context={"t":my_time,"taff":tas,"period":perid,"ident":mg})
     
 
 
       
 def week(req):
-    me=req.session.get('user')['mail'].split('.')[0]
-    today=datetim.datetime.now()
+    mg=""
+    try:
+      mg=req.GET['letter']
+      mg1=mg
+      if "TIME" in mg:
+        mg1=mg.split("TIME")[0]
+      if mg1 and mg1 is not None and mg1 !=" ":
+         users=select([db,'users'],{},'get')
+         me= get_user(key="message",message=mg1,users=users)['mail'].split(".")[0]
+         print(me)
+         if me is None:
+           return redirect(reverse("login")) 
+    except Exception as e:
+        print("Exep:",e)
+        return render(req,'plan/week.html',context={"t":my_time,"ident":mg})
+    #me=req.session.get('user')['mail'].split('.')[0]
+    today=form_clien_date(mg)  #datetim.datetime.now()
     current_Week=find_week(f"{today.year}-{today.month}-{today.day}")
     we=[]
     try:
@@ -582,34 +654,54 @@ def week(req):
     if req.method=="POST":
      return delete_or_update(req)
    
-    return render(req,'plan/week.html',context={"t":my_time,"week":w1,"period":period})
+    return render(req,'plan/week.html',context={"t":my_time,"week":w1,"period":period,"ident":mg})
 
 
 
 def months(req):
+ mg=""
+ signaler="Month"
+ frmdate=datetime.now()
  try:
-   me=req.session.get('user')['mail'].split('.')[0]
- except Exception as e:
-     print("Exception in month when geting user:",e)
-     rev=reverse('login')
-     return redirect(rev)
- mo=datetim.datetime.now().month
- yea=datetim.datetime.now().year
- fmo= ob= select([db,me,"plan","tasks"],{},"get")#db.child(me).child('tasks').get().val()
+     me=req.session['user']['mail'].split(".")[0]
+    # frmdate=form_clien_date(mg)
+ except:
+     try:
+      mg=req.GET['letter']
+      mg1=mg
+      if "TIME" in mg:
+        mg1=mg.split("TIME")[0]
+      if mg1 and mg1 is not None and mg1 !=" ":
+         users=select([db,'users'],{},'get')
+         me= get_user(key="message",message=mg1,users=users)['mail'].split(".")[0]
+         print(me)
+         
+      signaler=""
+      if me is None:
+          return redirect(reverse("login"))
+        
+     except Exception as e:
+         me=""
+         signaler=""
+         #return redirect(reverse("login")) 
+         
+     
+ mo=frmdate.month
+ yea=frmdate.year
+ fmo= ob= select([db,me,"plan","tasks"],{},"get")
  #verify if an othen than current month was chosen
- md=datetime.now()
+ md= frmdate#datetime.now()
  try:
     month_info=req.GET["msel"]
     msel=int(month_info.split(":")[0])
     syea=int(month_info.split(":")[1])
-    
     if not msel==mo:
-     mo=msel
-     yea=syea
- 
-     
- except:
-        pass
+        mo=msel
+        yea=syea
+ except Exception as e:
+     print("Ho laaa: ", e)
+     pass
+  
  periode_date=f"{yea}-{mo}-{1}"
  periode_date=datetime.strptime(periode_date,'%Y-%m-%d')
  period=Make_time_interval(periode_date).forme_month()         
@@ -633,19 +725,37 @@ def months(req):
  #period=Make_time_interval(md).forme_month() 
  if req.method =="POST":
      return delete_or_update(req)
- return render(req,'plan/month.html',context={"t":my_time,"mo":m1,"sel":selected_month,"mo1":allmonths,"period":period})
+ 
+ return render(req,'plan/month.html',context={"t":my_time,"mo":m1,"sel":selected_month,"mo1":allmonths,"period":period,"ident":mg,"signaler":signaler})
 
 
 def types(req):
-    
+    mg=""
+    signaler="Types"
     try:
        m=req.session.get('user')['mail'].split('.')[0]
-       if m is None:
-        rev=reverse('login')
-        return redirect(rev)
+       #if m is None:
+        #rev=reverse('login')
+        #return redirect(rev)
     except:
-        rev=reverse('login')
-        return redirect(rev)
+        try:
+           mg=req.GET['letter']
+           mg1=mg
+           if "TIME" in mg:
+             mg1=mg.split("TIME")[0]
+           if mg1 and mg1 is not None and mg1 !=" ":
+             users=select([db,'users'],{},'get')
+             m= get_user(key="message",message=mg1,users=users)['mail'].split(".")[0]
+             print(m)
+             signaler=""
+             if m is None:
+               return redirect(reverse("login"))
+        
+        except Exception as e:
+          m=""
+          signaler=""
+        #rev=reverse('login')
+        #return redirect(rev)
     message=""
     if req.method=="POST":
      
@@ -674,7 +784,7 @@ def types(req):
        message=f"{classi} added "
        
           
-    return render(req,'plan/types.html',context={"t":my_time,"m":message})
+    return render(req,'plan/types.html',context={"t":my_time,"m":message,"ident":mg,"signaler":signaler})
 
 def give_to_update_object(req):
     

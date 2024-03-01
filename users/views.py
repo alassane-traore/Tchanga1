@@ -9,7 +9,7 @@ from Tchanga1.settings import firebase
 import os
 from Tchanga1.settings import firebase
 from kasse.views import select
-
+import datetime
 #firebase = pyrebase.initialize_app(firebase_config)
 auth = firebase.auth()
 db=firebase.database()
@@ -27,6 +27,36 @@ class Login_form(forms.Form):
       username=forms.EmailField()#(max_length=69)
       password=forms.CharField(min_length=8,max_length=79)
 
+def get_user(key,message,users):
+    user=False
+    try:
+     for u in users:
+        
+        if u[f"{key}"]==message:
+          user=u
+          return user
+    except Exception as e:
+        print("THIS IS THE EX:", e)
+       # pass
+    return user
+
+def form_clien_date(x):
+      dtim =x.split("TIME")[1].split(":")[0]
+      y=dtim.split("-")[0]
+      y=int(y)
+      mon=dtim.split("-")[1]
+      mon=int(mon)+1
+      d=dtim.split("-")[2]
+      d=int(d)
+      h=x.split("TIME")[1].split(":")[1]
+      h=int(h)
+      min=x.split("TIME")[1].split(":")[2]
+      min=int(min)
+      sec=x.split("TIME")[1].split(":")[3]
+      sec=int(sec)
+      nd=datetime.datetime(year=y,month=mon,day=d,hour=h,minute=min,second=sec)
+      return nd
+  
 # Create your views here.
 
 def exists_or_signup(req,me):
@@ -38,16 +68,40 @@ def exists_or_signup(req,me):
        return redirect(reverse("signup"))
 
 def home(req):
+    users=select([db,'users'],{},'get')
+    #print(users)
+    mg=""
+   
+    try:
+      mg=req.GET['letter']
+      mg1=mg
+      if "TIME" in mg:
+        mg1=mg.split("TIME")[0]
+      if mg1 and mg1 is not None and mg1 !=" ":
+         n= get_user(key="message",message=mg1,users=users)['name']
+         if n is not None:
+           print("ANTICIPATE ...")
+           return  render(req, "users/home.html",context={"user":n,"ident":mg})
+          
+    except Exception as e:
+        print("Exep:",e)
+        pass
+        
+    
     
     try:
       if req.session['user']:
          me=req.session['user']['mail']
-         
          exists_or_signup(req,me.split(".")[0])
          n=req.session['user']['name']
-         
-         return  render(req, "users/home.html",context={"user":n})#redirect(rev) 
+         if mg is None or mg=="":
+           mg=req.session['user']['token']
+         identity=mg 
+         #print(mg==message)
+         #select([db,"users"])
+         return  render(req, "users/home.html",context={"user":n,"ident":identity})#redirect(rev) 
     except Exception as e:
+        print("EXPECT2:",e)
         rev=reverse('login')
         return redirect(rev)
             
@@ -90,7 +144,7 @@ def signup(request):
                return  redirect(rev)   
        
            except Exception as e:
-                 
+                 print("Ex",e)
                  message= "Please try again!"
                  return render(request,"users/signup.html",context={"message":message})
                   
@@ -104,7 +158,15 @@ def signup(request):
 
 
 def loginin(request):
-   
+    users=select([db,'users'],{},'get')
+    
+    #tk=auth.current_user['idToken']
+    mg=""
+    try:
+      mg=request.GET['letter']
+    except Exception as e:
+        print("Exep:",e)
+        pass
     if request.method=="POST":
         
         post=request.POST
@@ -118,16 +180,21 @@ def loginin(request):
                n=db.child(name.split('.')[0]).child('name').get().val()
                
                
-               request.session["user"]={"mail":name,'token':auth.current_user['idToken'],'name':n}#user1[0]['name']
+               request.session["user"]={"mail":name,'token':auth.current_user['idToken'],'name':n}
                
-               rev=reverse("home")
+               user=get_user(key="mail",message=name,users=users)
+               id=users.index(user)
+               
+               mas=select([db,'users',id],{"message":auth.current_user['idToken']},'update')
+               
+               rev=reverse("home")#kwargs={'message':auth.current_user['idToken']}
                return redirect(rev)
            except Exception as e:
                print(e)
                message="Invalid credentials"
         
-               return render(request,"users/login.html",context={"message":message})  
-    return render(request,"users/login.html")
+               return render(request,"users/login.html",context={"message":message,"ident":mg})  
+    return render(request,"users/login.html",context={"ident":mg})
     
     
 def profile(request):
@@ -153,7 +220,8 @@ def logingout(request):
     return redirect(rev)
 
 def welcome(req):
-    
+    message=req.session['user']['token']
     rev=reverse("home")
+    
     return redirect(rev)
     #return render(req, "users/home.html")
