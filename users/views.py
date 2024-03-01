@@ -87,8 +87,6 @@ def home(req):
         print("Exep:",e)
         pass
         
-    
-    
     try:
       if req.session['user']:
          me=req.session['user']['mail']
@@ -162,11 +160,13 @@ def loginin(request):
     
     #tk=auth.current_user['idToken']
     mg=""
+    signaler=""
     try:
       mg=request.GET['letter']
     except Exception as e:
+        
         print("Exep:",e)
-        pass
+        signaler="login"
     if request.method=="POST":
         
         post=request.POST
@@ -194,7 +194,7 @@ def loginin(request):
                message="Invalid credentials"
         
                return render(request,"users/login.html",context={"message":message,"ident":mg})  
-    return render(request,"users/login.html",context={"ident":mg})
+    return render(request,"users/login.html",context={"ident":mg,"signaler":signaler})
     
     
 def profile(request):
