@@ -1,0 +1,218 @@
+.nav{
+    display: inline-block;
+    padding: 19px;
+    
+    
+}
+
+nav>ul{
+   text-align:right; 
+   align-content: end;
+
+}
+
+#senddiv{
+    background-color: rebeccapurple;
+    color: white;
+    border: 1 solid black;
+    width: 91%;
+    text-align: center;
+    margin: 0px auto;
+}
+
+table{
+    border: 2px;
+    width: 100%;
+}
+tr>td{
+   
+    border-width: 1px;
+    text-align: center;
+    background-color: goldenrod;
+    color: white;
+}
+
+.wdate{
+    background-color: orangered;
+}
+
+#los0{
+    display: none;
+    
+}
+
+.act{
+    background-color: gray;
+    color: white;
+    width: 85%;
+    margin: 0 auto;
+    border-radius: 5px;
+}
+
+.act1{
+    background-color: gray;
+    color: white;
+    width: 85%;
+    margin: 0 auto;
+
+}
+
+#daycontainer{
+    background-color:transparent;
+    border-radius: 5px;
+    border:5px solid white;
+}
+
+#week{
+    width: 100%;
+    margin: 0 auto;
+}
+
+#addform{
+    width: 45%;
+    margin:0 auto ;
+    background-color: darkcyan;
+    border-radius: 15px;
+    text-align: center;
+}
+
+
+.head{
+   
+    color: white;
+    text-align: center;
+}
+
+.tab{
+    width: 85%;
+    margin:0 auto ;
+    border-radius: 45px; 
+}
+
+.wtask1{
+    display: none;
+}
+
+div>h6{
+    padding: 9px;
+    
+    display: inline-block;
+}
+h6>a{
+    text-decoration: none;
+    color: purple;
+}
+#plusdiv {
+    width: 49%;
+    margin:0 auto ;
+    background-color: darkcyan;
+    color: white;
+    border-radius: 15px;
+    text-align: center;
+}
+
+#day{
+    display: none;
+}
+#addform0{
+    display: none; 
+}
+h6>h6{
+    text-align: right;
+    align-items: end;
+    padding-left: 9px;
+   
+}
+
+h6>i{
+    text-align: right;
+    align-items: end;
+    padding-left: 19px;
+   
+}
+
+body{
+    background-image: url(./whit_map_pexels-monstera-production-7412057.jpg);
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+}
+
+#monSubmit{
+    display: none;
+    visibility: hidden;
+}
+.deleteform{
+    color: white;
+    display: none;
+}
+
+.danger{
+    color: white;
+    background-color: red;
+}
+#timereserve1{
+    display: none;
+    background-color: transparent;
+    color: white;
+
+}
+
+#period{
+    color: purple;
+    
+}
+
+
+.todayperiod{
+    color:purple;
+}
+
+.mtab{
+    text-align: left;
+}
+
+.deleteupdate{
+    text-align: right;
+    padding-left: 9px;
+}
+
+.edit-delete{
+    visibility: hidden;
+}
+@media only screen and (max-width:785px){
+    .nav{
+       
+        padding: 11px;
+        
+        
+    }
+    
+    .act{
+        background-color: gray;
+        color: white;
+        width: 95%;
+        margin: 0 auto;
+        
+        
+    }
+    
+    #addform{
+        width: 95%;
+        margin:0 auto ;
+        background-color: darkcyan;
+        border-radius: 45px;
+        
+    }
+
+    .tab{
+        width: 91%;
+        margin:0 auto ;
+        border-radius: 45px; 
+    }
+
+
+    #plusdiv{
+        width: 95%;
+    }
+}

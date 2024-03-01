@@ -1,0 +1,38 @@
+{% extends 'kasse/enchor.html' %}
+{% block contents %}
+{% load static %}
+<div id="marketContainer"> 
+<h1 id="head"> Shopping Sectors(places) </h1>
+    <div id="marketdiv"> 
+        {% if sector %}
+        {% for s in sector  %}
+         
+        <div class="sectors"> 
+            <form id="sform" method="POST"  action="{% url 'market' %}"  enctype="multipart/form-data">
+                {% csrf_token %}
+               <input name="id" class="addform0" value={{s.name}}> 
+                <h4>{{s.name}} <i class="fa-solid fa-sack-dollar {{s.decor}}" >{{s.rest}}</i>  </h4>
+
+                <h6><i class="fa-solid fa-clock"></i> <span>{{s.end}} </span> </h6>
+
+                <h4> <span >Budget: </span> <span>{{s.newbudget}} </span> </h4>
+                <input type="submit" class="marktSubmit">
+
+
+            </form>
+        </div>
+        
+        {% endfor %} 
+         {% else %} 
+         <h4>You have not added any sector yet ! </h4>
+        <h4><a href="{% url 'sectors'%}" ><i class="fa-regular fa-square-plus">Add</i>  </a> </h4>
+
+        {% endif %}
+    </div>
+    
+</div>
+
+<link rel="stylesheet" href="{% static 'kasse/style.css' %}">
+<script src="{% static 'kasse/kasse.js' %}"></script>
+
+{% endblock  %}

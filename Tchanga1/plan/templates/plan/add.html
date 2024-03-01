@@ -1,0 +1,63 @@
+{% extends 'plan/root.html' %}
+{% block contents %}
+{% load static %}
+
+<div id="addform">
+<h1 id="head" class="head"> ADD A PLAN ! </h1>
+<h4 id="time" class="head"> {{t}} : <span id="daily" > </span> </h4>
+
+<form id="addform0" method="POST" action="{% url 'tchanger' %}" enctype="multipart/form-data">
+  {% csrf_token %}
+  <input id="timereserve" name="date1" >
+  <button class="nav"  id="tchanger" ></button>
+</form>
+<form id="addform" method="POST" action="{% url 'add' %}" enctype="multipart/form-data">
+ <span class="period"> {{period.seting1}}<i class="fa-solid fa-arrow-right" ></i>{{period.seting2}}</span>
+      {% csrf_token %}
+      <h4> <span name="num" id="num"> 0</span> <span> Tasks </span></h4>
+      {% if blocked %}
+      <h4>Ces horaires ont été modufiés pour garder la chrono : {{blocked}}</h4>
+      {% endif %}
+      <input type="hidden" name="hid" id="hid" >
+      <div id="stock">
+        <input id="timput" name="date" type="datetime-local" value={{d}} >
+        
+      </div>
+      <button id="los0" > Submit </button>
+    <div id ="actsdiv"> 
+    <input id="timF" type="time" >
+    <input id="timT" type="time" >
+    <br>
+    <input name="l" id="act" placeholder="Tasks" list="lines">
+    <datalist id="lines">
+      {% for el in l  %}
+      <option >{{el}}</option>
+      {% endfor %}
+      </datalist>
+
+    <input name="typo" id ="typo" placeholder="Rubrics" list="typos" required>
+    {% if k %}
+    <datalist id="typos">
+    {% for el in k  %}
+    <option >{{el}} </option>
+    {% endfor %}
+    </datalist>
+    {% endif %}
+    </div>
+
+    <div id ="senddiv"> 
+      <i id="onemore" class="fa-solid fa-plus"></i>
+     
+     <br> <br>
+     
+    <!--<i class="fa-regular fa-square-plus" id="onemore"></i>
+    <i class="fa-regular fa-paper-plane" id="los0"></i> -->
+    
+    </div>
+</form>
+</div>
+
+<link rel="stylesheet" href="{% static 'plan/style.css' %}">
+<script src="{% static 'plan/index.js' %}"></script>
+
+{% endblock  %}

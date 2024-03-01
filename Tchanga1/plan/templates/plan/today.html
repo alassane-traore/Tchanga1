@@ -1,0 +1,50 @@
+
+{% extends 'plan/root.html' %}
+{% block contents %}
+{% load static %}
+
+<div class="tab" id="tab">
+<div id="daycontainer"> 
+    <h1 id="head" class="head"> DAILY PLAN  </h1>
+<h6 id="time" class="head"> {{t}} </h6>
+<span class="period todayperiod"> {{period.seting1}}<i class="fa-solid fa-arrow-right" ></i>{{period.seting2}}</span>
+<form  method="POST" enctype="multipart/form-data" class="deleteform">
+   
+    {% csrf_token %}
+    <input name="delete" id="deletes">
+<input type="submit" id="deleteb" >
+</form>
+
+{% if taff %}
+<div id="dayDiv">
+{% for t in taff %} 
+<div class="act pointed-row">
+    <h6 class="times">{{t.begin}}-{{t.end}} <span class="percent"> </span> <h6 class="edit-delete" ><i class="fa-solid fa-pen" id='{{t.id }}' ></i> <i class="fa-solid fa-trash-can" id='{{t.id}}'></i>  </h6> </h6>
+    <h5 class="tks">
+        <i class="fa-solid fa-circle-dot ench"></i>
+        {{t.task}} 
+    </h5>
+ </div>
+
+{% endfor %}
+
+</div>
+{% else %}
+<h4> You have no Program for today ! </h4>
+<h4><a href="{% url 'add'%}" ><i class="fa-regular fa-square-plus">Add</i>  </a> </h4>
+{% endif %}
+
+</div>
+
+</div>
+
+
+
+
+
+
+<link rel="stylesheet" href="{% static 'plan/style.css' %}">
+<script src="{% static 'plan/index.js' %}"></script>
+
+
+{% endblock  %}

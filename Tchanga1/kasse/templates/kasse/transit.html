@@ -1,0 +1,17 @@
+{% extends 'kasse/enchor.html' %}
+{% block contents %}
+{% load static %}
+<div id="plusdiv"> 
+<h1 id="head"> What would you like to add ? </h1>
+    <div id="kastrans"> 
+         <div class="ktrans"><a href="{% url 'sectors' %}"><i class="fa-solid fa-cart-shopping" class="ktrans1"></i></a> </div>
+          
+          <div class="ktrans" > <a href="{% url 'addlist'%}" > <i class="fa-solid fa-list-check" class="ktrans1"></i> </a> </div>
+          
+        </div>
+</div>
+
+<link rel="stylesheet" href="{% static 'kasse/style.css' %}">
+<script src="{% static 'kasse/kasse.js' %}"></script>
+
+{% endblock  %}
