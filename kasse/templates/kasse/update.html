@@ -1,0 +1,45 @@
+{% extends 'kasse/enchor.html' %}
+{% block contents %}
+{% load static %}
+<div id ="plusdiv"> 
+<h1 id="head"> Update {{s.name}} </h1>
+<div id="plusdiv1"> 
+    <h4> {{m}}</h4>
+    <form id="addform0" method="POST" action="{% url 'updatesec' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div id="periodiv" > 
+            
+            {% if s.new %}
+            <label for="from"> From </label>
+            <input id="begin" name="begin" type="datetime-local" value="{{s.begin}}"> <br>
+            {% endif %}
+           <label for="to"> To </label>
+           <input id="end" name="end" type="datetime-local" value="{{s.end}}" >
+        </div>
+        
+        <div id="adder">
+        <input id="sector" class="checker" name="sector" placeholder="Sector name " value="{{s.name}}"> 
+         
+        <input type="number" step="any" id="budget" name="budget" placeholder="Budget" value="{{s.budget}}">
+        <input id="checker" class="checker" name="auto" value="{{s.automate}}">
+        <h6>Automaticaly reusable ? 
+            <span>YES <input type="checkbox"  class="yesno" id="True" {% if s.automate %}checked{% endif %}> </span> 
+             <span> NO <input type="checkbox"  class="yesno" id="False" {% if not s.automate %} name="" checked{% endif %}></span> <h6>
+                <div id="losdiv"> 
+                    <input type="Submit"class="givelist"  >
+                    </div>
+
+                <!--<div> <i class="fa-solid fa-plus" id="plus"></i> </div>-->
+        
+        </div>
+
+    </form>
+      
+</div>
+
+</div>
+
+<link rel="stylesheet" href="{% static 'kasse/style.css' %}">
+<script src="{% static 'kasse/kasse.js' %}"></script>
+
+{% endblock  %}

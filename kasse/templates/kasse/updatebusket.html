@@ -1,0 +1,39 @@
+{% extends 'kasse/enchor.html' %}
+{% block contents %}
+{% load static %}
+<div id ="plusdiv1"> 
+<h4 id="head"> Update your shopping of {{b.date}} </h4>
+<h5 id="head">{{s.name}} </h5>
+
+<form id="addform0" method="POST" action="{% url 'updateb' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+<input name="sector" class="checker"  value="{{s.name}}" >
+<input  name="busket" class="checker" value="{{b.date}}" >
+<input name="good" class="checker" id="goodstock" value="{% for g in b.goods  %}41259{{g}}{% endfor %}" >
+<h4> Busket <i class="fa-solid fa-cart-shopping"></i>:</h4>
+{% for g in b.goods  %}
+<label for("{{g}}") > <input type="checkbox" class="upgood" name="{{g}}" checked >   {{g}} </label>
+{% endfor %}
+<br>
+<input name="ngood" class="checker" id="liststock">
+{% if s.list %}
+<h4> Shopping list <i class="fa-solid fa-list"></i>:</h4>
+{% for l in s.list %}
+<label for("{{l}}") > <input type="checkbox" class="uplist" name="{{l}}">   {{l}} </label>
+{% endfor %}
+{% endif %}
+
+
+<br>
+<h3>Costs:<i class="fa-solid fa-hand-holding-dollar"> </i> <input type="number" step="any" name="costs" value="{{b.costs}}" > </h3>
+
+<input type="submit" value="Update" class="givelist"  >
+</form>
+
+
+</div>
+
+<link rel="stylesheet" href="{% static 'kasse/style.css' %}">
+<script src="{% static 'kasse/kasse.js' %}"></script>
+
+{% endblock  %}

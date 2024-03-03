@@ -11,9 +11,12 @@ urlpatterns = [
     path('counter/',views.count,name='counter'),
     path('add_list/',views.add_list,name='addlist'),
     path('shopping/',views.shopping_list,name='list'),
-    path('hist/',views.hist,name='history'),
+    path('updates/',views.update_sector,name='updatesec'),
     path('shop/',views.basket,name='shop'),
-     path('del/<str:id>',views.removit,name="delete")
+    path('del/<str:id>',views.removit,name="delete"),
+    path('updatebusket/',views.update_busket,name='updateb'),
+    path('deletebusket/',views.delete_busket,name='deleteb')
+    
     
     
     

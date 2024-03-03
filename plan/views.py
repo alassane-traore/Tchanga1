@@ -60,14 +60,14 @@ def class_or_head(id,end_point,val,key,option):
                       li.append(val)
                       db.child(id).child(end_point).child(option).set(li)
                     except Exception as e:
-                        print(e)
+                        #print(e)
                         li=[val]
                         db.child(id).child(end_point).child(option).set(li)
                   else:
                       db.child(id).child(end_point).child(0).set({key:val})
                   
             except Exception as e:
-                print(e)
+                #print(e)
                 if end_point =="weekt":
                     li=[val]
                     db.child(id).child(end_point).child(option).set(li)
@@ -219,14 +219,15 @@ def delete_or_update(req) :
              
              li=select([db,me,"plan",'weekt',y,we],{},"get")
             except Exception as e:
-                print("this is the exception: ",e)
+                #print("this is the exception: ",e)
                 #li=[]
                 pass
             
             try:
                 ob= select([db,me,"plan","tasks",str(t),id],{},"get")
             except Exception as e:
-                print("could not get object:",ob,"because of ",e)   
+                #print("could not get object:",ob,"because of ",e) 
+                pass  
             if ob is not None and message=="D":
                 
                 return render(req,'plan/delete.html',context={"t":my_time,"d":ob,"ident":mg,"signaler":signaler})
@@ -236,8 +237,9 @@ def delete_or_update(req) :
                  cl=select([db,me,"plan","classes"],{},"get")
                  
                 except Exception as e:
-                    print("could not get classes",cl,":",e)
+                    #print("could not get classes",cl,":",e)
                     #cl=[]
+                    pass
                 
                 return render(req,'plan/update.html',context={"t":my_time,"d":ob,"l":li,"k":cl,"ident":mg,"signaler":signaler})  
             previous_url = req.META.get('HTTP_REFERER', '/')
@@ -252,7 +254,7 @@ def new_time(req):
     try:
       k=db.child(me).child('plan').child('classes').get().val()
     except Exception as e:
-        print("when get classes in new time:",e)
+        #print("when get classes in new time:",e)
         k=[]
     #get the current week to get lins
     d=datetim.datetime.now()
@@ -286,7 +288,8 @@ def new_time(req):
            id=int(id)
            ob= db.child(me).child('plan').child('tasks').child(date).child(id).get().val()
         except Exception as e:
-           print("Got an issue by UPDATE:",e)
+          # print("Got an issue by UPDATE:",e)
+          pass
                
         return render(req,'plan/update.html',context={"t":my_time,"d":ob,"l":lines,"k":k,"ident":mg,"signaler":signaler})
         
@@ -297,7 +300,7 @@ def new_time(req):
          return redirect(previous_url)
                 
      except Exception as e:
-      print("finalGot an issue by UPDATE:",e)
+      #print("finalGot an issue by UPDATE:",e)
       # post request coming from the add form
       try:
         #the data from post request to reqenine the week
@@ -323,8 +326,7 @@ def new_time(req):
         previous_url = req.META.get('HTTP_REFERER', '/')
       
         return redirect(previous_url)
-   
-   
+    
 def add(req):
  blocked=False
  mg=""
@@ -339,7 +341,7 @@ def add(req):
           k=[]
     except Exception as e:
         k=[]
-        print("when geting classes by add:",e)
+        #print("when geting classes by add:",e)
         
     d=datetim.datetime.now()   
     #cw=find_week(f"{d.year}-{d.month}-{d.day}")
@@ -359,7 +361,7 @@ def add(req):
        d=selected_date
        for i in range(1,int(num)+1):
            classi=post[f"typo{i}"]
-           print("CLASSI:",classi)
+           
            try:
              el = [c for c in k if c==classi]
              if len(el)<1 :
@@ -369,10 +371,10 @@ def add(req):
                #  k.append(classi)
              ob={"classes":k}
              cl=select([db,me,"plan"],ob,"update")
-             print(cl)
+             
                
            except Exception as e:
-               print("One error:",e)
+               #print("One error:",e)
                pass
              
               
@@ -399,7 +401,7 @@ def add(req):
            
            #nwtask.save()
  except Exception as e:# not req.user.is_authenticated:
-        print("Final:",e)
+        #print("Final:",e)
         try:
            mg=req.GET['letter']
            mg1=mg
@@ -423,19 +425,18 @@ def add(req):
  except Exception as e:
      if k is None:
        k=[]
-     print("when geting classes by add at the end of add:",e)
+     #print("when geting classes by add at the end of add:",e)
  try:
      cw=find_week(f"{d.year}-{d.month}-{d.day}")
      li=select([db,me,"plan",'weekt',d.year,cw],{},"get")
      
  except Exception as e:
-        print("I was blocked by an Errro when getting the week kines :",e)
+        #print("I was blocked by an Errro when getting the week kines :",e)
         if li is None:
          li=[]
  period=Make_time_interval(d).forme_week()
  return render(req,'plan/add.html',context={"t":my_time,"k":k,"d":md,"blocked":blocked,"l":li,"period":period,"ident":mg,"signaler":signaler})
     
-
 def add_week(req):
     mg=""
     signaler="add week"
@@ -490,7 +491,7 @@ def add_week(req):
              
              
            except Exception as e:
-               print("I wa getting Weekt but ",e)
+               #print("I wa getting Weekt but ",e)
                ob={w:[l]}
                wk=select([db,me,"plan",'weekt',d.year],ob,"update")
                
@@ -501,9 +502,8 @@ def add_week(req):
         l=[]
    # d1=datetim.datetime.now()
     perio=Make_time_interval(periodate).forme_week()
-    #print("PERIOD",periodate.year)
+    
     return render(req,'plan/weeklines.html',context={"t":my_time,"lines":l,"w":w,"d":periodate.year,"period":perio,"ident":mg,"signaler":signaler})
-
 
 def disprogram(req):
     try:
@@ -564,7 +564,7 @@ def ordi(me,date):
           tas.append(ob)
         
    except Exception as e:
-          print("exception when get tasks in day:",e)
+          #print("exception when get tasks in day:",e)
           tas=[]
    return tas
 
@@ -578,21 +578,19 @@ def days(req):
         mg1=mg.split("TIME")[0]
       if mg1 and mg1 is not None and mg1 !=" ":
          users=select([db,'users'],{},'get')
-         me= get_user(key="message",message=mg1,users=users)['mail'].split(".")[0]
-         print(me)
+         user=get_user(key="message",message=mg1,users=users)
+         if user:
+           me= user['mail'].split(".")[0]
+           
+         else:
+           me=req.session['user']['mail'].split(".")[0]
+          # mg=req.session['user']['token']
          if me is None:
            return redirect(reverse("login")) 
     except Exception as e:
-        print("Exep:",e)
+        #print("Exep:",e)
         return render(req,'plan/today.html',context={"t":my_time,"ident":mg})
         
-    #try:
-        #user1=req.session.get('user')['name']
-        #me=req.session.get('user')['mail'].split('.')[0]
-        
-    #except Exception as e:
-       #print(e)
-       #return redirect(reverse("login")) 
     id=0
         
     lc = get_localzone()
@@ -610,10 +608,7 @@ def days(req):
     tas=ordi(me=me,date=str(t))
         
     return render(req,'plan/today.html',context={"t":my_time,"taff":tas,"period":perid,"ident":mg})
-    
-
-
-      
+        
 def week(req):
     mg=""
     try:
@@ -624,11 +619,12 @@ def week(req):
       if mg1 and mg1 is not None and mg1 !=" ":
          users=select([db,'users'],{},'get')
          me= get_user(key="message",message=mg1,users=users)['mail'].split(".")[0]
-         print(me)
+         
          if me is None:
            return redirect(reverse("login")) 
     except Exception as e:
-        print("Exep:",e)
+        me=req.session.get('user')['mail'].split('.')[0]
+        #print("Exep:",e)
         return render(req,'plan/week.html',context={"t":my_time,"ident":mg})
     #me=req.session.get('user')['mail'].split('.')[0]
     today=form_clien_date(mg)  #datetim.datetime.now()
@@ -637,14 +633,14 @@ def week(req):
     try:
        we= ob= select([db,me,"plan","tasks"],{},"get") #db.child(me).child('tasks').get().val()
     except Exception as e:
-        print("Exception when trying to get we tasks:",e)
+       # print("Exception when trying to get we tasks:",e)
         we=[]
     #getting only plannings of the currentweek
     try:
       wee= [x for x in we if find_week(x.split(' 00:00:00')[0])== current_Week]  #[]
       
     except Exception as e:
-        print("got problem when trying to filter", we , "-->"*9, e)
+       # print("got problem when trying to filter", we , "-->"*9, e)
         wee=[]
     #getting planed dates of the week 
     wee.sort()
@@ -655,8 +651,6 @@ def week(req):
      return delete_or_update(req)
    
     return render(req,'plan/week.html',context={"t":my_time,"week":w1,"period":period,"ident":mg})
-
-
 
 def months(req):
  mg=""
@@ -674,7 +668,7 @@ def months(req):
       if mg1 and mg1 is not None and mg1 !=" ":
          users=select([db,'users'],{},'get')
          me= get_user(key="message",message=mg1,users=users)['mail'].split(".")[0]
-         print(me)
+         
          
       signaler=""
       if me is None:
@@ -699,7 +693,7 @@ def months(req):
         mo=msel
         yea=syea
  except Exception as e:
-     print("Ho laaa: ", e)
+     #print("Ho laaa: ", e)
      pass
   
  periode_date=f"{yea}-{mo}-{1}"
@@ -728,7 +722,6 @@ def months(req):
  
  return render(req,'plan/month.html',context={"t":my_time,"mo":m1,"sel":selected_month,"mo1":allmonths,"period":period,"ident":mg,"signaler":signaler})
 
-
 def types(req):
     mg=""
     signaler="Types"
@@ -746,7 +739,7 @@ def types(req):
            if mg1 and mg1 is not None and mg1 !=" ":
              users=select([db,'users'],{},'get')
              m= get_user(key="message",message=mg1,users=users)['mail'].split(".")[0]
-             print(m)
+             
              signaler=""
              if m is None:
                return redirect(reverse("login"))
@@ -791,7 +784,8 @@ def give_to_update_object(req):
   try:
     me=req.session.get('user')['mail'].split('.')[0]
   except Exception as e:
-      print("Who are you ?", e)
+      #print("Who are you ?", e)
+      pass
   date=req.POST['date']
   date=datetime.strptime(date,'%Y-%m-%dT%H:%M')
   y=date.year
@@ -816,13 +810,13 @@ def give_to_update_object(req):
   previous_url = req.META.get('HTTP_REFERER', '/')
       
   return redirect(previous_url)
- 
    
 def remov(req):
   try:
     me=req.session.get('user')['mail'].split('.')[0]
   except Exception as e:
-      print("Who are you ?", e)
+      #print("Who are you ?", e)
+      pass
   date=req.GET['date']
   id=req.GET['id']
  

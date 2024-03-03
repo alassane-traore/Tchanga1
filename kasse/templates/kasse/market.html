@@ -12,14 +12,15 @@
                 {% csrf_token %}
                <input name="id" class="addform0" value={{s.name}}> 
                 <h4>{{s.name}} <i class="fa-solid fa-sack-dollar {{s.decor}}" >{{s.rest}}</i>  </h4>
-
-                <h6><i class="fa-solid fa-clock"></i> <span>{{s.end}} </span> </h6>
-
-                <h4> <span >Budget: </span> <span>{{s.newbudget}} </span> </h4>
                 <input type="submit" class="marktSubmit">
-
-
             </form>
+                 <form method="GET"  action="{% url 'updatesec' %}"  enctype="multipart/form-data" >
+               <input name="id" class="addform0" value={{s.name}}>
+                <h6><i class="fa-solid fa-clock"></i> <span>{{s.end}} </span> <button class="btn"> <i class="fa-solid fa-pen"></i> </button>  </h6>
+                
+                 </form>
+                <h4> <span >Budget: </span> <span>{{s.newbudget}} </span> </h4>
+                
         </div>
         
         {% endfor %} 

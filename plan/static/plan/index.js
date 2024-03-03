@@ -37,17 +37,23 @@ let ev = new Event("click")
 
 //handle hide an show of edit and delete icones
 
-for(let i=0;i<pointedRow.length;i++){
-    let pointed =pointedRow[i]
-   let  delOrEd=deleteOrEdit[i]
-    pointed.addEventListener("mouseenter",()=>{
-     delOrEd.style.visibility="visible"
-    })
-    pointed.addEventListener("mouseleave",()=>{
-        delOrEd.style.visibility="hidden"
-       })
-
+function focus(parent,child){
+    let pointedRow= document.querySelectorAll(`.${parent}`) //".pointed-row"
+    let deleteOrEdit=document.querySelectorAll(`.${child}`)
+    for(let i=0;i<pointedRow.length;i++){
+        let pointed =pointedRow[i]
+       let  delOrEd=deleteOrEdit[i]
+        pointed.addEventListener("mouseenter",()=>{
+         delOrEd.style.visibility="visible"
+        })
+        pointed.addEventListener("mouseleave",()=>{
+            delOrEd.style.visibility="hidden"
+           })
+    
+    }
 }
+
+focus("pointed-row","edit-delete")
 
 //Delete week preprogramed task for 
 anul.forEach(el=>{
@@ -384,8 +390,6 @@ trash.forEach(el=>{
     })
     
 })
-
-
 
 
 function prepareCliendata(){

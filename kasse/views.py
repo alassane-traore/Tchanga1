@@ -28,8 +28,8 @@ def get_user(key,message,users):
           user=u
           return user
     except Exception as e:
-        print("THIS IS THE EX:", e)
-       # pass
+        #print("THIS IS THE EX:", e)
+        pass
     return user
 
 def form_clien_date(x):
@@ -194,12 +194,12 @@ def new_sector(req):
             else:
                message=select([db,me,"kasse",'sectors'],s,"update")
           except Exception as e:
-             print("Confronted with following error when trying to get sectors, sector is ", s, "problem is ",e )
+             #print("Confronted with following error when trying to get sectors, sector is ", s, "problem is ",e )
+             pass
       except:
         previous_url = req.META.get('HTTP_REFERER', '/')
         return redirect(previous_url)
     return render(req,"kasse/sectors.html",context={"m":message,"ident":mg,"signaler":signaler})
-
 
 
 def add_list(req):
@@ -261,7 +261,7 @@ def add_list(req):
            except Exception as e:
              o["list"]=[]
              o["len"]=0
-             print(e)
+            # print(e)
            leng+=len(o["list"])
            cs.append(o)
         
@@ -337,11 +337,12 @@ def markets(req):
          s["list"]=[]
          s["len"]=0
          s["decor"]=design(s["newbudget"],s["newcounter"])
-         print("this is an exception",e)
+        # print("this is an exception",e)
       
       
      except Exception as e:
-       print("GOT AN EXCEPTION in marks", e)
+      # print("GOT AN EXCEPTION in marks", e)
+      pass
        
      
      return render(req,"kasse/basket.html",context={"sc":s,"ident":mg,"signaler":signaler})
@@ -445,7 +446,7 @@ def basket(req):
             
         except Exception as e:
            g=select([db,me,"kasse","sectors",sid,"list"],'',"get")
-           print( "Exception occured when geting list element which is ",g, "Here is the Error: ",e)
+          # print( "Exception occured when geting list element which is ",g, "Here is the Error: ",e)
            
       #Prevent empty submition
       if validate([prise,eval(prise)]) : 
@@ -461,7 +462,7 @@ def basket(req):
            b=[]
            b.append(bk)
        except Exception as e:
-           print("Got an exeption in Buskets ",e)
+          # print("Got an exeption in Buskets ",e)
            b=[]
            b.append(bk)
            
@@ -477,7 +478,7 @@ def basket(req):
       
        return HttpResponseRedirect(reverse("market"))
      except Exception as e:
-        print("final exception in busket", e)
+       # print("final exception in busket", e)
         previous_url = req.META.get('HTTP_REFERER', '/')
         return redirect(previous_url)
     return render(req,"kasse/basket.html",context={"ident":mg,"signaler":signaler})
@@ -542,7 +543,7 @@ def count(req):
        s["len"]=len(bk)
        
       except Exception as e:
-        print("Exception revailed in count :", e)
+       # print("Exception revailed in count :", e)
         s["len"]=1
       sec.append(s)
     totalcosts= "{:.2f}".format(totalcosts)  
@@ -560,10 +561,8 @@ def count(req):
       pass
     return render(req,"kasse/counter.html",context={"sector":sec,"b":bt,"total":totalcosts,"nt":ntotal,"bud":totalbudget,"ident":mg,"signaler":signaler})
       
-    
-    
+       
 def hist(req):
-    
     
     return render(req,"kasse/history.html")
 
@@ -582,5 +581,267 @@ def removit(req,id):
     return redirect("addlist")
   
 
+def update_sector(req):
+  signaler="update_sec"
+  me=""
+  m=""
+  try :
+     me=req.session.get('user')['mail'].split('.')[0]
+  except:
+      return redirect(reverse("login"))
+  try:
+   id=req.GET['id']
+  except:
+    id=""
+  sec=select([db,me,"kasse","sectors",id],{},"get")
+  sec["name"]=id
+  busk=False
+  try:
+    busk=sec['buskets']
+  except:
+    pass
+  if busk:
+    sec['new']=False
+  else:
+   sec['new']=True
+   
+  if req.method =="POST":
+    post=req.POST
+    try:
+      begin=post['begin']
+    except:
+      begin=False
+    
+    auto=post['auto']
+    auto=eval(auto)
+    name=post['sector']
+    budget=post['budget']
+    budget=eval(budget)
+    end=post['end']
+    sector=select([db,me,"kasse","sectors",name],{},"get")
+    sector['automate']=auto
+    initial_budget= sector['budget']
+    sector['budget']=budget
+    #newbudget=sector['newbudget']
+    
+    if begin:
+      begin=datetime.strptime(begin,'%Y-%m-%dT%H:%M')
+      bg=f"{begin.year}-{begin.month}-{begin.day}"
+      begin=datetime.strptime(bg,'%Y-%m-%d')
+      begin=str(begin)
+      sector['begin']=begin
+      sector['newbudget']=budget
+    else:
+      sector['newbudget']=sector['newbudget']-initial_budget+budget
+      
+    end=datetime.strptime(end,'%Y-%m-%dT%H:%M')
+    nd=f"{end.year}-{end.month}-{end.day}"
+    end=datetime.strptime(nd,'%Y-%m-%d')
+    end=str(end)
+    sector['end']=end
+    m=select([db,me,"kasse","sectors"],{name:sector},"update")
+    
+    return redirect(reverse('market'))
+    
+  return render(req,'kasse/update.html',context={'s':sec,"signaler":signaler,"m":m})
 
 
+def update_busket(req):
+  signaler="update_sec"
+  me=""
+  m=""
+  
+  try :
+     me=req.session.get('user')['mail'].split('.')[0]
+  except:
+      return redirect(reverse("login"))
+  if req.method=="GET":
+   try:
+    id=req.GET['sector']
+    busket_date=req.GET['busket']
+   
+   except:
+     id=""
+     busket_date=""
+    
+   sec=select([db,me,"kasse","sectors",id],{},"get")
+   sec['name']=id
+   bk=get_user(key="date",message=busket_date,users=sec['buskets'])
+
+  if req.method=="POST":
+    post=req.POST
+    costs=post['costs']
+    costs=eval(costs)
+    goods=post['good']
+    ngoods=post['ngood']
+    if "41259" in goods:
+      goods=goods.split("41259")
+    else:
+      goods=False
+    if "41259" in ngoods:
+      ngoods=ngoods.split("41259")
+    else:
+      ngoods=False
+      
+    sector=post['sector']
+    bk=post['busket']
+    sec=select([db,me,"kasse","sectors",sector],{},"get")
+    counter=sec['counter']
+    newcounter=sec['newcounter']
+    newbudget=sec['newbudget']
+    begin=sec['begin']
+    begin=begin.split(' ')[0]
+    begin=datetime.strptime(begin,'%Y-%m-%d')
+    
+    end=sec['end']
+    end=end.split(' ')[0]
+    end=datetime.strptime(end,'%Y-%m-%d')
+    
+    bk=get_user(key="date",message=bk,users=sec['buskets'])
+    busket_date=bk['date']
+    busket_date=busket_date.split(' ')[0]
+    busket_date=datetime.strptime(busket_date,'%Y-%m-%d')
+    
+    initial_cost=bk['costs']
+    
+    try:
+     initial_goods=bk['goods']
+     
+    except:
+      initial_goods=[]
+    
+    try:
+     initial_list=sec['list']
+    except:
+      initial_list=[]
+      
+    new_goods=[]
+    new_list=[]
+    if goods:
+      goods=[x for x in goods if x is not None and x !="" and x !=" "]
+    else:
+      costs=0
+      goods=[]
+      
+    l=[x for x in initial_goods if x not in goods and x is not None and x !="" and x !=" "]
+    new_list.extend(l)
+    new_goods.extend(goods)
+    
+    if ngoods:
+      ngoods=[x for x in ngoods if x is not None and x !="" and x !=" "]
+    else:
+      ngoods=[]
+      
+    l=[x for x in initial_list if not x in ngoods and x is not None]
+    new_list.extend(l)
+    new_goods.extend(ngoods)
+      
+    sec['list']=new_list
+    bk['goods']=new_goods
+    bk['costs']=costs
+    allbk=sec['buskets'] 
+    
+    if begin<=busket_date and busket_date<=end:
+     newcounter=newcounter-initial_cost+costs
+     sec['newcounter']=newcounter
+     
+    else:
+      newbudget=newbudget+initial_cost-costs
+      sec['newbudget']=newbudget 
+    counter=counter-initial_cost+costs
+    sec['counter']=counter
+    
+    for b in allbk:
+      if b['date']==bk['date']:
+        if len(new_goods)<1 and len(initial_goods)>0:
+          allbk.remove(bk)
+        
+       
+    sec['buskets']=allbk
+    
+    sc=select([db,me,"kasse","sectors"],{sector:sec},"update")
+    return redirect(reverse('counter'))
+  return render(req,'kasse/updatebusket.html',context={'s':sec,'b':bk,"signaler":signaler,"m":m})
+
+
+def delete_busket(req):
+  signaler="update_sec"
+  me=""
+  m=""
+  try :
+     me=req.session.get('user')['mail'].split('.')[0]
+  except:
+      return redirect(reverse("login"))
+  if req.method=="GET":
+   try:
+    id=req.GET['sector']
+    busket_date=req.GET['busket']
+   except:
+    id=""
+    busket_date=""
+    
+   sec=select([db,me,"kasse","sectors",id],{},"get")
+   sec['name']=id
+  
+   bk=get_user(key="date",message=busket_date,users=sec['buskets'])
+  
+  if req.method =="POST":
+   try:
+    post=req.POST
+    sector=post['sector']
+    date=post['date']
+    sec=select([db,me,"kasse","sectors",sector],{},"get")
+    bk=get_user(key="date",message=date,users=sec['buskets'])
+    sec['name']=sector
+    costs=bk['costs']
+    goods=False
+    try:
+      goods=bk['goods']
+    except:
+      pass
+    li=False
+    try:
+      li=sec['list']
+    except:
+      li=False
+      
+    if goods:
+      l=[x for x in goods if x is not None and x and x !=" "]
+      if li:
+        sec['list'].extend(l)
+      else:
+        sec['list']=l
+       
+    sec['buskets'].remove(bk)
+    counter=sec['counter']
+    newcounter=sec['newcounter']
+    newbudget=sec['newbudget']
+    begin=sec['begin']
+    begin=begin.split(' ')[0]
+    begin=datetime.strptime(begin,'%Y-%m-%d')
+    
+    end=sec['end']
+    end=end.split(' ')[0]
+    end=datetime.strptime(end,'%Y-%m-%d')
+    
+    date=date.split(' ')[0]
+    date=datetime.strptime(date,'%Y-%m-%d')
+    if begin<=date and date<=end:
+     newcounter=newcounter-costs
+     sec['newcounter']=newcounter
+     
+    else:
+      newbudget=newbudget+costs
+      sec['newbudget']=newbudget 
+    counter=counter-costs
+    sec['counter']=counter
+    sc=select([db,me,"kasse","sectors"],{sector:sec},"update")
+    
+    return redirect(reverse('counter'))
+   except:
+     pass
+  
+  return render(req,'kasse/deletebusket.html',context={'s':sec,'b':bk,"signaler":signaler,"m":m})
+
+
+ 

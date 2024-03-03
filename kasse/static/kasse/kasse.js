@@ -15,8 +15,58 @@ beging = document.getElementById("begin"),
  checkSector=document.querySelectorAll(".checkSector"),
  sectionId=document.getElementById("sectionId"),
  //deletlist=document.getElementById("del"),
- anul=document.querySelectorAll(".anul")
+ anul=document.querySelectorAll(".anul"),
+ upgoodChek=document.querySelectorAll(".upgood"),
+ upgoodStock=document.getElementById("goodstock"),
+ upListCheck=document.querySelectorAll('.uplist')
 
+
+ function focus(parent,child){
+    let pointedRow= document.querySelectorAll(`.${parent}`) //".pointed-row"
+    let deleteOrEdit=document.querySelectorAll(`.${child}`)
+    for(let i=0;i<pointedRow.length;i++){
+        let pointed =pointedRow[i]
+       let  delOrEd=deleteOrEdit[i]
+        pointed.addEventListener("mouseenter",()=>{
+         delOrEd.style.visibility="visible"
+        })
+        pointed.addEventListener("mouseleave",()=>{
+            delOrEd.style.visibility="hidden"
+           })
+    
+    }
+}
+
+focus("brow","upd")
+
+focus("brow","del")
+
+focus('sectors','btn')
+
+function manageBusket(check,stock){
+    for (let i=0;i<check.length;i++){
+        check[i].addEventListener("change",(event)=>{
+            chk=event.target
+            for(let j=0;j<check.length;j++){
+                let upgoodStock=document.getElementById(stock)
+                let  stk=upgoodStock.value
+                if(!check[j].checked && stk.includes(check[j].name)){
+                   stk=stk.replace("41259"+check[j].name,"")
+                   upgoodStock.value=stk
+                   console.log("1",stk)
+                }else if(check[j].checked && !stk.includes(check[j].name)){
+                    stk=`${stk}41259${check[j].name}`
+                    upgoodStock.value=stk
+                    console.log("2",stk)
+                }
+            }
+        })
+    }
+}
+
+manageBusket(upgoodChek,"goodstock")
+
+manageBusket(upListCheck,"liststock")
 
  ev=new Event("click")
 
@@ -42,16 +92,21 @@ for(let i=0;i<checkSector.length;i++){
 }
 
 for(let i=0;i<sectors.length;i++){
-    sectors[i].addEventListener("click",()=>{
-        marktSubmit[i].dispatchEvent(ev)
-        marktSubmit[i].click()
-        console.log(i)
+    sectors[i].addEventListener("click",(event)=>{
+        console.log("EVENT",event.target.className)
+        if(event.target.className !=="fa-solid fa-pen"){
+            marktSubmit[i].dispatchEvent(ev)
+            marktSubmit[i].click()
+            console.log(i)
+        }
+        
     })
 }
 
 for(let i=0; i<yes.length;i++){
     yes[i].addEventListener("change",(event)=>{
         let c=event.target;
+        document.getElementById('checker').value=c.id
         c.name=c.id
         console.log(c.id,"i<=d:name=>",c.name)
         yes.forEach(el=>{
@@ -246,3 +301,4 @@ let signaler=document.getElementById("signal").textContent
 if (signaler ==="" || signaler===" "){
     lauch()
 }
+

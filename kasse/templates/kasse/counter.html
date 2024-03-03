@@ -6,19 +6,32 @@
 {% if sector %}
 <table id="countertable">
 
-    <tr> <td>  Dates</td>  <td> Shopping {{sector.0.m}} Costs :{{nt}}/ {{bud}}</td> <td> {{sector.0.interv}}  </td> </tr>
+    <tr> <td class="tdgray">  Dates</td>  <td class="tdgray" > Shopping {{sector.0.m}} Costs :{{nt}}/ {{bud}}</td> <td class="tdgray" > {{sector.0.interv}}  </td> </tr>
     {% for s in sector %}
     <tr>  <td colspan="2" class="buskettitle"> {{s.name}} {{s.m}}<i class="fa-solid fa-gauge-high"> {{s.newcounter}} </i>  </td> <td class="buskettitle"> {{s.counter}} </td> </tr> 
    {% for b in s.buskets %}
 
-    <tr> 
+    <tr class="brow"> 
       <td class="countertd1">{{b.date}} </td>
       
         
         <td class="countertd2" > {% for g  in b.goods  %} {{g}} {% endfor %} </td>
         
       
-       <td lass="countertd3" > {{b.costs}} </td>
+       <td class="countertd3" > 
+        {{b.costs}} 
+        <form class="counterform" method="GET" action="{% url 'updateb' %}" enctype="multipart/form-data" >
+          <input class="checker" name="sector" value="{{s.name}}">
+          <input class="checker" name="busket" value="{{b.date}}">
+          <button class="btn upd" ><i class="fa-solid fa-pen"></i> </button>
+        </form>
+        <form class="counterform" method="GET" action="{% url 'deleteb' %}" enctype="multipart/form-data" >
+          <input class="checker" name="sector" value="{{s.name}}">
+          <input class="checker" name="busket" value="{{b.date}}">
+          <button class="btn del" ><i class="fa-solid fa-trash-can"></i> </button>
+        </form>
+        
+      </td>
     </tr>
     
       

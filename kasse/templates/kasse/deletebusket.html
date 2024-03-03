@@ -1,0 +1,28 @@
+{% extends 'kasse/enchor.html' %}
+{% block contents %}
+{% load static %}
+<div id="plusdiv"> 
+    <h1 id="head" > Delete this busket in {{s.name}}  ? </h1>
+<h4 id="time"> {{t}} : <span id="daily" > </span> </h4>
+<h4> Busket <i class="fa-solid fa-cart-shopping"></i>:{{b.date}}</h4>
+{% for g in b.goods  %}
+<label for("{{g}}")>{{g}}</label>
+{% endfor %}
+<h4><i class="fa-solid fa-hand-holding-dollar"> {{b.costs}}</i> </h4>
+<br>
+<form  method="POST" enctype="multipart/form-data" action ="{% url 'deleteb'%}"  >
+    {% csrf_token %}
+    <input class="deleteform checker" name="sector" value="{{s.name}}" >
+    <input class="deleteform checker" name="date" value="{{b.date}}" >
+    <div> 
+         <h6><a href="{% url 'counter' %}"> NO </a> </h6>
+          <h6 > <input type="submit" value="YES" class="danger">  </h6>
+        </div>
+
+    </form>
+</div>
+
+<link rel="stylesheet" href="{% static 'plan/style.css' %}">
+<script src="{% static 'plan/index.js' %}"></script>
+
+{% endblock  %}

@@ -2,7 +2,7 @@
 {% block contents %}
 {% load static %}
 <div id="plusdiv"> 
-    <h1 id="head" > Veux-tu vraiment supprimer {{d.task}}  ? </h1>
+    <h1 id="head" > Delete {{d.task}}  ? </h1>
 <h4 id="time"> {{t}} : <span id="daily" > </span> </h4>
 <form  method="GET" enctype="multipart/form-data" action ="{% url 'delete'%}"  >
     <input class="deleteform" name="id" value="{{d.id}}" >
@@ -10,10 +10,10 @@
 
 
     <div> 
-         <h6><a href="{% url 'days' %}"> NON </a> </h6>
+         <h6><a href="{% url 'days' %}"> NO </a> </h6>
           
           
-          <h6 > <input type="submit" value="OUI" class="danger">  </h6>
+          <h6 > <input type="submit" value="YES" class="danger">  </h6>
           
         </div>
 

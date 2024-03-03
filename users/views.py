@@ -36,8 +36,8 @@ def get_user(key,message,users):
           user=u
           return user
     except Exception as e:
-        print("THIS IS THE EX:", e)
-       # pass
+        #print("THIS IS THE EX:", e)
+        pass
     return user
 
 def form_clien_date(x):
@@ -69,7 +69,7 @@ def exists_or_signup(req,me):
 
 def home(req):
     users=select([db,'users'],{},'get')
-    #print(users)
+    
     mg=""
    
     try:
@@ -80,11 +80,11 @@ def home(req):
       if mg1 and mg1 is not None and mg1 !=" ":
          n= get_user(key="message",message=mg1,users=users)['name']
          if n is not None:
-           print("ANTICIPATE ...")
+           
            return  render(req, "users/home.html",context={"user":n,"ident":mg})
           
     except Exception as e:
-        print("Exep:",e)
+        #print("Exep:",e)
         pass
         
     try:
@@ -95,11 +95,10 @@ def home(req):
          if mg is None or mg=="":
            mg=req.session['user']['token']
          identity=mg 
-         #print(mg==message)
-         #select([db,"users"])
+         
          return  render(req, "users/home.html",context={"user":n,"ident":identity})#redirect(rev) 
     except Exception as e:
-        print("EXPECT2:",e)
+        #print("EXPECT2:",e)
         rev=reverse('login')
         return redirect(rev)
             
@@ -108,7 +107,8 @@ def home(req):
       rev=reverse('login')
       return redirect(rev)
     except Exception as e:
-        print("exception happened:",e)
+        #print("exception happened:",e)
+        pass
     
 
 def signup(request):
@@ -142,7 +142,7 @@ def signup(request):
                return  redirect(rev)   
        
            except Exception as e:
-                 print("Ex",e)
+                 #print("Ex",e)
                  message= "Please try again!"
                  return render(request,"users/signup.html",context={"message":message})
                   
@@ -165,7 +165,7 @@ def loginin(request):
       mg=request.GET['letter']
     except Exception as e:
         
-        print("Exep:",e)
+        #print("Exep:",e)
         signaler="login"
     if request.method=="POST":
         
@@ -190,13 +190,12 @@ def loginin(request):
                rev=reverse("home")#kwargs={'message':auth.current_user['idToken']}
                return redirect(rev)
            except Exception as e:
-               print(e)
+               #print(e)
                message="Invalid credentials"
         
                return render(request,"users/login.html",context={"message":message,"ident":mg})  
     return render(request,"users/login.html",context={"ident":mg,"signaler":signaler})
-    
-    
+     
 def profile(request):
     try:
       n=request.session['user']['name']
@@ -204,14 +203,11 @@ def profile(request):
         pass
     
     return render(request,"users/profile.html",context={"n":n}) 
-        
-        
+             
 def edit_profile(request):
     
     return render(request,"profiledit.html")  
-
-
-    
+   
 def logingout(request):
     request.session.clear()
     #auth.logout(request)
@@ -225,3 +221,5 @@ def welcome(req):
     
     return redirect(rev)
     #return render(req, "users/home.html")
+    
+    

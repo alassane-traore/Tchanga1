@@ -186,6 +186,20 @@ th, td {
 #stock::-webkit-scrollbar{
     display: none;
 }
+.btn{
+    border: 0px;
+    visibility: hidden;
+    display: inline-flex
+}
+.checker{
+    display: none;
+}
+.tdgray{
+    background-color: purple;
+}
+.counterform{
+    display: inline-block;
+}
 @media only screen and (max-width:785px){
 
     .sectors{
