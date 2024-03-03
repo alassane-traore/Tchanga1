@@ -106,7 +106,11 @@ for(let i=0;i<sectors.length;i++){
 for(let i=0; i<yes.length;i++){
     yes[i].addEventListener("change",(event)=>{
         let c=event.target;
-        document.getElementById('checker').value=c.id
+        try{
+            document.getElementById('checker').value=c.id
+        } 
+        catch{ }
+        
         c.name=c.id
         console.log(c.id,"i<=d:name=>",c.name)
         yes.forEach(el=>{
