@@ -71,6 +71,7 @@ def home(req):
     users=select([db,'users'],{},'get')
     
     mg=""
+    signaler=""
     try:
       if req.session['user']:
          me=req.session['user']['mail']
@@ -79,8 +80,8 @@ def home(req):
          if mg is None or mg=="":
            mg=req.session['user']['token']
          identity=mg 
-         
-         return  render(req, "users/home.html",context={"user":n,"ident":identity})#redirect(rev) 
+         signaler=n
+         return  render(req, "users/home.html",context={"user":n,"ident":identity,"signaler":signaler})#redirect(rev) 
     except Exception as e:
         #print("EXPECT2:",e)
         
@@ -92,7 +93,8 @@ def home(req):
       if mg1 and mg1 is not None and mg1 !=" ":
          n= get_user(key="message",message=mg1,users=users)['name']
          if n is not None:
-           return  render(req, "users/home.html",context={"user":n,"ident":mg})
+           signaler=n
+           return  render(req, "users/home.html",context={"user":n,"ident":mg,"signaler":signaler})
           
      except Exception as e:
         rev=reverse('login')
