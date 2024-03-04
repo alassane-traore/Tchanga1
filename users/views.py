@@ -85,9 +85,9 @@ def home(req):
           
     except Exception as e:
         #print("Exep:",e)
-        pass
+     #pass
         
-    try:
+     try:
       if req.session['user']:
          me=req.session['user']['mail']
          exists_or_signup(req,me.split(".")[0])
@@ -97,18 +97,12 @@ def home(req):
          identity=mg 
          
          return  render(req, "users/home.html",context={"user":n,"ident":identity})#redirect(rev) 
-    except Exception as e:
+     except Exception as e:
         #print("EXPECT2:",e)
         rev=reverse('login')
         return redirect(rev)
             
-    try:
-
-      rev=reverse('login')
-      return redirect(rev)
-    except Exception as e:
-        #print("exception happened:",e)
-        pass
+     
     
 
 def signup(request):
