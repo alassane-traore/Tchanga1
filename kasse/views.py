@@ -720,7 +720,7 @@ def update_busket(req):
     if goods:
       goods=[x for x in goods if x is not None and x !="" and x !=" "]
     else:
-      costs=0
+      
       goods=[]
       
     l=[x for x in initial_goods if x not in goods and x is not None and x !="" and x !=" "]
@@ -735,6 +735,8 @@ def update_busket(req):
     l=[x for x in initial_list if not x in ngoods and x is not None]
     new_list.extend(l)
     new_goods.extend(ngoods)
+    if len(new_goods)<1:
+      costs=0 
       
     sec['list']=new_list
     bk['goods']=new_goods
