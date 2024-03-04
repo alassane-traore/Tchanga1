@@ -210,7 +210,7 @@ def logingout(request):
     return redirect(rev)
 
 def welcome(req):
-    message=req.session['user']['token']
+    #message=req.session['user']['token']
     rev=reverse("home")
     
     return redirect(rev)
