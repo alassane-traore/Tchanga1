@@ -71,23 +71,7 @@ def home(req):
     users=select([db,'users'],{},'get')
     
     mg=""
-   
     try:
-      mg=req.GET['letter']
-      mg1=mg
-      if "TIME" in mg:
-        mg1=mg.split("TIME")[0]
-      if mg1 and mg1 is not None and mg1 !=" ":
-         n= get_user(key="message",message=mg1,users=users)['name']
-         if n is not None:
-           
-           return  render(req, "users/home.html",context={"user":n,"ident":mg})
-          
-    except Exception as e:
-        #print("Exep:",e)
-     #pass
-        
-     try:
       if req.session['user']:
          me=req.session['user']['mail']
          exists_or_signup(req,me.split(".")[0])
@@ -97,10 +81,26 @@ def home(req):
          identity=mg 
          
          return  render(req, "users/home.html",context={"user":n,"ident":identity})#redirect(rev) 
-     except Exception as e:
+    except Exception as e:
         #print("EXPECT2:",e)
+        
+     try:
+      mg=req.GET['letter']
+      mg1=mg
+      if "TIME" in mg:
+        mg1=mg.split("TIME")[0]
+      if mg1 and mg1 is not None and mg1 !=" ":
+         n= get_user(key="message",message=mg1,users=users)['name']
+         if n is not None:
+           return  render(req, "users/home.html",context={"user":n,"ident":mg})
+          
+     except Exception as e:
         rev=reverse('login')
         return redirect(rev)
+        #print("Exep:",e)
+     #pass
+        
+     
             
      
     
