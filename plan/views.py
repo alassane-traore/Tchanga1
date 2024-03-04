@@ -611,23 +611,29 @@ def days(req):
         
 def week(req):
     mg=""
+    signaler="week"
+    #frmdate=datetime.now()
     try:
+     me=req.session['user']['mail'].split(".")[0]
+    # frmdate=form_clien_date(mg)
+    except:
+     try:
       mg=req.GET['letter']
       mg1=mg
       if "TIME" in mg:
         mg1=mg.split("TIME")[0]
       if mg1 and mg1 is not None and mg1 !=" ":
          users=select([db,'users'],{},'get')
-         me= get_user(key="message",message=mg1,users=users)['mail'].split(".")[0]
-         
-         if me is None:
-           return redirect(reverse("login")) 
-    except Exception as e:
-        me=req.session.get('user')['mail'].split('.')[0]
-        #print("Exep:",e)
-        return render(req,'plan/week.html',context={"t":my_time,"ident":mg})
+         me= get_user(key="message",message=mg1,users=users)['mail'].split(".")[0]  
+      signaler=""
+      if me is None:
+          return redirect(reverse("login"))
+        
+     except Exception as e:
+         me=""
+         signaler=""
     #me=req.session.get('user')['mail'].split('.')[0]
-    today=form_clien_date(mg)  #datetim.datetime.now()
+    today=datetim.datetime.now() #form_clien_date(mg)  #
     current_Week=find_week(f"{today.year}-{today.month}-{today.day}")
     we=[]
     try:
@@ -650,7 +656,7 @@ def week(req):
     if req.method=="POST":
      return delete_or_update(req)
    
-    return render(req,'plan/week.html',context={"t":my_time,"week":w1,"period":period,"ident":mg})
+    return render(req,'plan/week.html',context={"t":my_time,"week":w1,"period":period,"ident":mg,"signaler":signaler})
 
 def months(req):
  mg=""
@@ -668,8 +674,6 @@ def months(req):
       if mg1 and mg1 is not None and mg1 !=" ":
          users=select([db,'users'],{},'get')
          me= get_user(key="message",message=mg1,users=users)['mail'].split(".")[0]
-         
-         
       signaler=""
       if me is None:
           return redirect(reverse("login"))

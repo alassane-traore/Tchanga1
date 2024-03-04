@@ -53,11 +53,11 @@ function manageBusket(check,stock){
                 if(!check[j].checked && stk.includes(check[j].name)){
                    stk=stk.replace("41259"+check[j].name,"")
                    upgoodStock.value=stk
-                   console.log("1",stk)
+                   
                 }else if(check[j].checked && !stk.includes(check[j].name)){
                     stk=`${stk}41259${check[j].name}`
                     upgoodStock.value=stk
-                    console.log("2",stk)
+                    
                 }
             }
         })
@@ -81,7 +81,7 @@ for(let i=0;i<checkSector.length;i++){
     checkSector[i].addEventListener("change",(event)=>{
         let check=event.target
     sectionId.value=check.name
-    console.log(sectionId.value)
+    
     for(let j=0;j<checkSector.length;j++){
         if(checkSector[j] !==check){
             checkSector[j].checked=false
@@ -93,11 +93,11 @@ for(let i=0;i<checkSector.length;i++){
 
 for(let i=0;i<sectors.length;i++){
     sectors[i].addEventListener("click",(event)=>{
-        console.log("EVENT",event.target.className)
+        
         if(event.target.className !=="fa-solid fa-pen"){
             marktSubmit[i].dispatchEvent(ev)
             marktSubmit[i].click()
-            console.log(i)
+            
         }
         
     })
@@ -112,7 +112,7 @@ for(let i=0; i<yes.length;i++){
         catch{ }
         
         c.name=c.id
-        console.log(c.id,"i<=d:name=>",c.name)
+        
         yes.forEach(el=>{
             if(el !==c){
                 el.checked=false
@@ -132,16 +132,15 @@ for (let i=0;i<goods.length;i++){
         let goodnum=document.getElementById("goodnum")
         if(targ.checked){
             goodId[i].name="good"+prod
-            console.log(goodId[i].value)
+            
             goodnum.value=prod
             
             korb.textContent=parseInt(korb.textContent)+1
             prod+=1
-            console.log("n:",goodnum.value)
+            
         }else{
             goodId[i].name=""
-            console.log(goodId[i].value)
-
+            
             prod-=1
             if(parseInt(korb.textContent)>0){
                 korb.textContent=parseInt(korb.textContent)-1
@@ -149,7 +148,7 @@ for (let i=0;i<goods.length;i++){
             
             
             goodnum.value=prod
-            console.log("nn:",goodnum.value)
+            
         }
         
 
@@ -193,15 +192,14 @@ async function toDelete(id){
     fetch(`/del/${id}`)
     .then(res =>{
         res.text()
-    }).then(data=>console.log(data))
+    })
      .catch(e=>{throw Error(`I was confronted with an error : ${e}`)})
 }
 
 //if (anul){
     anul.forEach(el=>{
         el.addEventListener("click",()=>{
-            
-            console.log(el.id)
+          
             toDelete(el.id)
             location.reload()
         })
@@ -215,18 +213,15 @@ function prepareCliendata(){
     let secs=new Date().getSeconds()
     let dateInfo=`${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}:${new Date().getHours()}:${new Date().getMinutes()}:${secs}`
     let m=identity.value
-    //console.log("m:",m)
+    
     if (m !=="" && m !==" " && m){
-        console.log("NOOO !")
+        
         let m1=m
         m.includes("TIME")?m1=m.split("TIME")[0]:m1=m
         document.getElementById("letter").value=`${m1}TIME${dateInfo}`
-        //let v=document.getElementById("letter")
-        //console.log(v.value)
+        
     }else{
         m=localStorage.getItem('https://tchanga12x.onrender.com1')
-          
-        console.log(">>>>>>>")
         
             m=m.split("TIME")[0]+"TIME"+dateInfo
             document.getElementById("letter").value=m
@@ -238,7 +233,7 @@ function prepareCliendata(){
     }
         
     localStorage.setItem('https://tchanga12x.onrender.com1',`${m}TIME${dateInfo}`)
-    console.log("DON in manage...")
+    
 }
 
 setInterval(()=>{
@@ -251,7 +246,7 @@ const lauch=()=>{
     let letter=document.getElementById("letter")
     let signaler=document.getElementById("signal").textContent
     let letter1=letter.value
-    console.log(`signaler ==="":`,signaler ==="")
+    
     if(letter1.includes("TIME")){
         let s =letter1.split("TIME")[1]
         let t1=s.split(":")[0]
@@ -276,28 +271,23 @@ const lauch=()=>{
         sec1.setSeconds(sec)
 
         let ns=new Date()
-        console.log("old:",sec1.toLocaleString(),"nw:",ns.toLocaleString())
         
-        if(ns-sec1>60000){//&& signaler.textContent !=="mon")
-            console.log("signaler:",signaler)
+        if(ns-sec1>60000){
             let comminicat=document.getElementById('com')
 
             comminicat.addEventListener("click",()=>prepareCliendata())
             comminicat.dispatchEvent(ev)
             comminicat.click()
-            console.log("one minute ...")
-            //changeMonth()
+            
           }
-    }else{ //if(signaler.textContent !=="mon")
-        console.log("signaler2:",signaler)
+    }else{ 
         let comminicat=document.getElementById('com')
 
        comminicat.addEventListener("click",()=>prepareCliendata())
         comminicat.dispatchEvent(ev)
 
         comminicat.click()
-        ///changeMonth()
-        console.log("did not see Time in " )
+        
     }
   
 }
