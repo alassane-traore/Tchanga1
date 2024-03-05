@@ -8,7 +8,30 @@ let los0 = document.getElementById("los0")
 let onemore = document.getElementById("onemore")
 let actsdiv= document.getElementById("actsdiv")
 let letter0=document.getElementById("letter0")
-let senddiv= document.getElementById("senddiv")
+let senddiv= document.getElementById("senddiv"),
+loading=document.getElementById('load'),
+html5=document.querySelector('.html5')
+
+
+//manage loading
+document.addEventListener("DOMContentLoaded",()=>{
+    try{
+        loading.style.display="block"
+        html5.id="html"
+        
+    }
+    catch{
+
+    }
+   
+})
+
+window.addEventListener("load",()=>{
+    loading.style.display="none"
+    container.style.display="block"
+    html5.id=""
+    
+})
 
 let lin=0
 const ev=new Event("click")

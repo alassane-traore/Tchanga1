@@ -34,7 +34,7 @@
       {% csrf_token %}
     
       <label for"date"> WEEK
-    <input type="datetime-local" name="week" value={{d}} >
+    <input type="datetime-local" name="week" value='{{d}}' >
     <input name="line"> 
     
     <a href="{% url 'lines' %}"><button> <i class="fa-regular fa-paper-plane" id="los1"></i>  </button> </a> 

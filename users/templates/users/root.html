@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="html5">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -13,6 +13,8 @@
     <title>tchanga</title>
 </head>
 <body>
+    <div id="load">Tchanga...</div>
+    <div id="container" style="display: none;">
    <nav>
     <ul>
         <li class="nav" > <a href="{% url 'login' %}"> Login </a></li>
@@ -30,7 +32,37 @@
     <input type="text" id="letter" name="letter" value="{{ident}}" >
 <button id="com"></button>
 </form>
+
+<style>
+    /* CSS to center the div */
+    #html {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #load {
+       
+        border: 8px solid #f3f3f3; /* Light grey */
+        border-top: 8px solid #3498db; /* Blue */
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        animation: spin 1s linear infinite; /* Animation for rotation */
+        margin: auto;
+        margin-top: 20%; 
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
 {% block contents %}{% endblock  %}
+
+</div>
 
 </body>
 </html>

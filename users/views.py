@@ -190,12 +190,13 @@ def loginin(request):
     return render(request,"users/login.html",context={"ident":mg,"signaler":signaler})
      
 def profile(request):
+    signaler="Profile"
     try:
       n=request.session['user']['name']
     except:
         pass
     
-    return render(request,"users/profile.html",context={"n":n}) 
+    return render(request,"users/profile.html",context={"n":n,'signaler':signaler}) 
              
 def edit_profile(request):
     

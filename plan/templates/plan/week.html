@@ -7,7 +7,7 @@
 <h1 id="head" class="head" >WEEKLY PLAN</h1>
 <h6 id="time" class="head" > {{t}} </h6>
 <span id="period"> {{period.seting1}}<i class="fa-solid fa-arrow-right" ></i>{{period.seting2}}</span>
-<form  method="POST" enctype="multipart/form-data" class="deleteform">
+<form style="display: none;"  method="POST" enctype="multipart/form-data" class="deleteform">
    
     {% csrf_token %}
     <input name="delete" id="deletes">
@@ -28,6 +28,8 @@
 {% endfor %}
 
 </table>
+{% elif not maga %}
+<h4> You are not loged in ! <a href="{% url 'login' %}"> Login </a> </h4>
 {% else %}
 <h4> You have no Program for this Week ! </h4>
 <h4><a href="{% url 'add'%}" ><i class="fa-regular fa-square-plus">Add</i>  </a> </h4>

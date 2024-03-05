@@ -195,6 +195,7 @@ def delete_or_update(req) :
     signaler="Types"
     me=req.session.get('user')['mail'].split('.')[0]
     previous_url = req.META.get('HTTP_REFERER', '/')
+    maga=select([db,me,"name"],{},"get")
     if req.method=="POST":
             try:
              el=req.POST['delete'].split(':')
@@ -230,7 +231,7 @@ def delete_or_update(req) :
                 pass  
             if ob is not None and message=="D":
                 
-                return render(req,'plan/delete.html',context={"t":my_time,"d":ob,"ident":mg,"signaler":signaler})
+                return render(req,'plan/delete.html',context={"t":my_time,"d":ob,"ident":mg,"signaler":signaler,"maga":maga})
             elif ob is not None:
                 try:
                  
@@ -241,12 +242,14 @@ def delete_or_update(req) :
                     #cl=[]
                     pass
                 
-                return render(req,'plan/update.html',context={"t":my_time,"d":ob,"l":li,"k":cl,"ident":mg,"signaler":signaler})  
+                return render(req,'plan/update.html',context={"t":my_time,"d":ob,"l":li,"k":cl,"ident":mg,"signaler":signaler,"maga":maga})  
             previous_url = req.META.get('HTTP_REFERER', '/')
             return redirect(previous_url)      
 
 def new_time(req):
+    maga=False
     me=req.session.get('user')['mail'].split('.')[0]
+    maga=select([db,me,"name"],{},"get")
     mg=""
     signaler="add week"
     #get classes
@@ -291,7 +294,7 @@ def new_time(req):
           # print("Got an issue by UPDATE:",e)
           pass
                
-        return render(req,'plan/update.html',context={"t":my_time,"d":ob,"l":lines,"k":k,"ident":mg,"signaler":signaler})
+        return render(req,'plan/update.html',context={"t":my_time,"d":ob,"l":lines,"k":k,"ident":mg,"signaler":signaler,"maga":maga})
         
       else:
         
@@ -316,7 +319,7 @@ def new_time(req):
           lines =select([db,me,"plan","weekt",d.year,cw],{},"get")    
         except:
           pass
-        return render(req,'plan/add.html',context={"t":my_time,"k":k,"l":lines,"d":dt1,"period":period,"ident":mg,"signaler":signaler})
+        return render(req,'plan/add.html',context={"t":my_time,"k":k,"l":lines,"d":dt1,"period":period,"ident":mg,"signaler":signaler,"maga":maga})
       except:
           previous_url = req.META.get('HTTP_REFERER', '/')
       
@@ -331,9 +334,10 @@ def add(req):
  blocked=False
  mg=""
  signaler="add week"
+ maga=False
  try:
     me=req.session.get('user')['mail'].split('.')[0]
-    
+    maga=select([db,me,"name"],{},"get")
     k=[]
     try:
       k=select([db,me,"plan","classes"],{},"get") 
@@ -410,7 +414,7 @@ def add(req):
            if mg1 and mg1 is not None and mg1 !=" ":
              users=select([db,'users'],{},'get')
              me= get_user(key="message",message=mg1,users=users)['mail'].split(".")[0]
-            
+             maga=select([db,me,"name"],{},"get")
              signaler=""
              if me is None:
                return redirect(reverse("login"))
@@ -418,6 +422,7 @@ def add(req):
         except Exception as e:
           me=""
           signaler=""
+          maga=False
         #rev=reverse('add')
         #return redirect(rev) 
  try:
@@ -431,17 +436,20 @@ def add(req):
      li=select([db,me,"plan",'weekt',d.year,cw],{},"get")
      
  except Exception as e:
+        li=[]
         #print("I was blocked by an Errro when getting the week kines :",e)
         if li is None:
          li=[]
  period=Make_time_interval(d).forme_week()
- return render(req,'plan/add.html',context={"t":my_time,"k":k,"d":md,"blocked":blocked,"l":li,"period":period,"ident":mg,"signaler":signaler})
+ return render(req,'plan/add.html',context={"t":my_time,"k":k,"d":md,"blocked":blocked,"l":li,"period":period,"ident":mg,"signaler":signaler,"maga":maga})
     
 def add_week(req):
     mg=""
     signaler="add week"
+    maga=False
     try:
         me=req.session.get('user')['mail'].split('.')[0]
+        maga=select([db,me,"name"],{},"get")
     except:
         try:
            mg=req.GET['letter']
@@ -451,12 +459,14 @@ def add_week(req):
            if mg1 and mg1 is not None and mg1 !=" ":
              users=select([db,'users'],{},'get')
              me= get_user(key="message",message=mg1,users=users)['mail'].split(".")[0]
+             maga=select([db,me,"name"],{},"get")
              signaler=""
              if me is None:
                return redirect(reverse("login"))
         
         except Exception as e:
           me=""
+          maga=False
           signaler=""
         #return redirect(reverse("login"))
     d=datetim.datetime.now()
@@ -503,7 +513,7 @@ def add_week(req):
    # d1=datetim.datetime.now()
     perio=Make_time_interval(periodate).forme_week()
     
-    return render(req,'plan/weeklines.html',context={"t":my_time,"lines":l,"w":w,"d":periodate.year,"period":perio,"ident":mg,"signaler":signaler})
+    return render(req,'plan/weeklines.html',context={"t":my_time,"lines":l,"w":w,"d":str(periodate),"period":perio,"ident":mg,"signaler":signaler,"maga":maga})
 
 def disprogram(req):
     try:
@@ -535,6 +545,7 @@ def disprogram(req):
 def transit(req):
     mg=""
     signaler="transit"
+    
     return render(req,'plan/transit.html',context={"t":my_time,"ident":mg,"signaler":signaler})
 
 def ordi(me,date):
@@ -571,8 +582,10 @@ def ordi(me,date):
 def days(req):
     tas=[]
     mg=""
+    maga=False
     try:
       mg=req.GET['letter']
+     
       mg1=mg
       if "TIME" in mg:
         mg1=mg.split("TIME")[0]
@@ -581,15 +594,18 @@ def days(req):
          user=get_user(key="message",message=mg1,users=users)
          if user:
            me= user['mail'].split(".")[0]
+           maga=select([db,me,"name"],{},"get")
            
          else:
            me=req.session['user']['mail'].split(".")[0]
+           maga=select([db,me,"name"],{},"get")
           # mg=req.session['user']['token']
          if me is None:
            return redirect(reverse("login")) 
     except Exception as e:
         #print("Exep:",e)
-        return render(req,'plan/today.html',context={"t":my_time,"ident":mg})
+        maga=False
+        return render(req,'plan/today.html',context={"t":my_time,"ident":mg,"maga":maga})
         
     id=0
         
@@ -607,14 +623,17 @@ def days(req):
       return delete_or_update(req)
     tas=ordi(me=me,date=str(t))
         
-    return render(req,'plan/today.html',context={"t":my_time,"taff":tas,"period":perid,"ident":mg})
+    return render(req,'plan/today.html',context={"t":my_time,"taff":tas,"period":perid,"ident":mg,"maga":maga})
         
 def week(req):
     mg=""
     signaler="week"
     #frmdate=datetime.now()
+    maga=False
     try:
      me=req.session['user']['mail'].split(".")[0]
+     maga=req.session['user']['name']
+     
     # frmdate=form_clien_date(mg)
     except:
      try:
@@ -625,12 +644,14 @@ def week(req):
       if mg1 and mg1 is not None and mg1 !=" ":
          users=select([db,'users'],{},'get')
          me= get_user(key="message",message=mg1,users=users)['mail'].split(".")[0]  
+         maga=select([db,me,'name'],{},"get")
       signaler=""
       if me is None:
           return redirect(reverse("login"))
         
      except Exception as e:
          me=""
+         maga=False
          signaler=""
     #me=req.session.get('user')['mail'].split('.')[0]
     today=datetim.datetime.now() #form_clien_date(mg)  #
@@ -656,14 +677,16 @@ def week(req):
     if req.method=="POST":
      return delete_or_update(req)
    
-    return render(req,'plan/week.html',context={"t":my_time,"week":w1,"period":period,"ident":mg,"signaler":signaler})
+    return render(req,'plan/week.html',context={"t":my_time,"week":w1,"period":period,"ident":mg,"signaler":signaler,"maga":maga})
 
 def months(req):
  mg=""
  signaler="Month"
+ maga=False
  frmdate=datetime.now()
  try:
      me=req.session['user']['mail'].split(".")[0]
+     maga=req.session['user']['name']
     # frmdate=form_clien_date(mg)
  except:
      try:
@@ -674,12 +697,14 @@ def months(req):
       if mg1 and mg1 is not None and mg1 !=" ":
          users=select([db,'users'],{},'get')
          me= get_user(key="message",message=mg1,users=users)['mail'].split(".")[0]
+         maga=select([db,me,"name"],{},"get")
       signaler=""
       if me is None:
           return redirect(reverse("login"))
         
      except Exception as e:
          me=""
+         maga=False
          signaler=""
          #return redirect(reverse("login")) 
          
@@ -724,13 +749,15 @@ def months(req):
  if req.method =="POST":
      return delete_or_update(req)
  
- return render(req,'plan/month.html',context={"t":my_time,"mo":m1,"sel":selected_month,"mo1":allmonths,"period":period,"ident":mg,"signaler":signaler})
+ return render(req,'plan/month.html',context={"t":my_time,"mo":m1,"sel":selected_month,"mo1":allmonths,"period":period,"ident":mg,"signaler":signaler,"maga":maga})
 
 def types(req):
     mg=""
     signaler="Types"
+    maga=False
     try:
        m=req.session.get('user')['mail'].split('.')[0]
+       maga=req.session.get('user')['name']
        #if m is None:
         #rev=reverse('login')
         #return redirect(rev)
@@ -743,7 +770,7 @@ def types(req):
            if mg1 and mg1 is not None and mg1 !=" ":
              users=select([db,'users'],{},'get')
              m= get_user(key="message",message=mg1,users=users)['mail'].split(".")[0]
-             
+             maga=select([db,m,"name"],{},"get")
              signaler=""
              if m is None:
                return redirect(reverse("login"))
@@ -751,6 +778,7 @@ def types(req):
         except Exception as e:
           m=""
           signaler=""
+          maga=False
         #rev=reverse('login')
         #return redirect(rev)
     message=""
@@ -781,7 +809,7 @@ def types(req):
        message=f"{classi} added "
        
           
-    return render(req,'plan/types.html',context={"t":my_time,"m":message,"ident":mg,"signaler":signaler})
+    return render(req,'plan/types.html',context={"t":my_time,"m":message,"ident":mg,"signaler":signaler,"maga":maga})
 
 def give_to_update_object(req):
     

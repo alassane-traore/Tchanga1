@@ -32,8 +32,31 @@ let deletesValue=document.getElementById('deletes')
 let sendDelete =document.getElementById('deleteb')
 let pointedRow = document.querySelectorAll(".pointed-row")
 let deleteOrEdit=document.querySelectorAll(".edit-delete")
+let container=document.getElementById('container'),
+loading=document.getElementById('load'),
+html5=document.querySelector('.html5')
 
 let ev = new Event("click")
+
+//manage loading
+document.addEventListener("DOMContentLoaded",()=>{
+    try{
+        loading.style.display="block"
+        html5.id="html"
+        
+    }
+    catch{
+
+    }
+   
+})
+
+window.addEventListener("load",()=>{
+    loading.style.display="none"
+    container.style.display="block"
+    html5.id=""
+    
+})
 
 //handle hide an show of edit and delete icones
 

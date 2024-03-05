@@ -141,9 +141,11 @@ def design(x,y):
 def new_sector(req):
     mg=""
     signaler="new sector"
+    maga=False
   #verify that user is authenticated
     try :
      me=req.session.get('user')['mail'].split('.')[0]
+     maga=select([db,me,"name"],{},"get")
     except:
       return redirect(reverse("login"))
   #verify if their allready sector existing
@@ -199,15 +201,17 @@ def new_sector(req):
       except:
         previous_url = req.META.get('HTTP_REFERER', '/')
         return redirect(previous_url)
-    return render(req,"kasse/sectors.html",context={"m":message,"ident":mg,"signaler":signaler})
+    return render(req,"kasse/sectors.html",context={"m":message,"ident":mg,"signaler":signaler,"maga":maga})
 
 
 def add_list(req):
   mg=""
   signaler="add list"
+  maga=False
   #verify that user is authenticated
   try :
      me=req.session.get('user')['mail'].split('.')[0]
+     maga=select([db,me,"name"],{},"get")
   except:
       return redirect(reverse("login"))
   
@@ -285,7 +289,7 @@ def add_list(req):
      
     return redirect("addlist")
   
-  return render(req,"kasse/addliste.html",context={"li":gs,"cs":cs,"len":leng,"ident":mg,"signaler":signaler})
+  return render(req,"kasse/addliste.html",context={"li":gs,"cs":cs,"len":leng,"ident":mg,"signaler":signaler,"maga":maga})
 
 
 def shopping_list(req):
@@ -298,9 +302,11 @@ def shopping_list(req):
 def markets(req):
    mg=""
    signaler="markets"
+   maga=False
    #make sure user is athenticated
    try :
     me=req.session.get('user')['mail'].split('.')[0]
+    maga=select([db,me,"name"],{},"get")
    except:
      try:
         mg=req.GET['letter']
@@ -310,12 +316,14 @@ def markets(req):
         if mg1 and mg1 is not None and mg1 !=" ":
           users=select([db,'users'],{},'get')
           me= get_user(key="message",message=mg1,users=users)['mail'].split(".")[0]
+          maga=select([db,me,"name"],{},"get")
         signaler=""
         if me is None:
            return redirect(reverse("login"))
         
      except Exception as e:
          me=""
+         maga=False
          signaler=""
     #return redirect(reverse("login"))
    #prepare to redirect to the busket by click
@@ -345,7 +353,7 @@ def markets(req):
       pass
        
      
-     return render(req,"kasse/basket.html",context={"sc":s,"ident":mg,"signaler":signaler})
+     return render(req,"kasse/basket.html",context={"sc":s,"ident":mg,"signaler":signaler,"maga":maga})
    
    #present current available sector on the marketplace and renew them if automate is True 
    nw = datetim.datetime.now()
@@ -390,15 +398,17 @@ def markets(req):
            #db.child(me).child('kasse').child('sectors').child(o.id).update(o)
            cs.append(o)
            
-   return render(req,"kasse/market.html",context={"sector":cs,"ident":mg,"signaler":signaler})
+   return render(req,"kasse/market.html",context={"sector":cs,"ident":mg,"signaler":signaler,"maga":maga})
 
 
 def basket(req):
     mg=""
     signaler="basket"
+    maga=False
    #ensure that user is authenticated
     try :
      me=req.session.get('user')['mail'].split('.')[0]
+     maga=select([db,me,"name"],{},"get")
     except:
       try:
         mg=req.GET['letter']
@@ -408,12 +418,14 @@ def basket(req):
         if mg1 and mg1 is not None and mg1 !=" ":
           users=select([db,'users'],{},'get')
           me= get_user(key="message",message=mg1,users=users)['mail'].split(".")[0]
+          maga=select([db,me,"name"],{},"get")
         signaler=""
         if me is None:
            return redirect(reverse("login"))
         
       except Exception as e:
          me=""
+         maga=False
          signaler=""
      #return redirect(reverse("login"))
    #handle post request in shop
@@ -481,7 +493,7 @@ def basket(req):
        # print("final exception in busket", e)
         previous_url = req.META.get('HTTP_REFERER', '/')
         return redirect(previous_url)
-    return render(req,"kasse/basket.html",context={"ident":mg,"signaler":signaler})
+    return render(req,"kasse/basket.html",context={"ident":mg,"signaler":signaler,"maga":maga})
 
 
 def transit1(req):
@@ -493,8 +505,10 @@ def transit1(req):
 def count(req):
     mg=""
     signaler="count"
+    maga=False
     try :
      me=req.session.get('user')['mail'].split('.')[0]
+     maga=select([db,me,"name"],{},"get")
     except:
       try:
         mg=req.GET['letter']
@@ -504,12 +518,14 @@ def count(req):
         if mg1 and mg1 is not None and mg1 !=" ":
           users=select([db,'users'],{},'get')
           me= get_user(key="message",message=mg1,users=users)['mail'].split(".")[0]
+          maga=select([db,me,"name"],{},"get")
         signaler=""
         if me is None:
            return redirect(reverse("login"))
         
       except Exception as e:
          me=""
+         maga=False
          signaler=""
      
     sector=select([db,me,"kasse","sectors"],{},"get")
@@ -559,7 +575,7 @@ def count(req):
         sec[0]['interv']=f"{interv}--{datetime.now().day} {my_months[datetime.now().month]} {datetime.now().year}"
     except:
       pass
-    return render(req,"kasse/counter.html",context={"sector":sec,"b":bt,"total":totalcosts,"nt":ntotal,"bud":totalbudget,"ident":mg,"signaler":signaler})
+    return render(req,"kasse/counter.html",context={"sector":sec,"b":bt,"total":totalcosts,"nt":ntotal,"bud":totalbudget,"ident":mg,"signaler":signaler,"maga":maga})
       
        
 def hist(req):
@@ -567,8 +583,10 @@ def hist(req):
     return render(req,"kasse/history.html")
 
 def removit(req,id):
+    maga=False
     try :
      me=req.session.get('user')['mail'].split('.')[0]
+     maga=select([db,me,"name"],{},"get")
     except:
       return redirect(reverse("login"))
     
@@ -585,8 +603,10 @@ def update_sector(req):
   signaler="update_sec"
   me=""
   m=""
+  maga=False
   try :
      me=req.session.get('user')['mail'].split('.')[0]
+     maga=select([db,me,"name"],{},"get")
   except:
       return redirect(reverse("login"))
   try:
@@ -643,16 +663,17 @@ def update_sector(req):
     
     return redirect(reverse('market'))
     
-  return render(req,'kasse/update.html',context={'s':sec,"signaler":signaler,"m":m})
+  return render(req,'kasse/update.html',context={'s':sec,"signaler":signaler,"m":m,"maga":maga})
 
 
 def update_busket(req):
   signaler="update_sec"
   me=""
   m=""
-  
+  maga=False
   try :
      me=req.session.get('user')['mail'].split('.')[0]
+     maga=select([db,me,"name"],{},"get")
   except:
       return redirect(reverse("login"))
   if req.method=="GET":
@@ -763,15 +784,17 @@ def update_busket(req):
     
     sc=select([db,me,"kasse","sectors"],{sector:sec},"update")
     return redirect(reverse('counter'))
-  return render(req,'kasse/updatebusket.html',context={'s':sec,'b':bk,"signaler":signaler,"m":m})
+  return render(req,'kasse/updatebusket.html',context={'s':sec,'b':bk,"signaler":signaler,"m":m,"maga":maga})
 
 
 def delete_busket(req):
   signaler="update_sec"
   me=""
   m=""
+  maga=False
   try :
      me=req.session.get('user')['mail'].split('.')[0]
+     maga=select([db,me,"name"],{},"get")
   except:
       return redirect(reverse("login"))
   if req.method=="GET":
@@ -843,7 +866,7 @@ def delete_busket(req):
    except:
      pass
   
-  return render(req,'kasse/deletebusket.html',context={'s':sec,'b':bk,"signaler":signaler,"m":m})
+  return render(req,'kasse/deletebusket.html',context={'s':sec,'b':bk,"signaler":signaler,"m":m,"maga":maga})
 
 
  

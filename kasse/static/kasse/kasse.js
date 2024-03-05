@@ -18,7 +18,29 @@ beging = document.getElementById("begin"),
  anul=document.querySelectorAll(".anul"),
  upgoodChek=document.querySelectorAll(".upgood"),
  upgoodStock=document.getElementById("goodstock"),
- upListCheck=document.querySelectorAll('.uplist')
+ upListCheck=document.querySelectorAll('.uplist'),
+ container=document.getElementById('container'),
+ loading=document.getElementById('load'),
+ html5=document.querySelector('.html5')
+
+ //manage loading
+document.addEventListener("DOMContentLoaded",()=>{
+    try{
+        loading.style.display="block"
+        html5.id="html"
+        
+    }
+    catch{
+
+    }
+   
+})
+
+window.addEventListener("load",()=>{
+    loading.style.display="none"
+    container.style.display="block"
+    html5.id=""
+})
 
 
  function focus(parent,child){
