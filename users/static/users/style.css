@@ -72,6 +72,10 @@ nav>ul{
     background-color: black;
     color: white;
 }
+
+#load{
+    text-align: center;
+}
 @media only screen and (max-width:785px){
     #kassenApp{
         width: 49%;

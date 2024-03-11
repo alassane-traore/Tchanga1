@@ -105,7 +105,8 @@ def home(req):
     
 
 def signup(request):
-    
+    mg=""
+    signaler="signup"
     if request.method == "POST":
         post1=request.POST
         use=Signup_form(post1)
@@ -137,15 +138,15 @@ def signup(request):
            except Exception as e:
                  #print("Ex",e)
                  message= "Please try again!"
-                 return render(request,"users/signup.html",context={"message":message})
+                 return render(request,"users/signup.html",context={"message":message,"signaler":signaler})
                   
                
         else:
             message="Please submit correct und complete information"
-            return render(request,"users/signup.html",context={"message":message})
+            return render(request,"users/signup.html",context={"message":message,"signaler":signaler})
     else:
         message="Signup or login !"
-        return render(request,"users/signup.html",context={"message":message})
+        return render(request,"users/signup.html",context={"message":message,"signaler":signaler})
 
 
 def loginin(request):
