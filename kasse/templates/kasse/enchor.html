@@ -19,13 +19,18 @@
         <!--<li class="nav" > <a href="{% url 'transit' %}"> <i class="fa-solid fa-plus"></i> </a></li> -->
         
         <li class="nav" style="display:none;"> <a id="day">{% static 'plan/Bird_Ringtone(256k).mp3' %} </a> </li>
-        <li class="nav"> <a href="{% url 'transit1' %}"> <i class="fa-regular fa-square-plus"></i>  </a></li>
-        <li class="nav" > <a href="{% url 'counter' %}"> <i class="fa-solid fa-gauge"></i> </a></li>
-        <li class="nav" > <a href="{% url 'market' %}"> <i class="fa-solid fa-cart-shopping"></i> </a> </li>
-       
-        <li class="nav"  > <a href="{% url 'days' %}"> <i class="fa-regular fa-calendar-days" ></i></i>  </a></li>
-        <li class="nav"> <a href="{% url 'logout' %}"> <i class="fa-solid fa-right-from-bracket"></i> </a></li>
-        <li class="nav" > <a href="{% url 'home' %}"> {% if maga %} <span>{{maga}}</span>{% endif %} <i class="fa-solid fa-house"></i> </a></li>
+        <li class="nav txt">ADD</li>
+        <li class="nav icn"> <a href="{% url 'transit1' %}"> <i class="fa-regular fa-square-plus"></i>  </a></li>
+        <li class="nav txt" >COUNTER</li>
+        <li class="nav icn" > <a href="{% url 'counter' %}"> <i class="fa-solid fa-gauge"></i> </a></li>
+        <li class="nav txt" >MARKETS</li>
+        <li class="nav icn" > <a href="{% url 'market' %}"> <i class="fa-solid fa-cart-shopping"></i> </a> </li>
+        <li class="nav txt"  >DAILY PLAN</li>
+        <li class="nav icn"  > <a href="{% url 'days' %}"> <i class="fa-regular fa-calendar-days" ></i></i>  </a></li>
+        <li class="nav txt">LOGOUT</li>
+        <li class="nav icn"> <a href="{% url 'logout' %}"> <i class="fa-solid fa-right-from-bracket"></i> </a></li>
+        <li class="nav txt" >HOME</li>
+        <li class="nav icn" > <a href="{% url 'home' %}"> {% if maga %} <span>{{maga}}</span>{% endif %} <i class="fa-solid fa-house"></i> </a></li>
         
     </ul>
    </nav> 

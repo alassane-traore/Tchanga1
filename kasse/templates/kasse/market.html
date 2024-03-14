@@ -4,6 +4,7 @@
 <div id="marketContainer"> 
 <h1 id="head"> Shopping Sectors(places) </h1>
     <div id="marketdiv"> 
+        <h4> {{m}}</h4>
         {% if sector %}
         {% for s in sector  %}
          
@@ -24,6 +25,16 @@
         </div>
         
         {% endfor %} 
+        <a href="{% url 'transfer' %}">
+        <div class="transfer"> 
+            <h4>Budget</h4>
+            <h4><i class="fa-solid fa-money-bill-transfer"></i> </h4>
+            <h4>Transfer</h4>
+          
+          
+           
+                
+        </div> </a> 
         {% elif not maga %}
         <h4> You are not loged in ! <a href="{% url 'login' %}"> Login </a> </h4>
          {% else %} 

@@ -869,4 +869,66 @@ def delete_busket(req):
   return render(req,'kasse/deletebusket.html',context={'s':sec,'b':bk,"signaler":signaler,"m":m,"maga":maga})
 
 
+def transfer(req):
+  signaler="update_sec"
+  me=""
+  message=""
+  try :
+     me=req.session.get('user')['mail'].split('.')[0]
+     maga=select([db,me,"name"],{},"get")
+     s=select([db,me,"kasse","sectors"],{},"get")
+     sectors=[]
+     activ_sectors=[]
+     tm=datetime.now()
+     for x in s:
+       sec=select([db,me,"kasse","sectors",x],{},"get")
+       fm=sec['begin'].split(' ')[0]
+       to=sec['end'].split(' ')[0]
+       fm=datetime.strptime(fm,'%Y-%m-%d')
+       to=datetime.strptime(to,'%Y-%m-%d')
+       sec['name']=x
+      # print(sec)
+       if fm<tm and tm<=to:
+         activ_sectors.append(sec)
+       sectors.append(sec)
+     if req.method=="POST":
+        try:
+          post=req.POST
+          give=post['give'].split("bud1get")[0]
+          receive=post['receive']
+          emiter=select([db,me,"kasse","sectors",give],{},"get")
+          recepter=select([db,me,"kasse","sectors",receive],{},"get")
+          sectors=[x for x in sectors if x != emiter and x != recepter]
+          transfer=eval(post['budget'])
+          if validate(receive) and validate(give) and validate(transfer):
+            reduced=emiter['newbudget']-transfer
+            incrim=recepter['newbudget']+transfer
+            if reduced>=0:
+              emiter['newbudget']=reduced
+              recepter['newbudget']=incrim
+              em=select([db,me,"kasse","sectors"],{give:emiter},"update")
+              
+              rec=select([db,me,"kasse","sectors"],{receive:recepter},"update")
+              emiter['name']=give
+              recepter['name']=receive
+              sectors.append(emiter)
+              sectors.append(recepter)
+              
+              message=f"Success : {transfer} transfered from {give} to {receive}"
+              return redirect("market")
+              
+              
+            else:
+              message=f"insufficient budget : can’t remove {transfer} from {give} ! Please reduce the amount !"
+              
+            
+          else:
+            message="Transaction failed !Received unvalid data !All fields are mendatory !"
+        except:
+          pass
+  except:
+      return redirect(reverse("login"))
+  
+  
+  return render(req,"kasse/transfer.html",context={'signaler':signaler,'sectors':sectors,"m":message,"as":activ_sectors})
  

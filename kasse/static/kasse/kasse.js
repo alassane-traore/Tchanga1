@@ -21,7 +21,68 @@ beging = document.getElementById("begin"),
  upListCheck=document.querySelectorAll('.uplist'),
  container=document.getElementById('container'),
  loading=document.getElementById('load'),
- html5=document.querySelector('.html5')
+ html5=document.querySelector('.html5'),
+ receiverLabels=document.querySelectorAll('.receive'),
+ receiverCheck=document.querySelectorAll('.receicerCheck'),
+ transferedBudget=document.getElementById("transferedBudget"),
+ giveSel=document.getElementById("give"),
+ receiverSector=document.getElementById("receiverSector"),
+ remainingbudget=document.getElementById("remainingbudget")
+
+
+//transfer
+
+function selectSector(){
+    giveSel.addEventListener("change",()=>{
+        let bget=giveSel.value.split('bud1get')[1]
+        bget=parseFloat(bget)
+        //transferedBudget.value=bget
+        //receiverSector.value=bget
+        remainingbudget.textContent=bget
+        
+        receiverLabels.forEach(el=>{
+            if(el.id===giveSel.value.split('bud1get')[0]){
+                el.style.display="none"
+            }else{
+                el.style.display="inline"
+            }
+        })
+    })
+
+    transferedBudget.addEventListener("input",()=>{
+        let bget=giveSel.value.split('bud1get')[1]
+        bget=parseFloat(bget)
+        //receiverSector.value=transferedBudget.value
+        try{
+            remainingbudget.textContent=bget-transferedBudget.value
+        }catch{
+
+        }
+        
+    })
+  
+    receiverCheck.forEach(el=>{
+        el.addEventListener("change",()=>{
+            if(el.checked){
+                receiverSector.value=el.name
+                receiverCheck.forEach(c=>{
+                    if(c.name !==el.name){
+                        c.checked=false
+                    }
+                })
+            }else{}
+        })
+        
+    })
+
+
+
+
+}
+if(giveSel){
+    selectSector()
+
+}
 
  //manage loading
 document.addEventListener("DOMContentLoaded",()=>{
@@ -51,9 +112,17 @@ window.addEventListener("load",()=>{
        let  delOrEd=deleteOrEdit[i]
         pointed.addEventListener("mouseenter",()=>{
          delOrEd.style.visibility="visible"
+         if(delOrEd.classList.contains("nav")){
+            delOrEd.style.display="inline"
+         }
+
         })
         pointed.addEventListener("mouseleave",()=>{
             delOrEd.style.visibility="hidden"
+            if(delOrEd.classList.contains("nav")){
+                delOrEd.style.display="none"
+             }
+
            })
     
     }
@@ -64,6 +133,9 @@ focus("brow","upd")
 focus("brow","del")
 
 focus('sectors','btn')
+
+focus("icn","txt")
+
 
 function manageBusket(check,stock){
     for (let i=0;i<check.length;i++){

@@ -180,12 +180,33 @@ body{
 .edit-delete{
     visibility: hidden;
 }
+
+#load{
+    text-align: center;
+}
+
+.txt{
+    display: none;
+    color: white;
+    background-color: black;
+    border-radius: 15px;
+    padding: 1px;
+
+}
 @media only screen and (max-width:785px){
     .nav{
        
         padding: 11px;
         
         
+    }
+
+    .txt{
+    
+        color: white;
+        background-color: black;
+        border-radius: 15px;
+        padding: 1px;
     }
     
     .act{

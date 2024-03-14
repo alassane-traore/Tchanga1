@@ -1,0 +1,42 @@
+{% extends 'kasse/enchor.html' %}
+{% block contents %}
+{% load static %}
+<div id ="plusdiv"> 
+<h1 id="head"> Transfer </h1>
+<div id="plusdiv1"> 
+    <h4> {{m}}</h4>
+    <form id="addform0" method="POST" action="{% url 'transfer' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="from" style="color: white;"> FROM:</label>
+        <select id="give" name="give"> 
+            <option value="">choose sector</option>
+            {% for s in sectors %}
+            <option value="{{s.name}}bud1get{{s.newbudget}}">{{s.name}} </option>
+            {% endfor %}
+         </select>
+        <div> <h3>Budget:<i class="fa-solid fa-hand-holding-dollar" id="remainingbudget"> </i></h3>
+            <input type="number" id="transferedBudget" step="any" name="budget" > 
+            <input style="display: none;" type="text" id="receiverSector" name="receive">
+        </div>
+        <hr>
+        <label for="to" style="color: white;">TO:</label>
+        {% for s in as %}
+        <label for("{{s.name}}") id="{{s.name}}"  class="receive"> <input type="checkbox" class="receicerCheck" name="{{s.name}}">   {{s.name}} </label>
+         {% endfor %}
+            <div>
+                <button> Transfer </button>
+            </div>
+            
+        
+         
+
+    </form>
+      
+</div>
+
+</div>
+
+<link rel="stylesheet" href="{% static 'kasse/style.css' %}">
+<script src="{% static 'kasse/kasse.js' %}"></script>
+
+{% endblock  %}

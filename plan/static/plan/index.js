@@ -34,7 +34,9 @@ let pointedRow = document.querySelectorAll(".pointed-row")
 let deleteOrEdit=document.querySelectorAll(".edit-delete")
 let container=document.getElementById('container'),
 loading=document.getElementById('load'),
-html5=document.querySelector('.html5')
+html5=document.querySelector('.html5'),
+navTexts=document.querySelectorAll('.txt'),
+navIcons=document.querySelectorAll(".icn")
 
 let ev = new Event("click")
 
@@ -68,15 +70,23 @@ function focus(parent,child){
        let  delOrEd=deleteOrEdit[i]
         pointed.addEventListener("mouseenter",()=>{
          delOrEd.style.visibility="visible"
+         if(delOrEd.classList.contains("nav")){
+            delOrEd.style.display="inline"
+         }
+         
         })
         pointed.addEventListener("mouseleave",()=>{
             delOrEd.style.visibility="hidden"
+            if(delOrEd.classList.contains("nav")){
+                delOrEd.style.display="none"
+             }
            })
     
     }
 }
 
 focus("pointed-row","edit-delete")
+focus("icn","txt")
 
 //Delete week preprogramed task for 
 anul.forEach(el=>{

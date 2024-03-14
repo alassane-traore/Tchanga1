@@ -19,6 +19,14 @@ nav>ul{
     border-radius: 9px;
     padding: 2px;
 }
+.transfer{
+    display: inline-block;
+    border: 2px solid white;
+    background-color: purple;
+    color: white;
+    border-radius: 9px;
+    padding: 2px;
+}
 
 #marketdiv{
   
@@ -199,6 +207,18 @@ th, td {
 }
 .counterform{
     display: inline-block;
+}
+#load{
+    text-align: center;
+}
+
+.txt{
+    display: none;
+    color: white;
+    background-color: black;
+    border-radius: 15px;
+    padding: 1px;
+
 }
 @media only screen and (max-width:785px){
 

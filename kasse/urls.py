@@ -15,7 +15,8 @@ urlpatterns = [
     path('shop/',views.basket,name='shop'),
     path('del/<str:id>',views.removit,name="delete"),
     path('updatebusket/',views.update_busket,name='updateb'),
-    path('deletebusket/',views.delete_busket,name='deleteb')
+    path('deletebusket/',views.delete_busket,name='deleteb'),
+    path('transfer/',views.transfer,name='transfer')
     
     
     
