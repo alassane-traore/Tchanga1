@@ -9,7 +9,7 @@
         {% csrf_token %}
         <label for="from" style="color: white;"> FROM:</label>
         <select id="give" name="give"> 
-            <option value="">choose sector</option>
+            <option value="choose">choose sector</option>
             {% for s in sectors %}
             <option value="{{s.name}}bud1get{{s.newbudget}}">{{s.name}} </option>
             {% endfor %}

@@ -34,19 +34,33 @@ beging = document.getElementById("begin"),
 
 function selectSector(){
     giveSel.addEventListener("change",()=>{
-        let bget=giveSel.value.split('bud1get')[1]
-        bget=parseFloat(bget)
-        //transferedBudget.value=bget
-        //receiverSector.value=bget
-        remainingbudget.textContent=bget
-        
-        receiverLabels.forEach(el=>{
-            if(el.id===giveSel.value.split('bud1get')[0]){
-                el.style.display="none"
-            }else{
-                el.style.display="inline"
-            }
-        })
+        if(giveSel.value !=="choose"){
+            let bget=giveSel.value.split('bud1get')[1]
+            bget=parseFloat(bget)
+            //transferedBudget.value=bget
+            //receiverSector.value=bget
+            remainingbudget.textContent=bget
+            
+            receiverLabels.forEach(el=>{
+                if(el.id===giveSel.value.split('bud1get')[0]){
+                    el.style.display="none"
+                }else{
+                    el.style.display="inline"
+                }
+            })
+   
+        }else{
+            remainingbudget.textContent=""
+            
+            receiverLabels.forEach(el=>{
+                if(el.id===giveSel.value.split('bud1get')[0]){
+                    el.style.display="none"
+                }else{
+                    el.style.display="inline"
+                }
+            })
+
+        }
     })
 
     transferedBudget.addEventListener("input",()=>{

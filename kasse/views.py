@@ -887,8 +887,22 @@ def transfer(req):
        fm=datetime.strptime(fm,'%Y-%m-%d')
        to=datetime.strptime(to,'%Y-%m-%d')
        sec['name']=x
+       count=0
+       busks=False
+       try:
+         busks=sec['buskets']
+       except:
+         
+         pass
+       if busks:
+         for b in busks:
+           tb=b['date'].split(' ')[0]
+           tb=datetime.strptime(tb,'%Y-%m-%d')
+           if fm<=tb and tb <=to: 
+             count+=b['costs']
+       sec['newbudget']=sec['newbudget']-count
       # print(sec)
-       if fm<tm and tm<=to:
+       if fm<=tm and tm<=to:
          activ_sectors.append(sec)
        sectors.append(sec)
      if req.method=="POST":
