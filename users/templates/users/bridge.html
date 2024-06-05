@@ -1,0 +1,20 @@
+{% extends 'users/root.html' %}
+{% block contents %}
+{% load static %}
+
+<div id="bridge" style="width: 98%;margin: 0 auto;font-family: Georgia, 'Times New Roman', Times, serif;background-color: purple; color: white; border-radius: 9px;">
+    <hr>
+    <h4>Tchangbé ! Dear user ,</h4>
+    <p>For more interesting experience,we migrated  <strong>Tchanga</strong> to new Tchnologies! 
+        You can follow <a href="https://tchanga1.web.app/"> this link</a> or contact the developper  to access our services. 
+        If you created your account on the old version (<a href="https://tchanga12x.onrender.com"> https://tchanga12x.onrender.com </a>)  , kindly create a new one , because such accounts are unfortunatly not available anymore.
+        We recommand you to make a sortcut with the new link (<a href="https://tchanga1.web.app/">https://tchanga1.web.app/</a> ) for easier use of the webapp, while the developper is working on android and ios versions.
+    </p>
+    <hr>
+</div>
+
+
+<link rel="stylesheet" href="{% static 'users/style.css' %}">
+<script src="{% static 'users/index.js' %}"></script>
+
+{% endblock  %}

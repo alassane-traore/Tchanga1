@@ -68,7 +68,10 @@ def exists_or_signup(req,me):
        return redirect(reverse("signup"))
 
 def home(req):
-    users=select([db,'users'],{},'get')
+
+    return render(req,"users/bridge.html",context={"ident":"N","signaler":"N"})
+
+    """users=select([db,'users'],{},'get')
     
     mg=""
    
@@ -101,11 +104,14 @@ def home(req):
         #print("EXPECT2:",e)
         rev=reverse('login')
         return redirect(rev)
-            
+            """
     
 
 def signup(request):
-    mg=""
+
+    return render(request,"users/bridge.html",context={"ident":"N","signaler":"N"})
+
+    """mg=""
     signaler="signup"
     if request.method == "POST":
         post1=request.POST
@@ -148,9 +154,13 @@ def signup(request):
         message="Signup or login !"
         return render(request,"users/signup.html",context={"message":message,"signaler":signaler})
 
+"""
 
 def loginin(request):
-    users=select([db,'users'],{},'get')
+
+    return render(request,"users/bridge.html",context={"ident":"N","signaler":"N"})
+
+    """users=select([db,'users'],{},'get')
     
     #tk=auth.current_user['idToken']
     mg=""
@@ -189,32 +199,42 @@ def loginin(request):
         
                return render(request,"users/login.html",context={"message":message,"ident":mg})  
     return render(request,"users/login.html",context={"ident":mg,"signaler":signaler})
-     
+     """
+
 def profile(request):
-    signaler="Profile"
+
+    return render(request,"users/bridge.html",context={"ident":"N","signaler":"N"})
+
+    """signaler="Profile"
     try:
       n=request.session['user']['name']
     except:
         pass
     
     return render(request,"users/profile.html",context={"n":n,'signaler':signaler}) 
-             
+             """
 def edit_profile(request):
     
     return render(request,"profiledit.html")  
    
 def logingout(request):
-    request.session.clear()
-    #auth.logout(request)
-    #logout(request)
-    rev=reverse("login")
-    return redirect(rev)
+    #request.session.clear()
+    
+    #rev=reverse("login")
+    #return redirect(rev)
+    return render(request,"users/bridge.html",context={"ident":"N","signaler":"N"})
+
+
+
 
 def welcome(req):
+
+    return render(req,"users/bridge.html",context={"ident":"N","signaler":"N"})
+
    
-    rev=reverse("home")
+    #rev=reverse("home")
     
-    return redirect(rev)
+    #return redirect(rev)
     #return render(req, "users/home.html")
     
     
